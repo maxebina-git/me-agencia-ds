@@ -915,6 +915,85 @@ function FormsSection() {
           <LeadCaptureForm />
         </div>
       </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'title', type: 'string', default: "'Vamos conversar sobre seu projeto'", description: 'Título do formulário' },
+          { name: 'subtitle', type: 'string', default: "'Preencha o formulário e receba um diagnóstico gratuito em até 2h.'", description: 'Subtítulo do formulário' },
+          { name: 'action', type: 'string', default: "'#'", description: 'URL de ação do formulário (Formspree)' },
+          { name: 'onSubmit', type: 'function', default: 'undefined', description: 'Callback após submissão' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Campos do Formulário</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            { name: 'Nome', type: 'text', required: true, placeholder: 'Seu nome completo' },
+            { name: 'Email', type: 'email', required: true, placeholder: 'seu@email.com' },
+            { name: 'WhatsApp', type: 'tel', required: true, placeholder: '(11) 99999-9999' },
+            { name: 'Serviço', type: 'select', required: true, placeholder: 'Selecione um serviço' },
+            { name: 'Mensagem', type: 'textarea', required: false, placeholder: 'Conte-nos sobre seu projeto...' },
+          ].map(field => (
+            <div key={field.name} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+              <div className="flex items-center justify-between mb-2">
+                <p className="font-semibold text-sm text-[var(--text-on-surface)]">{field.name}</p>
+                {field.required && <span className="text-xs text-error">Obrigatório</span>}
+              </div>
+              <p className="text-xs text-[var(--text-on-surface-subtle)] font-mono mb-1">type: {field.type}</p>
+              <p className="text-xs text-[var(--text-on-surface-muted)]">placeholder: "{field.placeholder}"</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<LeadCaptureForm
+  title="Vamos conversar sobre seu projeto"
+  subtitle="Preencha o formulário e receba um diagnóstico gratuito em até 2h."
+  action="https://formspree.io/f/your-form-id"
+/>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Validação em tempo real (email, telefone)',
+            'Máscara automática para telefone',
+            'Estados: idle, submitting, success, error',
+            'Integração com Formspree (AJAX)',
+            'Mensagem de sucesso animada',
+            'Privacy note com ícone de cadeado',
+            '100% responsivo',
+            'Acessível (labels, focus states)',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Estados</h3>
+        <div className="grid md:grid-cols-4 gap-4">
+          {[
+            { state: 'Idle', desc: 'Formulário pronto para preencher', color: 'bg-info/10 border-info/20' },
+            { state: 'Submitting', desc: 'Enviando dados (spinner)', color: 'bg-warning/10 border-warning/20' },
+            { state: 'Success', desc: 'Enviado com sucesso (checkmark)', color: 'bg-success/10 border-success/20' },
+            { state: 'Error', desc: 'Erro no envio (retry)', color: 'bg-error/10 border-error/20' },
+          ].map(s => (
+            <div key={s.state} className={`rounded-xl border p-4 ${s.color}`}>
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{s.state}</p>
+              <p className="text-xs text-[var(--text-on-surface-muted)]">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -939,6 +1018,74 @@ function NavbarSection() {
           </div>
         </div>
       </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'logo', type: 'string', default: "'MAX'", description: 'Texto do logo' },
+          { name: 'links', type: 'Array<{label: string, href: string}>', default: '[]', description: 'Links de navegação' },
+          { name: 'ctaText', type: 'string', default: "'Diagnóstico Gratuito'", description: 'Texto do botão CTA' },
+          { name: 'ctaHref', type: 'string', default: "'#'", description: 'URL do botão CTA' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<Navbar
+  logo="MAX"
+  links={[
+    { label: 'Serviços', href: '#servicos' },
+    { label: 'Cases', href: '#cases' },
+    { label: 'Sobre', href: '#sobre' },
+    { label: 'Contato', href: '#contato' },
+  ]}
+  ctaText="Diagnóstico Gratuito"
+  ctaHref="#contato"
+/>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Fixa no topo com glassmorphism',
+            'Scroll progress bar (linha ciano no topo)',
+            'Sombra e opacidade aumentam ao scrollar',
+            'Links com underline animado (cresce da esquerda)',
+            'Menu mobile com hamburger animado',
+            'CTA sempre visível',
+            'Backdrop blur no scroll',
+            '100% responsivo',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Comportamento de Scroll</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech font-semibold mb-2">📍 Topo da página</p>
+            <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-1">
+              <li>• Background transparente</li>
+              <li>• Padding maior (py-4)</li>
+              <li>• Sem sombra</li>
+            </ul>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech font-semibold mb-2">📍 Após scroll (50px+)</p>
+            <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-1">
+              <li>• Glassmorphism (backdrop-blur)</li>
+              <li>• Padding menor (py-2)</li>
+              <li>• Sombra e borda</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -948,6 +1095,8 @@ function FAQSection() {
     { question: 'Quanto tempo leva para criar um site?', answer: 'Dependendo da complexidade, um site institucional fica pronto em 2-4 semanas.' },
     { question: 'Vocês fazem manutenção após a entrega?', answer: 'Sim! Oferecemos planos de manutenção mensal com atualizações e suporte.' },
     { question: 'Como funciona o tráfego pago?', answer: 'Criamos campanhas estratégicas no Google Ads e Meta Ads com foco em ROI.' },
+    { question: 'A automação de WhatsApp substitui atendentes?', answer: 'Não substitui — potencializa! A automação cuida do primeiro contato e qualificação.' },
+    { question: 'Preciso ter conhecimento técnico?', answer: 'Absolutamente não! Nós cuidamos de toda a parte técnica. Você foca no seu negócio.' },
   ];
 
   return (
@@ -958,24 +1107,152 @@ function FAQSection() {
           <FAQ items={items} />
         </div>
       </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'items', type: 'Array<{question: string, answer: string}>', default: '—', description: 'Array de perguntas e respostas' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<FAQ items={[
+  {
+    question: 'Quanto tempo leva para criar um site?',
+    answer: 'Dependendo da complexidade, um site institucional fica pronto em 2-4 semanas.'
+  },
+  {
+    question: 'Vocês fazem manutenção após a entrega?',
+    answer: 'Sim! Oferecemos planos de manutenção mensal com atualizações e suporte.'
+  },
+  {
+    question: 'Como funciona o tráfego pago?',
+    answer: 'Criamos campanhas estratégicas no Google Ads e Meta Ads com foco em ROI.'
+  },
+]} />`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Accordion — um aberto por vez',
+            'Ícone + que rotaciona com easing elástico',
+            'Altura animada com max-height transition',
+            'Glassmorphism background',
+            'Acessível (aria-expanded, keyboard navigation)',
+            'Borda sutil entre itens',
+            'Hover state nos botões',
+            '100% responsivo',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Dicas de Conteúdo</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+          <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
+            <li>✅ <strong>Seja direto:</strong> Responda a pergunta nos primeiros 10-15 palavras</li>
+            <li>✅ <strong>Use números:</strong> "2-4 semanas" é melhor que "algum tempo"</li>
+            <li>✅ <strong>Foque em benefícios:</strong> "economiza 4h por dia" em vez de "automação inteligente"</li>
+            <li>✅ <strong>Limite a 5-7 perguntas:</strong> Mais que isso sobrecarrega o usuário</li>
+            <li>❌ <strong>Evite jargões técnicos:</strong> "API REST" → "integração com sistemas"</li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
 
 function TestimonialsSection() {
   const testimonials = [
-    { name: 'Carlos Mendes', company: 'TechStart', role: 'CEO', rating: 5, testimonial: 'A Max Ebina transformou completamente nossa presença digital.' },
-    { name: 'Ana Silva', company: 'ModaFit', role: 'Diretora', rating: 5, testimonial: 'A automação de WhatsApp economiza 4 horas por dia da minha equipe.' },
+    { name: 'Carlos Mendes', company: 'TechStart', role: 'CEO', rating: 5, testimonial: 'A Max Ebina transformou completamente nossa presença digital. Em 3 meses, triplicamos os leads qualificados.' },
+    { name: 'Ana Silva', company: 'ModaFit', role: 'Diretora', rating: 5, testimonial: 'A automação de WhatsApp economiza 4 horas por dia da minha equipe. Resultado incrível!' },
+    { name: 'Roberto Lima', company: 'Construmax', role: 'Gerente', rating: 4, testimonial: 'O CRM que desenvolveram é intuitivo e poderoso. Nossa taxa de conversão subiu 60%.' },
   ];
 
   return (
     <div className="space-y-12">
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map(t => (
             <TestimonialCard key={t.name} {...t} />
           ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'name', type: 'string', default: '—', description: 'Nome da pessoa' },
+          { name: 'company', type: 'string', default: '—', description: 'Empresa' },
+          { name: 'role', type: 'string', default: '—', description: 'Cargo' },
+          { name: 'rating', type: 'number (1-5)', default: '5', description: 'Nota em estrelas' },
+          { name: 'testimonial', type: 'string', default: '—', description: 'Texto do depoimento' },
+          { name: 'photo', type: 'string (URL)', default: 'undefined', description: 'URL da foto (se não fornecida, mostra iniciais)' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<TestimonialCard
+  name="Carlos Mendes"
+  company="TechStart"
+  role="CEO"
+  rating={5}
+  testimonial="A Max Ebina transformou completamente nossa presença digital. Em 3 meses, triplicamos os leads qualificados."
+/>
+
+// Com foto personalizada
+<TestimonialCard
+  name="Ana Silva"
+  company="ModaFit"
+  role="Diretora"
+  rating={5}
+  testimonial="A automação de WhatsApp economiza 4 horas por dia da minha equipe."
+  photo="/photos/ana-silva.jpg"
+/>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Avatar com iniciais (gradiente tech→primary)',
+            'Foto opcional (circular com ring)',
+            'Estrelas de rating (1-5)',
+            'Hover com scale suave (1.02)',
+            'Glassmorphism background',
+            'Aspas decorativas no texto',
+            '100% responsivo',
+            'Acessível (semântica correta)',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Dicas para Depoimentos Eficazes</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+          <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
+            <li>✅ <strong>Use números concretos:</strong> "triplicamos os leads" é melhor que "aumentamos muito"</li>
+            <li>✅ <strong>Mencione tempo:</strong> "Em 3 meses" dá credibilidade</li>
+            <li>✅ <strong>Foque em resultados:</strong> "economiza 4h por dia" mostra valor real</li>
+            <li>✅ <strong>Inclua cargo e empresa:</strong> Aumenta autoridade do depoimento</li>
+            <li>✅ <strong>Mantenha conciso:</strong> 2-3 frases são ideais</li>
+            <li>❌ <strong>Evite genéricos:</strong> "Ótimo serviço" não convence ninguém</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -1252,52 +1529,120 @@ function PreviewSection() {
     <div className="space-y-12">
       <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
         <p className="text-tech font-semibold mb-2">🚀 Landing Page Preview</p>
-        <p className="text-sm text-[var(--text-on-surface-muted)]">Preview da LP completa da Max Ebina.</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Preview da LP completa da Max Ebina, montada com todos os componentes do Design System.</p>
       </div>
 
-      <div className="rounded-2xl border border-[var(--surface-border)] overflow-hidden bg-bg-dark">
-        <Navbar
-          logo="MAX"
-          links={[
-            { label: 'Serviços', href: '#servicos' },
-            { label: 'Cases', href: '#cases' },
-          ]}
-          ctaText="Diagnóstico Gratuito"
-        />
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Estrutura da Landing Page</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] overflow-hidden">
+          <div className="bg-[var(--surface-card-secondary)] p-4 border-b border-[var(--surface-border)]">
+            <p className="text-sm font-semibold text-[var(--text-on-surface)]">Seções da LP</p>
+          </div>
+          <div className="divide-y divide-[var(--surface-border)]">
+            {[
+              { name: 'Navbar', component: 'Navbar', desc: 'Fixa no topo, glassmorphism, scroll progress bar' },
+              { name: 'Hero Section', component: 'HeroSection', desc: 'Headline com stagger animation, partículas, 2 CTAs' },
+              { name: 'Serviços', component: 'ServiceCard x6', desc: 'Grid 3x2 com todos os serviços da agência' },
+              { name: 'Prova Social', component: 'AnimatedCounter x4', desc: 'Números animados: +150 projetos, +40% leads, 98% satisfação' },
+              { name: 'Depoimentos', component: 'TestimonialCard x3', desc: 'Cards com avatar, estrelas e texto do depoimento' },
+              { name: 'Lead Magnet', component: 'LeadCaptureForm', desc: 'Formulário de captura com gradiente de fundo' },
+              { name: 'FAQ', component: 'FAQ', desc: '5 perguntas frequentes em accordion' },
+              { name: 'Footer', component: 'Footer', desc: 'Links, redes sociais, copyright' },
+              { name: 'WhatsApp Float', component: 'WhatsAppFloat', desc: 'Botão flutuante fixo no canto inferior direito' },
+            ].map((section, i) => (
+              <div key={i} className="flex items-center gap-4 p-4 bg-[var(--surface-card)]">
+                <div className="w-8 h-8 rounded-lg bg-tech/10 flex items-center justify-center text-tech font-bold text-sm flex-shrink-0">
+                  {i + 1}
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-sm text-[var(--text-on-surface)]">{section.name}</p>
+                  <p className="text-xs text-[var(--text-on-surface-muted)]">{section.desc}</p>
+                </div>
+                <code className="text-xs text-tech font-mono hidden md:block">{section.component}</code>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-        <section className="py-24 px-6 bg-bg-dark">
-          <div className="max-w-6xl mx-auto">
-            <SectionHeader
-              eyebrow="Nossos Serviços"
-              title="Soluções que Geram Resultado"
-              subtitle="Cada serviço é pensado para acelerar o crescimento do seu negócio."
-            />
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <ServiceCard title="Sites Institucionais" description="Presença digital profissional que converte." icon="Globe" badge="Popular" />
-              <ServiceCard title="Landing Pages" description="Páginas de alta conversão para campanhas." icon="Layout" badge="+40% leads" />
-              <ServiceCard title="SaaS" description="Plataformas web sob medida." icon="Code2" />
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Preview Visual</h3>
+        <div className="rounded-2xl border border-[var(--surface-border)] overflow-hidden bg-bg-dark">
+          <Navbar
+            logo="MAX"
+            links={[
+              { label: 'Serviços', href: '#servicos' },
+              { label: 'Cases', href: '#cases' },
+            ]}
+            ctaText="Diagnóstico Gratuito"
+          />
+
+          <section className="py-24 px-6 bg-bg-dark">
+            <div className="max-w-6xl mx-auto">
+              <SectionHeader
+                eyebrow="Nossos Serviços"
+                title="Soluções que Geram Resultado"
+                subtitle="Cada serviço é pensado para acelerar o crescimento do seu negócio."
+              />
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <ServiceCard title="Sites Institucionais" description="Presença digital profissional que converte." icon="Globe" badge="Popular" />
+                <ServiceCard title="Landing Pages" description="Páginas de alta conversão para campanhas." icon="Layout" badge="+40% leads" />
+                <ServiceCard title="SaaS" description="Plataformas web sob medida." icon="Code2" />
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="py-24 px-6 bg-bg-dark-secondary">
-          <div className="max-w-4xl mx-auto">
-            <SectionHeader eyebrow="Prova Social" title="Números que Falam" />
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <AnimatedCounter end={150} suffix="+" label="Projetos Entregues" icon={<Layout className="w-6 h-6" />} />
-              <AnimatedCounter end={40} suffix="%" label="Aumento em Leads" icon={<TrendingUp className="w-6 h-6" />} />
-              <AnimatedCounter end={98} suffix="%" label="Satisfação" icon={<Star className="w-6 h-6" />} />
-              <AnimatedCounter end={10} suffix="+" label="Anos de Mercado" icon={<Clock className="w-6 h-6" />} />
+          <section className="py-24 px-6 bg-bg-dark-secondary">
+            <div className="max-w-4xl mx-auto">
+              <SectionHeader eyebrow="Prova Social" title="Números que Falam" />
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <AnimatedCounter end={150} suffix="+" label="Projetos Entregues" icon={<Layout className="w-6 h-6" />} />
+                <AnimatedCounter end={40} suffix="%" label="Aumento em Leads" icon={<TrendingUp className="w-6 h-6" />} />
+                <AnimatedCounter end={98} suffix="%" label="Satisfação" icon={<Star className="w-6 h-6" />} />
+                <AnimatedCounter end={10} suffix="+" label="Anos de Mercado" icon={<Clock className="w-6 h-6" />} />
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <footer className="py-12 px-6 border-t border-white/5 bg-bg-dark">
-          <div className="max-w-6xl mx-auto text-center">
-            <p className="font-display font-bold text-xl gradient-text">MAX</p>
-            <p className="text-sm text-white/40 mt-1">© 2026 Max Ebina. Todos os direitos reservados.</p>
-          </div>
-        </footer>
+          <footer className="py-12 px-6 border-t border-white/5 bg-bg-dark">
+            <div className="max-w-6xl mx-auto text-center">
+              <p className="font-display font-bold text-xl gradient-text">MAX</p>
+              <p className="text-sm text-white/40 mt-1">© 2026 Max Ebina. Todos os direitos reservados.</p>
+            </div>
+          </footer>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Animações e Interações</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            { name: 'Scroll Progress Bar', desc: 'Linha ciano no topo que preenche conforme scroll' },
+            { name: 'Navbar Glassmorphism', desc: 'Background blur e sombra ao scrollar 50px+' },
+            { name: 'Animated Counters', desc: 'Números animam de 0 até valor final em 2s' },
+            { name: 'ServiceCard Hover', desc: 'Lift -8px + gradiente animado na borda' },
+            { name: 'FAQ Accordion', desc: 'Abre/fecha com easing elástico' },
+            { name: 'WhatsApp Pulse', desc: 'Anel expansivo no botão flutuante' },
+          ].map(anim => (
+            <div key={anim.name} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{anim.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-muted)]">{anim.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Performance</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+          <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
+            <li>✅ <strong>Lazy loading:</strong> Imagens carregam apenas quando visíveis</li>
+            <li>✅ <strong>Partículas otimizadas:</strong> Reduzidas em mobile (30 vs 60)</li>
+            <li>✅ <strong>will-change:</strong> Apenas no hover para economizar memória</li>
+            <li>✅ <strong>IntersectionObserver:</strong> Contadores animam apenas ao entrar no viewport</li>
+            <li>✅ <strong>Fontes otimizadas:</strong> Preconnect + display swap</li>
+          </ul>
+        </div>
       </div>
 
       <WhatsAppFloat />
