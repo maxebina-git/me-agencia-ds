@@ -10,6 +10,7 @@ import {
   InstagramSlide
 } from './components/ui';
 import { PhoneMockup } from './components/PhoneMockup';
+import { CodeBlock, PropsTable } from './components/DocsComponents';
 
 type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'buttons' | 'cards' | 'forms' | 'navbar' | 'faq' | 'testimonials' | 'instagram' | 'brand-voice' | 'preview';
 
@@ -464,11 +465,63 @@ function ColorsSection({ copiedColor, copyToClipboard }: { copiedColor: string |
           </div>
         </div>
       ))}
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Gradientes</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { name: 'Primary', css: 'linear-gradient(135deg, #8f6424 0%, #06B6D4 100%)' },
+            { name: 'Tech', css: 'linear-gradient(135deg, #06B6D4 0%, #0EA5E9 100%)' },
+            { name: 'Dark', css: 'linear-gradient(180deg, #17120e 0%, #1f1a16 100%)' },
+          ].map(g => (
+            <div key={g.name} className="rounded-xl overflow-hidden border border-[var(--surface-border)]">
+              <div className="h-24 w-full" style={{ background: g.css }} />
+              <div className="p-4 bg-[var(--surface-card-secondary)]">
+                <p className="font-semibold text-sm text-[var(--text-on-surface)]">{g.name}</p>
+                <p className="text-xs text-[var(--text-on-surface-muted)] font-mono mt-1 truncate">{g.css}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Sombras e Efeitos</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <div className="w-full h-20 rounded-xl bg-tech mb-4" style={{ boxShadow: '0 0 40px rgba(6, 182, 212, 0.3)' }} />
+            <p className="font-semibold text-sm text-[var(--text-on-surface)]">Glow Tech</p>
+            <p className="text-xs text-[var(--text-on-surface-muted)] font-mono mt-1">0 0 40px rgba(6,182,212,0.3)</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <div className="w-full h-20 rounded-xl bg-tech mb-4" style={{ boxShadow: '0 0 60px rgba(6, 182, 212, 0.5)' }} />
+            <p className="font-semibold text-sm text-[var(--text-on-surface)]">Glow Tech Strong</p>
+            <p className="text-xs text-[var(--text-on-surface-muted)] font-mono mt-1">0 0 60px rgba(6,182,212,0.5)</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <div className="w-full h-20 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 mb-4" />
+            <p className="font-semibold text-sm text-[var(--text-on-surface)]">Glassmorphism</p>
+            <p className="text-xs text-[var(--text-on-surface-muted)] font-mono mt-1">backdrop-blur(12px)</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 function TypographySection() {
+  const scale = [
+    { name: 'text-xs', value: 'clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem)', size: '0.75rem' },
+    { name: 'text-sm', value: 'clamp(0.875rem, 0.8rem + 0.35vw, 1rem)', size: '0.875rem' },
+    { name: 'text-base', value: 'clamp(1rem, 0.9rem + 0.5vw, 1.125rem)', size: '1rem' },
+    { name: 'text-lg', value: 'clamp(1.125rem, 1rem + 0.6vw, 1.25rem)', size: '1.125rem' },
+    { name: 'text-xl', value: 'clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem)', size: '1.25rem' },
+    { name: 'text-2xl', value: 'clamp(1.5rem, 1.3rem + 1vw, 2rem)', size: '1.5rem' },
+    { name: 'text-3xl', value: 'clamp(1.875rem, 1.5rem + 1.8vw, 2.5rem)', size: '1.875rem' },
+    { name: 'text-4xl', value: 'clamp(2.25rem, 1.8rem + 2.2vw, 3.5rem)', size: '2.25rem' },
+    { name: 'text-5xl', value: 'clamp(3rem, 2.2rem + 4vw, 5rem)', size: '3rem' },
+  ];
+
   return (
     <div className="space-y-12">
       <div>
@@ -477,12 +530,62 @@ function TypographySection() {
           <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card-secondary)]">
             <p className="text-tech text-sm font-semibold mb-4">Display — Space Grotesk</p>
             <p className="text-4xl font-display font-bold text-[var(--text-on-surface)] mb-2">Aa Bb Cc</p>
-            <p className="text-[var(--text-on-surface-muted)] text-sm">Futurista, geométrica, perfeita para títulos.</p>
+            <p className="text-[var(--text-on-surface-muted)] text-sm mb-4">Futurista, geométrica, perfeita para títulos e headlines que transmitem inovação.</p>
+            <p className="text-[var(--text-on-surface-subtle)] text-xs font-mono">font-family: 'Space Grotesk', sans-serif;</p>
           </div>
           <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card-secondary)]">
             <p className="text-tech text-sm font-semibold mb-4">Body — Inter</p>
             <p className="text-4xl font-bold text-[var(--text-on-surface)] mb-2">Aa Bb Cc</p>
-            <p className="text-[var(--text-on-surface-muted)] text-sm">Legível, versátil, ideal para corpo de texto.</p>
+            <p className="text-[var(--text-on-surface-muted)] text-sm mb-4">Legível, versátil, ideal para corpo de texto e UI que precisa de clareza.</p>
+            <p className="text-[var(--text-on-surface-subtle)] text-xs font-mono">font-family: 'Inter', sans-serif;</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Escala Tipográfica (Fluid com clamp)</h3>
+        <p className="text-[var(--text-on-surface-muted)] mb-6">
+          A escala usa <code className="text-tech">clamp()</code> para ser responsiva automaticamente, adaptando-se ao tamanho da tela.
+        </p>
+        <div className="space-y-4">
+          {scale.map(item => (
+            <div key={item.name} className="flex flex-col md:flex-row md:items-center gap-4 p-4 rounded-xl border border-[var(--surface-border)] bg-[var(--surface-card-secondary)]">
+              <div className="md:w-24 flex-shrink-0">
+                <span className="text-xs font-mono text-tech">{item.name}</span>
+              </div>
+              <div className="flex-1">
+                <p style={{ fontSize: item.size }} className="font-display font-bold text-[var(--text-on-surface)]">
+                  Transforme Sua Empresa
+                </p>
+              </div>
+              <div className="md:w-64 flex-shrink-0">
+                <code className="text-xs text-[var(--text-on-surface-subtle)] font-mono">{item.value}</code>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Uso Recomendado</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="rounded-xl border border-success/20 bg-success/5 p-6">
+            <p className="font-semibold text-[var(--text-on-surface)] mb-3">✅ Use Space Grotesk para:</p>
+            <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
+              <li>• Headlines e títulos principais</li>
+              <li>• Nomes de seções</li>
+              <li>• CTAs de botões</li>
+              <li>• Números de métricas</li>
+            </ul>
+          </div>
+          <div className="rounded-xl border border-success/20 bg-success/5 p-6">
+            <p className="font-semibold text-[var(--text-on-surface)] mb-3">✅ Use Inter para:</p>
+            <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
+              <li>• Corpo de texto</li>
+              <li>• Labels de formulários</li>
+              <li>• Descrições e parágrafos</li>
+              <li>• UI elements (botões, links)</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -492,31 +595,68 @@ function TypographySection() {
 
 function SpacingSection() {
   const spaces = [
-    { name: 'space-1', value: '4px' },
-    { name: 'space-2', value: '8px' },
-    { name: 'space-4', value: '16px' },
-    { name: 'space-8', value: '32px' },
-    { name: 'space-16', value: '64px' },
+    { name: 'space-1', value: '4px', use: 'Detalhes mínimos, ícones pequenos' },
+    { name: 'space-2', value: '8px', use: 'Espaçamento entre ícones e texto' },
+    { name: 'space-3', value: '12px', use: 'Padding interno de badges' },
+    { name: 'space-4', value: '16px', use: 'Padding de botões, gaps pequenos' },
+    { name: 'space-6', value: '24px', use: 'Padding de cards, margens entre elementos' },
+    { name: 'space-8', value: '32px', use: 'Margens entre seções, padding de containers' },
+    { name: 'space-12', value: '48px', use: 'Espaçamento entre seções grandes' },
+    { name: 'space-16', value: '64px', use: 'Padding de seções hero' },
+    { name: 'space-24', value: '96px', use: 'Margens de seções principais' },
+    { name: 'space-32', value: '128px', use: 'Espaçamento de hero sections' },
   ];
 
   return (
-    <div className="space-y-8">
-      <p className="text-[var(--text-on-surface-muted)]">Escala baseada em múltiplos de 8px.</p>
-      <div className="space-y-3">
-        {spaces.map(space => (
-          <div key={space.name} className="flex items-center gap-4">
-            <div className="w-28 text-right">
-              <span className="text-sm font-mono text-tech">{space.name}</span>
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Escala de Espaçamento</h3>
+        <p className="text-[var(--text-on-surface-muted)] mb-6">
+          Baseada em múltiplos de 8px para consistência visual e harmonia em todos os componentes.
+        </p>
+        <div className="space-y-3">
+          {spaces.map(space => (
+            <div key={space.name} className="flex items-center gap-4 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <div className="w-28 flex-shrink-0">
+                <span className="text-sm font-mono text-tech">{space.name}</span>
+              </div>
+              <div className="flex-1 flex items-center gap-3">
+                <div
+                  className="h-8 rounded-md bg-gradient-to-r from-tech to-tech-light opacity-80"
+                  style={{ width: space.value }}
+                />
+                <span className="text-sm text-[var(--text-on-surface-muted)] font-mono">{space.value}</span>
+              </div>
+              <div className="hidden md:block w-64 text-sm text-[var(--text-on-surface-subtle)]">
+                {space.use}
+              </div>
             </div>
-            <div className="flex-1 flex items-center gap-3">
-              <div
-                className="h-8 rounded-md bg-gradient-to-r from-tech to-tech-light opacity-80"
-                style={{ width: space.value }}
-              />
-              <span className="text-sm text-[var(--text-on-surface-subtle)] font-mono">{space.value}</span>
-            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Princípios</h3>
+        <div className="grid md:grid-cols-3 gap-4">
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech font-semibold mb-2">Consistência</p>
+            <p className="text-sm text-[var(--text-on-surface-muted)]">
+              Use apenas valores da escala. Evite valores arbitrários como 13px ou 27px.
+            </p>
           </div>
-        ))}
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech font-semibold mb-2">Hierarquia</p>
+            <p className="text-sm text-[var(--text-on-surface-muted)]">
+              Espaços maiores para separar seções, menores para elementos relacionados.
+            </p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech font-semibold mb-2">Respiração</p>
+            <p className="text-sm text-[var(--text-on-surface-muted)]">
+              Não tenha medo de espaço em branco. Ele melhora a legibilidade.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -526,15 +666,23 @@ function MotionSection() {
   const [activeEasing, setActiveEasing] = useState<string | null>(null);
 
   const easings = [
-    { name: 'Elastic', value: 'cubic-bezier(0.34, 1.56, 0.64, 1)' },
-    { name: 'Smooth', value: 'cubic-bezier(0.16, 1, 0.3, 1)' },
-    { name: 'Spring', value: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' },
+    { name: 'Elastic', value: 'cubic-bezier(0.34, 1.56, 0.64, 1)', desc: 'Efeito bounce/elástico — ideal para botões e CTAs' },
+    { name: 'Smooth', value: 'cubic-bezier(0.16, 1, 0.3, 1)', desc: 'Entrada suave — ideal para reveals e transições de página' },
+    { name: 'Spring', value: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)', desc: 'Spring leve — ideal para hovers e micro-interações' },
+  ];
+
+  const durations = [
+    { name: 'fast', value: '150ms', use: 'Micro-interações, toggles' },
+    { name: 'normal', value: '300ms', use: 'Transições padrão' },
+    { name: 'slow', value: '600ms', use: 'Reveals, animações de entrada' },
+    { name: 'slower', value: '900ms', use: 'Transições dramáticas' },
   ];
 
   return (
     <div className="space-y-12">
       <div>
-        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Easings</h3>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Easings (Curvas de Animação)</h3>
+        <p className="text-[var(--text-on-surface-muted)] mb-8">Clique nos botões para ver cada easing em ação:</p>
         <div className="grid md:grid-cols-3 gap-6">
           {easings.map(easing => (
             <div key={easing.name} className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)] text-center">
@@ -546,9 +694,59 @@ function MotionSection() {
                 style={{ transitionTimingFunction: easing.value, transitionDuration: '600ms' }}
               />
               <p className="font-display font-bold text-[var(--text-on-surface)] mb-1">{easing.name}</p>
-              <p className="text-xs text-[var(--text-on-surface-muted)] font-mono">{easing.value}</p>
+              <p className="text-xs text-[var(--text-on-surface-muted)] font-mono mb-2">{easing.value}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{easing.desc}</p>
             </div>
           ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Durations</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {durations.map(d => (
+            <div key={d.name} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)] text-center">
+              <p className="text-2xl font-display font-bold gradient-text-tech">{d.value}</p>
+              <p className="text-sm text-tech font-mono mt-1">{d.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)] mt-2">{d.use}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Animações Predefinidas</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { name: 'glow', class: 'animate-glow', desc: 'Brilho pulsante' },
+            { name: 'float', class: 'animate-float', desc: 'Flutuação suave' },
+            { name: 'pulse-ring', class: 'animate-pulse-ring', desc: 'Anel expansivo' },
+            { name: 'fade-in', class: 'animate-fade-in', desc: 'Aparecimento suave' },
+          ].map(anim => (
+            <div key={anim.name} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)] text-center">
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-tech to-primary mx-auto mb-3 ${anim.class}`} />
+              <p className="text-sm font-mono text-tech">{anim.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)] mt-1">{anim.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Princípios de Motion</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech font-semibold mb-2">⚡ Performance</p>
+            <p className="text-sm text-[var(--text-on-surface-muted)]">
+              Use apenas <code className="text-tech">transform</code> e <code className="text-tech">opacity</code> para animações. Evite animar width, height ou position.
+            </p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech font-semibold mb-2">🎯 Propósito</p>
+            <p className="text-sm text-[var(--text-on-surface-muted)]">
+              Toda animação deve ter um propósito: guiar atenção, confirmar ação ou criar delight. Nunca anime por animar.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -579,6 +777,64 @@ function ButtonsSection() {
           </div>
         </div>
       </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Tamanhos</h3>
+        <div className="flex flex-wrap items-center gap-4">
+          <Button variant="tech" size="sm">Small</Button>
+          <Button variant="tech" size="md">Medium</Button>
+          <Button variant="tech" size="lg">Large</Button>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'variant', type: "'primary' | 'secondary' | 'ghost' | 'tech'", default: "'primary'", description: 'Estilo visual do botão' },
+          { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamanho do botão' },
+          { name: 'icon', type: 'boolean', default: 'false', description: 'Mostra ícone de seta animado' },
+          { name: 'loading', type: 'boolean', default: 'false', description: 'Estado de carregamento com spinner' },
+          { name: 'href', type: 'string', default: 'undefined', description: 'Se definido, renderiza como <a>' },
+          { name: 'disabled', type: 'boolean', default: 'false', description: 'Desabilita o botão' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplos de Uso</h3>
+        <CodeBlock code={`<Button variant="tech" size="lg" icon>
+  Quero Escalar Meu Negócio
+</Button>
+
+<Button variant="ghost" href="/cases">
+  Ver Cases
+</Button>
+
+<Button variant="primary" loading>
+  Enviando...
+</Button>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Micro-copy para CTAs</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech text-sm font-semibold mb-3">Primário (Tech)</p>
+            <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
+              <li>• "Quero Escalar Meu Negócio"</li>
+              <li>• "Agendar Diagnóstico Gratuito"</li>
+              <li>• "Começar Agora"</li>
+            </ul>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech text-sm font-semibold mb-3">Secundário (Ghost)</p>
+            <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
+              <li>• "Ver Cases"</li>
+              <li>• "Conhecer Soluções"</li>
+              <li>• "Saiba Mais"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -588,6 +844,9 @@ function CardsSection() {
     { title: 'Sites Institucionais', description: 'Presença digital profissional que converte visitantes em clientes.', icon: 'Globe', badge: 'Popular' },
     { title: 'Landing Pages', description: 'Páginas de alta conversão para campanhas de tráfego pago.', icon: 'Layout', badge: '+40% leads' },
     { title: 'SaaS', description: 'Plataformas web sob medida para escalar seu modelo de negócio.', icon: 'Code2' },
+    { title: 'CRM', description: 'Gestão inteligente de clientes e automação de vendas.', icon: 'Bot' },
+    { title: 'Tráfego Pago', description: 'Investimento estratégico em mídia com ROI mensurável.', icon: 'Megaphone' },
+    { title: 'Automação WhatsApp', description: 'Fluxos inteligentes que vendem 24h por dia.', icon: 'Workflow', badge: 'Novo' },
   ];
 
   return (
@@ -597,6 +856,49 @@ function CardsSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map(service => (
             <ServiceCard key={service.title} {...service} />
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'title', type: 'string', default: '—', description: 'Título do serviço' },
+          { name: 'description', type: 'string', default: '—', description: 'Descrição do serviço' },
+          { name: 'icon', type: 'string', default: '—', description: 'Nome do ícone Lucide (Globe, Layout, Code2, Bot, Megaphone, Workflow)' },
+          { name: 'badge', type: 'string', default: 'undefined', description: 'Badge opcional no canto superior (ex: "Popular", "+40% leads")' },
+          { name: 'ctaText', type: 'string', default: "'Saiba mais'", description: 'Texto do link CTA' },
+          { name: 'href', type: 'string', default: "'#'", description: 'URL do link' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<ServiceCard
+  title="Sites Institucionais"
+  description="Presença digital profissional que converte visitantes em clientes."
+  icon="Globe"
+  badge="Popular"
+  ctaText="Saiba mais"
+  href="/servicos/sites"
+/>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Borda com gradiente animado (ciano→laranja)',
+            'Lift no hover (translateY -8px)',
+            'Ícone com scale e rotação no hover',
+            'Badge opcional no canto superior direito',
+            'Glassmorphism background',
+            '100% responsivo',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
           ))}
         </div>
       </div>
@@ -696,12 +998,38 @@ function InstagramSection() {
     <div className="space-y-12">
       <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
         <p className="text-tech font-semibold mb-2">📸 Como usar os templates</p>
-        <ol className="text-sm text-[var(--text-on-surface-muted)] space-y-1 list-decimal list-inside">
-          <li>Use "Mostrar no celular" para ver como o slide fica no Instagram</li>
-          <li>Ative "Mostrar área de segurança" para posicionar conteúdo</li>
-          <li>Texto crítico deve ficar DENTRO da linha tracejada ciano</li>
+        <ol className="text-sm text-[var(--text-on-surface-muted)] space-y-2 list-decimal list-inside">
+          <li>Use o toggle "Mostrar no celular" para ver como o slide fica no Instagram real</li>
+          <li>Ative "Mostrar área de segurança" para posicionar conteúdo importante</li>
+          <li>Todo texto crítico deve ficar DENTRO da linha tracejada ciano</li>
+          <li>As bordas (fora da safe zone) são apenas para elementos decorativos</li>
+          <li>Abra o slide em nova aba (zoom 100%)</li>
+          <li>DevTools → Clique direito no elemento → "Capture node screenshot"</li>
+          <li>Dimensão final: 1080x1350px (proporção 4:5)</li>
           <li>Desative safe zone e mockup antes do screenshot final</li>
         </ol>
+      </div>
+
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-3">📐 Especificações da Safe Zone</p>
+        <div className="grid md:grid-cols-4 gap-4 text-sm">
+          <div>
+            <p className="text-[var(--text-on-surface-subtle)]">Topo</p>
+            <p className="text-[var(--text-on-surface)] font-mono">180px (13.3%)</p>
+          </div>
+          <div>
+            <p className="text-[var(--text-on-surface-subtle)]">Base</p>
+            <p className="text-[var(--text-on-surface)] font-mono">200px (14.8%)</p>
+          </div>
+          <div>
+            <p className="text-[var(--text-on-surface-subtle)]">Laterais</p>
+            <p className="text-[var(--text-on-surface)] font-mono">140px (13%)</p>
+          </div>
+          <div>
+            <p className="text-[var(--text-on-surface-subtle)]">Safe Zone</p>
+            <p className="text-[var(--text-on-surface)] font-mono">800x970px</p>
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
@@ -798,15 +1126,121 @@ function BrandVoiceSection() {
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Tom de Voz</h3>
         <div className="grid md:grid-cols-3 gap-4">
           {[
-            { adj: 'Confiante', desc: 'Fala com segurança sobre resultados.' },
-            { adj: 'Visionário', desc: 'Mostra o futuro possível com tecnologia.' },
-            { adj: 'Acessível', desc: 'Traduz complexidade em linguagem simples.' },
+            { adj: 'Confiante', desc: 'Fala com segurança sobre resultados e transformação.' },
+            { adj: 'Visionário', desc: 'Mostra o futuro possível com tecnologia e automação.' },
+            { adj: 'Acessível', desc: 'Traduz complexidade técnica em linguagem de resultado.' },
           ].map(t => (
             <div key={t.adj} className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
               <p className="text-2xl font-display font-bold gradient-text-tech mb-2">{t.adj}</p>
               <p className="text-sm text-[var(--text-on-surface-muted)]">{t.desc}</p>
             </div>
           ))}
+        </div>
+        <p className="text-sm text-[var(--text-on-surface-muted)] mt-4">
+          <strong>Personalidade da marca:</strong> O Mago + O Sábio. Transforma complexidade técnica em simplicidade estratégica. Fala de resultado, não de ferramenta.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">✅ Fale Assim</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            { label: 'Headline', text: '"Transforme Sua Empresa com Tecnologia e Automação"' },
+            { label: 'Benefício', text: '"Economize 4h por dia com automação inteligente"' },
+            { label: 'Prova Social', text: '"+150 empresas já escalaram com a gente"' },
+            { label: 'CTA', text: '"Quero Escalar Meu Negócio"' },
+            { label: 'Urgência', text: '"Vagas limitadas para diagnóstico gratuito este mês"' },
+            { label: 'Resultado', text: '"+40% mais leads qualificados em 90 dias"' },
+          ].map(item => (
+            <div key={item.label} className="flex items-start gap-3 p-4 rounded-xl bg-success/5 border border-success/20">
+              <Check className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs text-success font-semibold mb-1">{item.label}</p>
+                <p className="text-sm text-[var(--text-on-surface)]">{item.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">❌ Evite Isso</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            { label: 'Jargão técnico', text: '"Nossa API REST com webhooks e deploy CI/CD"' },
+            { label: 'Vago', text: '"O melhor do mercado em soluções digitais"' },
+            { label: 'Foco em ferramenta', text: '"Usamos React, Node.js e PostgreSQL"' },
+            { label: 'Promessa vazia', text: '"Resultados garantidos em 24h"' },
+            { label: 'Técnico demais', text: '"Arquitetura escalável com microserviços"' },
+            { label: 'Genérico', text: '"Código limpo e boas práticas"' },
+          ].map(item => (
+            <div key={item.label} className="flex items-start gap-3 p-4 rounded-xl bg-error/5 border border-error/20">
+              <X className="w-5 h-5 text-error flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs text-error font-semibold mb-1">{item.label}</p>
+                <p className="text-sm text-[var(--text-on-surface)]">{item.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Gatilhos Mentais</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            { name: 'Autoridade', desc: 'Números, cases, anos de experiência', example: '"+10 anos transformando negócios"' },
+            { name: 'Prova Social', desc: 'Depoimentos, logos, métricas', example: '"+150 empresas satisfeitas"' },
+            { name: 'Urgência', desc: 'Vagas limitadas, bônus por tempo', example: '"Apenas 5 vagas para diagnóstico"' },
+            { name: 'Reciprocidade', desc: 'Iscas digitais, diagnósticos gratuitos', example: '"Diagnóstico gratuito sem compromisso"' },
+          ].map(g => (
+            <div key={g.name} className="rounded-xl border border-[var(--surface-border)] p-5 bg-[var(--surface-card-secondary)]">
+              <p className="font-display font-bold text-tech mb-1">{g.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)] mb-3">{g.desc}</p>
+              <p className="text-sm text-[var(--text-on-surface-muted)] italic">"{g.example}"</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Micro-copy</h3>
+        <div className="space-y-4">
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech text-sm font-semibold mb-3">Formulários</p>
+            <div className="space-y-3 text-sm">
+              <div>
+                <span className="text-[var(--text-on-surface-subtle)]">Label:</span>{' '}
+                <span className="text-[var(--text-on-surface)]">"Vamos conversar sobre seu projeto"</span>
+              </div>
+              <div>
+                <span className="text-[var(--text-on-surface-subtle)]">Placeholder email:</span>{' '}
+                <span className="text-[var(--text-on-surface)] font-mono">seu@email.com</span>
+              </div>
+              <div>
+                <span className="text-[var(--text-on-surface-subtle)]">Placeholder telefone:</span>{' '}
+                <span className="text-[var(--text-on-surface)] font-mono">(11) 99999-9999</span>
+              </div>
+              <div>
+                <span className="text-[var(--text-on-surface-subtle)]">Sucesso:</span>{' '}
+                <span className="text-[var(--text-on-surface)]">"Recebemos seus dados! Em até 2h úteis entraremos em contato. 🚀"</span>
+              </div>
+              <div>
+                <span className="text-[var(--text-on-surface-subtle)]">Privacy note:</span>{' '}
+                <span className="text-[var(--text-on-surface)]">"🔒 Seus dados estão seguros. Não enviamos spam."</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech text-sm font-semibold mb-3">Headlines de Exemplo</p>
+            <ul className="space-y-2 text-sm text-[var(--text-on-surface)]">
+              <li>• "Transforme Sua Empresa com Tecnologia e Automação"</li>
+              <li>• "Sites, LPs e CRM que geram resultados reais"</li>
+              <li>• "5 Automações que Toda Empresa Precisa em 2026"</li>
+              <li>• "Escale seu negócio com inteligência digital"</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
