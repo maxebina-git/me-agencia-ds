@@ -11,7 +11,7 @@ import {
 } from './components/ui';
 import { PhoneMockup } from './components/PhoneMockup';
 
-type Section = 'colors' | 'typography' | 'spacing' | 'motion' | 'buttons' | 'cards' | 'forms' | 'navbar' | 'faq' | 'testimonials' | 'instagram' | 'brand-voice' | 'preview';
+type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'buttons' | 'cards' | 'forms' | 'navbar' | 'faq' | 'testimonials' | 'instagram' | 'brand-voice' | 'preview';
 
 interface NavItem {
   id: Section;
@@ -21,6 +21,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
+  { id: 'logo', label: 'Logo', group: '📦 Fundações', icon: <Box className="w-4 h-4" /> },
   { id: 'colors', label: 'Cores', group: '📦 Fundações', icon: <Palette className="w-4 h-4" /> },
   { id: 'typography', label: 'Tipografia', group: '📦 Fundações', icon: <Type className="w-4 h-4" /> },
   { id: 'spacing', label: 'Espaçamento', group: '📦 Fundações', icon: <Ruler className="w-4 h-4" /> },
@@ -191,6 +192,7 @@ export default function App() {
             </h2>
           </div>
 
+          {activeSection === 'logo' && <LogoSection />}
           {activeSection === 'colors' && <ColorsSection copiedColor={copiedColor} copyToClipboard={copyToClipboard} />}
           {activeSection === 'typography' && <TypographySection />}
           {activeSection === 'spacing' && <SpacingSection />}
@@ -217,6 +219,185 @@ export default function App() {
 /* ═══════════════════════════════════════════════════════════
    SECTION COMPONENTS
    ═══════════════════════════════════════════════════════════ */
+
+function LogoSection() {
+  const [copiedSvg, setCopiedSvg] = useState(false);
+
+  const logoSvg = `<svg width="182" height="87" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"/>
+<path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
+</svg>`;
+
+  const handleCopySvg = () => {
+    navigator.clipboard.writeText(logoSvg);
+    setCopiedSvg(true);
+    setTimeout(() => setCopiedSvg(false), 2000);
+  };
+
+  return (
+    <div className="space-y-12">
+      {/* Logo Principal */}
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Logo Principal</h3>
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Fundo Claro */}
+          <div className="rounded-xl border border-[var(--surface-border)] p-12 bg-[var(--surface-card)] flex items-center justify-center">
+            <svg width="182" height="87" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"/>
+              <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
+            </svg>
+          </div>
+
+          {/* Fundo Escuro */}
+          <div className="rounded-xl border border-[var(--surface-border)] p-12 bg-bg-dark flex items-center justify-center">
+            <svg width="182" height="87" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"/>
+              <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
+            </svg>
+          </div>
+        </div>
+        <p className="text-sm text-[var(--text-on-surface-muted)] mt-4">
+          O logo usa a cor primária do DS (#8f6424) em ambos os fundos para manter consistência da marca.
+        </p>
+      </div>
+
+      {/* Variações de Tamanho */}
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Tamanhos</h3>
+        <div className="space-y-6">
+          {/* Grande */}
+          <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card)]">
+            <p className="text-xs text-[var(--text-on-surface-subtle)] mb-4">Grande (182x87)</p>
+            <svg width="182" height="87" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"/>
+              <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
+            </svg>
+          </div>
+
+          {/* Médio */}
+          <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card)]">
+            <p className="text-xs text-[var(--text-on-surface-subtle)] mb-4">Médio (136x65)</p>
+            <svg width="136" height="65" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"/>
+              <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
+            </svg>
+          </div>
+
+          {/* Pequeno */}
+          <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card)]">
+            <p className="text-xs text-[var(--text-on-surface-subtle)] mb-4">Pequeno (91x43)</p>
+            <svg width="91" height="43" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"/>
+              <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* Versão com Texto */}
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Logo + Texto</h3>
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Fundo Claro */}
+          <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card)] flex items-center gap-4">
+            <svg width="60" height="29" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"/>
+              <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
+            </svg>
+            <div>
+              <p className="font-display font-bold text-2xl text-[var(--text-on-surface)]">Max Ebina</p>
+              <p className="text-xs text-[var(--text-on-surface-muted)]">Marketing Digital</p>
+            </div>
+          </div>
+
+          {/* Fundo Escuro */}
+          <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-bg-dark flex items-center gap-4">
+            <svg width="60" height="29" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"/>
+              <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
+            </svg>
+            <div>
+              <p className="font-display font-bold text-2xl text-bg-light">Max Ebina</p>
+              <p className="text-xs text-bg-light/60">Marketing Digital</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Guidelines */}
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Guidelines de Uso</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="rounded-xl border border-success/20 bg-success/5 p-6">
+            <div className="flex items-start gap-3">
+              <Check className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold text-[var(--text-on-surface)] mb-2">✅ Use assim</p>
+                <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-1">
+                  <li>• Mantenha a proporção original (2.09:1)</li>
+                  <li>• Use em fundos claros ou escuros</li>
+                  <li>• Respeite a área de proteção</li>
+                  <li>• Tamanho mínimo: 91px de largura</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-error/20 bg-error/5 p-6">
+            <div className="flex items-start gap-3">
+              <X className="w-5 h-5 text-error flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold text-[var(--text-on-surface)] mb-2">❌ Evite isso</p>
+                <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-1">
+                  <li>• Alterar as cores do logo</li>
+                  <li>• Distorcer a proporção</li>
+                  <li>• Adicionar efeitos (sombra, brilho)</li>
+                  <li>• Usar em fundos com pouco contraste</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Área de Proteção */}
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Área de Proteção</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-12 bg-[var(--surface-card)] flex items-center justify-center">
+          <div className="relative">
+            <div className="absolute inset-0 border-2 border-dashed border-tech/30 -m-8 rounded-lg" />
+            <svg width="182" height="87" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"/>
+              <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
+            </svg>
+            <p className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs text-tech font-mono">32px</p>
+            <p className="absolute top-1/2 -right-10 -translate-y-1/2 text-xs text-tech font-mono">32px</p>
+          </div>
+        </div>
+        <p className="text-sm text-[var(--text-on-surface-muted)] mt-4">
+          Mantenha uma margem mínima de 32px ao redor do logo para garantir legibilidade.
+        </p>
+      </div>
+
+      {/* Download */}
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Download</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+          <p className="text-sm text-[var(--text-on-surface-muted)] mb-4">
+            Copie o código SVG do logo para usar em seus projetos:
+          </p>
+          <button
+            onClick={handleCopySvg}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-tech/10 border border-tech/20 text-tech hover:bg-tech/20 transition-all"
+          >
+            {copiedSvg ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            {copiedSvg ? 'Copiado!' : 'Copiar SVG'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function ColorsSection({ copiedColor, copyToClipboard }: { copiedColor: string | null; copyToClipboard: (text: string, label: string) => void }) {
   const colorGroups = [
