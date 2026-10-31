@@ -12,7 +12,7 @@ import {
 import { PhoneMockup } from './components/PhoneMockup';
 import { CodeBlock, PropsTable } from './components/DocsComponents';
 
-type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'buttons' | 'cards' | 'forms' | 'navbar' | 'faq' | 'testimonials' | 'instagram' | 'brand-voice' | 'preview';
+type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'buttons' | 'cards' | 'forms' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'instagram' | 'brand-voice' | 'preview';
 
 interface NavItem {
   id: Section;
@@ -31,6 +31,7 @@ const navItems: NavItem[] = [
   { id: 'cards', label: 'ServiceCard', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'forms', label: 'Formulário', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'navbar', label: 'Navbar', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
+  { id: 'hero', label: 'Hero Section', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'faq', label: 'FAQ', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'testimonials', label: 'Depoimentos', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'instagram', label: 'Instagram', group: '📱 Templates', icon: <Image className="w-4 h-4" /> },
@@ -202,6 +203,7 @@ export default function App() {
           {activeSection === 'cards' && <CardsSection />}
           {activeSection === 'forms' && <FormsSection />}
           {activeSection === 'navbar' && <NavbarSection />}
+          {activeSection === 'hero' && <HeroSectionDocs />}
           {activeSection === 'faq' && <FAQSection />}
           {activeSection === 'testimonials' && <TestimonialsSection />}
           {activeSection === 'instagram' && <InstagramSection />}
@@ -992,6 +994,121 @@ function FormsSection() {
               <p className="text-xs text-[var(--text-on-surface-muted)]">{s.desc}</p>
             </div>
           ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HeroSectionDocs() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] overflow-hidden">
+          <div className="bg-bg-dark min-h-[600px] relative flex items-center justify-center">
+            <div className="max-w-4xl mx-auto px-6 py-24 text-center">
+              <h1 className="text-5xl md:text-6xl font-display font-bold text-white mb-6">
+                Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span>
+              </h1>
+              <p className="text-xl text-white/70 mb-8 max-w-2xl mx-auto">
+                Sites, LPs e CRM que geram resultados reais. Escalabilidade com inteligência digital para o seu negócio crescer.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button variant="tech" size="lg" icon>
+                  Quero Escalar Meu Negócio
+                </Button>
+                <Button variant="ghost" size="lg">
+                  Ver Cases
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'headline', type: 'string', default: '—', description: 'Título principal do hero (suporta <span> para destaque)' },
+          { name: 'subheadline', type: 'string', default: '—', description: 'Subtítulo descritivo' },
+          { name: 'ctaPrimary', type: 'string', default: '—', description: 'Texto do botão CTA principal' },
+          { name: 'ctaSecondary', type: 'string', default: '—', description: 'Texto do botão CTA secundário' },
+          { name: 'ctaPrimaryHref', type: 'string', default: "'#'", description: 'URL do CTA principal' },
+          { name: 'ctaSecondaryHref', type: 'string', default: "'#'", description: 'URL do CTA secundário' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<HeroSection
+  headline={<>Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span></>}
+  subheadline="Sites, LPs e CRM que geram resultados reais. Escalabilidade com inteligência digital."
+  ctaPrimary="Quero Escalar Meu Negócio"
+  ctaSecondary="Ver Cases"
+  ctaPrimaryHref="#contato"
+  ctaSecondaryHref="#cases"
+/>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Headline com stagger animation (palavra por palavra)',
+            'Partículas tsParticles no background',
+            'Gradientes radiais decorativos',
+            '2 CTAs com variantes diferentes',
+            'Badge animado no topo',
+            'Scroll indicator animado',
+            'Subheadline com fade-in + blur',
+            '100% responsivo',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Animações</h3>
+        <div className="space-y-4">
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech font-semibold mb-2">Stagger Animation</p>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mb-3">
+              Cada palavra do headline aparece com delay de 80ms, criando um efeito de cascata suave.
+            </p>
+            <CodeBlock code={`// Delay calculado automaticamente
+words.forEach((word, i) => {
+  setTimeout(() => {
+    word.style.opacity = '1';
+    word.style.transform = 'translateY(0)';
+  }, 200 + i * 80);
+});`} />
+          </div>
+
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech font-semibold mb-2">Partículas Interativas</p>
+            <p className="text-sm text-[var(--text-on-surface-muted)]">
+              60 partículas ciano com links entre elas. Reagem ao mouse (grab) e clique (push). Reduzidas para 30 em mobile.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Dicas de Conteúdo</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+          <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
+            <li>✅ <strong>Headline direto:</strong> Máximo 8-10 palavras, foque no benefício principal</li>
+            <li>✅ <strong>Subheadline explicativo:</strong> Complemente o headline com detalhes (2-3 linhas)</li>
+            <li>✅ <strong>CTAs claros:</strong> Use verbos de ação ("Quero", "Agendar", "Começar")</li>
+            <li>✅ <strong>Destaque palavras-chave:</strong> Use gradient-text-tech em termos importantes</li>
+            <li>❌ <strong>Evite jargões:</strong> "Soluções sinérgicas" → "Resultados reais"</li>
+            <li>❌ <strong>Não seja genérico:</strong> "O melhor do mercado" → "+150 empresas satisfeitas"</li>
+          </ul>
         </div>
       </div>
     </div>
