@@ -364,8 +364,162 @@ export function Navbar({ logo = 'MAX', links = [], ctaText = 'Diagnóstico Gratu
    ═══════════════════════════════════════════════════════════ */
 
 export function LeadCaptureForm() {
-  const [status, setStatus] = useState<'idle' | 'success'>('idle');
+  // Estados dos campos
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    whatsapp: '',
+    service: '',
+    message: '',
+  });
 
+  // Estados de erro
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  
+  // Estados de campos tocados (para mostrar erros apenas após interação)
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  
+  // Estado de envio
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  // Regex para validação
+  const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const PHONE_REGEX = /^\(\d{2}\) \d{5}-\d{4}$/;
+  const NAME_REGEX = /^[a-zA-ZÀ-ÿ\s]{3,}$/;
+
+  // Máscara para telefone
+  const formatPhone = (value: string): string => {
+    const numbers = value.replace(/\D/g, '');
+    
+    if (numbers.length <= 2) {
+      return numbers;
+    } else if (numbers.length <= 7) {
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+    } else {
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
+    }
+  };
+
+  // Validação de um campo específico
+  const validateField = (name: string, value: string): string => {
+    switch (name) {
+      case 'name':
+        if (!value.trim()) return 'Nome é obrigatório';
+        if (!NAME_REGEX.test(value)) return 'Nome deve ter pelo menos 3 caracteres';
+        return '';
+      
+      case 'email':
+        if (!value.trim()) return 'Email é obrigatório';
+        if (!EMAIL_REGEX.test(value)) return 'Email inválido. Exemplo: seu@email.com';
+        return '';
+      
+      case 'whatsapp':
+        if (!value.trim()) return 'WhatsApp é obrigatório';
+        if (!PHONE_REGEX.test(value)) return 'Telefone inválido. Formato: (11) 99999-9999';
+        return '';
+      
+      case 'service':
+        if (!value) return 'Selecione um serviço';
+        return '';
+      
+      default:
+        return '';
+    }
+  };
+
+  // Valida todos os campos
+  const validateAll = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    let isValid = true;
+
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key !== 'message') { // message é opcional
+        const error = validateField(key, value);
+        if (error) {
+          newErrors[key] = error;
+          isValid = false;
+        }
+      }
+    });
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  // Verifica se formulário está válido
+  const isFormValid = (): boolean => {
+    return (
+      formData.name.trim().length >= 3 &&
+      NAME_REGEX.test(formData.name) &&
+      EMAIL_REGEX.test(formData.email) &&
+      PHONE_REGEX.test(formData.whatsapp) &&
+      formData.service !== ''
+    );
+  };
+
+  // Handler de mudança de campo
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    
+    // Aplica máscara para telefone
+    const formattedValue = name === 'whatsapp' ? formatPhone(value) : value;
+    
+    setFormData(prev => ({ ...prev, [name]: formattedValue }));
+    
+    // Valida em tempo real se o campo já foi tocado
+    if (touched[name]) {
+      const error = validateField(name, formattedValue);
+      setErrors(prev => ({ ...prev, [name]: error }));
+    }
+  };
+
+  // Handler de blur (campo perdeu foco)
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    
+    // Marca como tocado
+    setTouched(prev => ({ ...prev, [name]: true }));
+    
+    // Valida o campo
+    const error = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: error }));
+  };
+
+  // Handler de submit
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Marca todos os campos como tocados
+    const allTouched: Record<string, boolean> = {};
+    Object.keys(formData).forEach(key => {
+      allTouched[key] = true;
+    });
+    setTouched(allTouched);
+    
+    // Valida todos os campos
+    if (!validateAll()) {
+      return;
+    }
+    
+    setStatus('submitting');
+    
+    // Simula envio (substituir por chamada real à API)
+    try {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setStatus('success');
+      
+      // Aqui você faria a chamada real:
+      // await fetch('/api/contact', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(formData),
+      // });
+    } catch (error) {
+      setStatus('error');
+    }
+  };
+
+  // Estado de sucesso
   if (status === 'success') {
     return (
       <div className="rounded-2xl p-12 text-center bg-white dark:bg-white/5 border border-[var(--surface-border)] animate-fade-in">
@@ -378,48 +532,167 @@ export function LeadCaptureForm() {
     );
   }
 
+  // Classes para inputs com erro
+  const getInputClassName = (fieldName: string) => {
+    const baseClass = "w-full px-4 py-3 rounded-xl bg-[var(--surface-card-secondary)] border text-[var(--text-on-surface)] placeholder-[var(--text-on-surface-subtle)] focus:ring-1 outline-none transition-all";
+    
+    if (touched[fieldName] && errors[fieldName]) {
+      return `${baseClass} border-error focus:border-error focus:ring-error`;
+    }
+    
+    return `${baseClass} border-[var(--surface-border)] focus:border-tech focus:ring-tech`;
+  };
+
   return (
     <div className="rounded-2xl p-8 md:p-12 bg-white dark:bg-white/5 border border-[var(--surface-border)]">
       <h3 className="text-2xl font-display font-bold text-[var(--text-on-surface)] mb-2">Vamos conversar sobre seu projeto</h3>
       <p className="text-[var(--text-on-surface-muted)] mb-8">Preencha o formulário e receba um diagnóstico gratuito em até 2h.</p>
 
-      <form onSubmit={(e) => { e.preventDefault(); setStatus('success'); }} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+        {/* Nome */}
         <div>
-          <label className="block text-sm font-medium text-[var(--text-on-surface)] mb-2">Nome completo</label>
+          <label htmlFor="name" className="block text-sm font-medium text-[var(--text-on-surface)] mb-2">
+            Nome completo <span className="text-error">*</span>
+          </label>
           <input
+            id="name"
+            name="name"
             type="text"
             placeholder="Seu nome completo"
-            className="w-full px-4 py-3 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] text-[var(--text-on-surface)] placeholder-[var(--text-on-surface-subtle)] focus:border-tech focus:ring-1 focus:ring-tech outline-none transition-all"
+            value={formData.name}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={getInputClassName('name')}
+            aria-invalid={touched.name && !!errors.name}
+            aria-describedby={errors.name ? 'name-error' : undefined}
+          />
+          {touched.name && errors.name && (
+            <p id="name-error" className="mt-2 text-sm text-error flex items-center gap-1" role="alert">
+              <span>⚠️</span> {errors.name}
+            </p>
+          )}
+        </div>
+
+        {/* Email e WhatsApp */}
+        <div className="grid md:grid-cols-2 gap-5">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-[var(--text-on-surface)] mb-2">
+              Email <span className="text-error">*</span>
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="seu@email.com"
+              value={formData.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={getInputClassName('email')}
+              aria-invalid={touched.email && !!errors.email}
+              aria-describedby={errors.email ? 'email-error' : undefined}
+            />
+            {touched.email && errors.email && (
+              <p id="email-error" className="mt-2 text-sm text-error flex items-center gap-1" role="alert">
+                <span>⚠️</span> {errors.email}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="whatsapp" className="block text-sm font-medium text-[var(--text-on-surface)] mb-2">
+              WhatsApp <span className="text-error">*</span>
+            </label>
+            <input
+              id="whatsapp"
+              name="whatsapp"
+              type="tel"
+              placeholder="(11) 99999-9999"
+              value={formData.whatsapp}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              maxLength={15}
+              className={getInputClassName('whatsapp')}
+              aria-invalid={touched.whatsapp && !!errors.whatsapp}
+              aria-describedby={errors.whatsapp ? 'whatsapp-error' : undefined}
+            />
+            {touched.whatsapp && errors.whatsapp && (
+              <p id="whatsapp-error" className="mt-2 text-sm text-error flex items-center gap-1" role="alert">
+                <span>⚠️</span> {errors.whatsapp}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Serviço */}
+        <div>
+          <label htmlFor="service" className="block text-sm font-medium text-[var(--text-on-surface)] mb-2">
+            Serviço de interesse <span className="text-error">*</span>
+          </label>
+          <select
+            id="service"
+            name="service"
+            value={formData.service}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={getInputClassName('service')}
+            aria-invalid={touched.service && !!errors.service}
+            aria-describedby={errors.service ? 'service-error' : undefined}
+          >
+            <option value="">Selecione um serviço</option>
+            <option value="site">Site Institucional</option>
+            <option value="landing-page">Landing Page</option>
+            <option value="saas">SaaS</option>
+            <option value="crm">CRM</option>
+            <option value="trafego">Tráfego Pago</option>
+            <option value="automacao">Automação WhatsApp</option>
+          </select>
+          {touched.service && errors.service && (
+            <p id="service-error" className="mt-2 text-sm text-error flex items-center gap-1" role="alert">
+              <span>⚠️</span> {errors.service}
+            </p>
+          )}
+        </div>
+
+        {/* Mensagem (opcional) */}
+        <div>
+          <label htmlFor="message" className="block text-sm font-medium text-[var(--text-on-surface)] mb-2">
+            Mensagem <span className="text-[var(--text-on-surface-subtle)]">(opcional)</span>
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            placeholder="Conte-nos sobre seu projeto..."
+            value={formData.message}
+            onChange={handleChange}
+            rows={4}
+            className={getInputClassName('message')}
           />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-5">
-          <div>
-            <label className="block text-sm font-medium text-[var(--text-on-surface)] mb-2">Email</label>
-            <input
-              type="email"
-              placeholder="seu@email.com"
-              className="w-full px-4 py-3 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] text-[var(--text-on-surface)] placeholder-[var(--text-on-surface-subtle)] focus:border-tech focus:ring-1 focus:ring-tech outline-none transition-all"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-[var(--text-on-surface)] mb-2">WhatsApp</label>
-            <input
-              type="tel"
-              placeholder="(11) 99999-9999"
-              className="w-full px-4 py-3 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] text-[var(--text-on-surface)] placeholder-[var(--text-on-surface-subtle)] focus:border-tech focus:ring-1 focus:ring-tech outline-none transition-all"
-            />
-          </div>
-        </div>
-
-        <Button variant="tech" size="lg" className="w-full">
-          Quero Escalar Meu Negócio
+        {/* Botão de envio */}
+        <Button
+          variant="tech"
+          size="lg"
+          className="w-full"
+          disabled={!isFormValid() || status === 'submitting'}
+          loading={status === 'submitting'}
+        >
+          {status === 'submitting' ? 'Enviando...' : 'Quero Escalar Meu Negócio'}
         </Button>
 
+        {/* Nota de privacidade */}
         <p className="flex items-center gap-2 text-xs text-[var(--text-on-surface-subtle)]">
           <Lock className="w-3 h-3" />
           Seus dados estão seguros. Não enviamos spam.
         </p>
+
+        {/* Mensagem de erro geral */}
+        {status === 'error' && (
+          <div className="p-4 rounded-xl bg-error/10 border border-error/30 text-error text-sm" role="alert">
+            <p className="font-semibold mb-1">❌ Ops! Algo deu errado</p>
+            <p>Não conseguimos enviar seus dados. Tente novamente ou entre em contato pelo WhatsApp.</p>
+          </div>
+        )}
       </form>
     </div>
   );

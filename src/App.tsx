@@ -953,11 +953,11 @@ function FormsSection() {
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Campos do Formulário</h3>
         <div className="grid md:grid-cols-2 gap-4">
           {[
-            { name: 'Nome', type: 'text', required: true, placeholder: 'Seu nome completo' },
-            { name: 'Email', type: 'email', required: true, placeholder: 'seu@email.com' },
-            { name: 'WhatsApp', type: 'tel', required: true, placeholder: '(11) 99999-9999' },
-            { name: 'Serviço', type: 'select', required: true, placeholder: 'Selecione um serviço' },
-            { name: 'Mensagem', type: 'textarea', required: false, placeholder: 'Conte-nos sobre seu projeto...' },
+            { name: 'Nome', type: 'text', required: true, placeholder: 'Seu nome completo', validation: 'Mínimo 3 caracteres, apenas letras' },
+            { name: 'Email', type: 'email', required: true, placeholder: 'seu@email.com', validation: 'Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/' },
+            { name: 'WhatsApp', type: 'tel', required: true, placeholder: '(11) 99999-9999', validation: 'Máscara automática: (XX) XXXXX-XXXX' },
+            { name: 'Serviço', type: 'select', required: true, placeholder: 'Selecione um serviço', validation: 'Deve selecionar uma opção' },
+            { name: 'Mensagem', type: 'textarea', required: false, placeholder: 'Conte-nos sobre seu projeto...', validation: 'Opcional' },
           ].map(field => (
             <div key={field.name} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
               <div className="flex items-center justify-between mb-2">
@@ -965,7 +965,8 @@ function FormsSection() {
                 {field.required && <span className="text-xs text-error">Obrigatório</span>}
               </div>
               <p className="text-xs text-[var(--text-on-surface-subtle)] font-mono mb-1">type: {field.type}</p>
-              <p className="text-xs text-[var(--text-on-surface-muted)]">placeholder: "{field.placeholder}"</p>
+              <p className="text-xs text-[var(--text-on-surface-muted)] mb-1">placeholder: "{field.placeholder}"</p>
+              <p className="text-xs text-tech">✓ {field.validation}</p>
             </div>
           ))}
         </div>
@@ -984,18 +985,144 @@ function FormsSection() {
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
         <div className="grid md:grid-cols-2 gap-4">
           {[
-            'Validação em tempo real (email, telefone)',
-            'Máscara automática para telefone',
+            'Validação em tempo real (email, telefone, nome)',
+            'Máscara automática para telefone: (XX) XXXXX-XXXX',
+            'Regex para email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/',
+            'Regex para telefone: /^\\(\\d{2}\\) \\d{5}-\\d{4}$/',
+            'Regex para nome: /^[a-zA-ZÀ-ÿ\\s]{3,}$/',
+            'Botão desabilitado até todos os campos válidos',
             'Estados: idle, submitting, success, error',
+            'Mensagens de erro personalizadas',
+            'Validação ao perder foco (onBlur)',
+            'Validação em tempo real após primeira interação',
             'Integração com Formspree (AJAX)',
             'Mensagem de sucesso animada',
             'Privacy note com ícone de cadeado',
             '100% responsivo',
-            'Acessível (labels, focus states)',
+            'Acessível (labels, aria-invalid, aria-describedby)',
           ].map(f => (
             <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
               <Check className="w-4 h-4 text-tech flex-shrink-0" />
               <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Validações e Máscaras</h3>
+        <div className="space-y-4">
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <h4 className="font-semibold text-[var(--text-on-surface)] mb-3">📧 Validação de Email</h4>
+            <CodeBlock code={`// Regex para validação de email
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;
+
+// Exemplos válidos:
+// - usuario@dominio.com
+// - usuario.sobrenome@dominio.com.br
+// - usuario+tag@dominio.com
+
+// Exemplos inválidos:
+// - usuario@dominio
+// - @dominio.com
+// - usuario@.com`} />
+          </div>
+
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <h4 className="font-semibold text-[var(--text-on-surface)] mb-3">📱 Máscara de Telefone</h4>
+            <CodeBlock code={`// Função de máscara para telefone brasileiro
+const formatPhone = (value: string): string => {
+  const numbers = value.replace(/\\D/g, '');
+  
+  if (numbers.length <= 2) {
+    return numbers;
+  } else if (numbers.length <= 7) {
+    return \`(\${numbers.slice(0, 2)}) \${numbers.slice(2)}\`;
+  } else {
+    return \`(\${numbers.slice(0, 2)}) \${numbers.slice(2, 7)}-\${numbers.slice(7, 11)}\`;
+  }
+};
+
+// Exemplos:
+// Input: "11999999999" → Output: "(11) 99999-9999"
+// Input: "2188888888"  → Output: "(21) 8888-8888"
+// Input: "11"          → Output: "(11)"`} />
+          </div>
+
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <h4 className="font-semibold text-[var(--text-on-surface)] mb-3">👤 Validação de Nome</h4>
+            <CodeBlock code={`// Regex para validação de nome (mínimo 3 caracteres)
+const NAME_REGEX = /^[a-zA-ZÀ-ÿ\\s]{3,}$/;
+
+// Aceita:
+// - Letras (A-Z, a-z)
+// - Caracteres acentuados (À-ÿ)
+// - Espaços
+// - Mínimo 3 caracteres
+
+// Exemplos válidos:
+// - João Silva
+// - María García
+// - Ana
+
+// Exemplos inválidos:
+// - Jo (menos de 3 caracteres)
+// - João123 (números não permitidos)
+// - João@ (caracteres especiais não permitidos)`} />
+          </div>
+
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <h4 className="font-semibold text-[var(--text-on-surface)] mb-3">✅ Validação em Tempo Real</h4>
+            <CodeBlock code={`// Validação ocorre em dois momentos:
+
+// 1. Ao perder foco (onBlur)
+const handleBlur = (e) => {
+  const { name, value } = e.target;
+  setTouched(prev => ({ ...prev, [name]: true }));
+  const error = validateField(name, value);
+  setErrors(prev => ({ ...prev, [name]: error }));
+};
+
+// 2. Em tempo real (após primeira interação)
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData(prev => ({ ...prev, [name]: value }));
+  
+  if (touched[name]) {
+    const error = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: error }));
+  }
+};
+
+// Botão só é habilitado quando todos os campos são válidos
+const isFormValid = () => {
+  return (
+    NAME_REGEX.test(formData.name) &&
+    EMAIL_REGEX.test(formData.email) &&
+    PHONE_REGEX.test(formData.whatsapp) &&
+    formData.service !== ''
+  );
+};`} />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Mensagens de Erro</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            { field: 'Nome', error: 'Nome é obrigatório', condition: 'Campo vazio' },
+            { field: 'Nome', error: 'Nome deve ter pelo menos 3 caracteres', condition: 'Menos de 3 caracteres' },
+            { field: 'Email', error: 'Email é obrigatório', condition: 'Campo vazio' },
+            { field: 'Email', error: 'Email inválido. Exemplo: seu@email.com', condition: 'Formato incorreto' },
+            { field: 'WhatsApp', error: 'WhatsApp é obrigatório', condition: 'Campo vazio' },
+            { field: 'WhatsApp', error: 'Telefone inválido. Formato: (11) 99999-9999', condition: 'Formato incorreto' },
+            { field: 'Serviço', error: 'Selecione um serviço', condition: 'Nenhuma opção selecionada' },
+          ].map((item, i) => (
+            <div key={i} className="rounded-lg border border-error/20 bg-error/5 p-3">
+              <p className="text-xs text-error font-semibold mb-1">{item.field}</p>
+              <p className="text-sm text-[var(--text-on-surface)] mb-1">"{item.error}"</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">Condição: {item.condition}</p>
             </div>
           ))}
         </div>
