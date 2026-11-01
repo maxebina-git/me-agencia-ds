@@ -1849,9 +1849,9 @@ function InstagramSection() {
 
   const themes = [
     { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
-    { id: 'sunrise' as const, name: 'Sunrise', bg: '#F6EEE7', border: '#8f6424', desc: 'Dicas, conteúdo educativo' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#FFF5E6', border: '#FF6B35', desc: 'Dicas, conteúdo educativo' },
     { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
-    { id: 'minimal' as const, name: 'Minimal', bg: '#F5F5F5', border: '#0A0A0A', desc: 'Depoimentos, elegância' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#FAFAFA', border: '#1A1A1A', desc: 'Depoimentos, elegância' },
   ];
 
   const slides = [
@@ -2042,8 +2042,8 @@ function InstagramSection() {
             
             <div className="rounded-lg border border-[var(--surface-border)] p-4">
               <p className="font-semibold text-[var(--text-on-surface)] mb-2">🌅 Sunrise</p>
-              <p className="text-xs mb-2">Fundo claro com acentos em laranja. Perfeito para dicas, conteúdo educativo e leveza.</p>
-              <p className="text-xs font-mono text-tech">bg: #F6EEE7 | accent: #8f6424</p>
+              <p className="text-xs mb-2">Fundo quente com acentos em laranja vibrante. Perfeito para dicas, conteúdo educativo e leveza.</p>
+              <p className="text-xs font-mono text-tech">bg: #FFF5E6 | accent: #FF6B35</p>
             </div>
             
             <div className="rounded-lg border border-[var(--surface-border)] p-4">
@@ -2054,8 +2054,8 @@ function InstagramSection() {
             
             <div className="rounded-lg border border-[var(--surface-border)] p-4">
               <p className="font-semibold text-[var(--text-on-surface)] mb-2">✨ Minimal</p>
-              <p className="text-xs mb-2">Fundo off-white monocromático. Ideal para depoimentos, citações e elegância.</p>
-              <p className="text-xs font-mono text-tech">bg: #F5F5F5 | accent: #0A0A0A</p>
+              <p className="text-xs mb-2">Fundo off-white com preto puro. Ideal para depoimentos, citações e elegância.</p>
+              <p className="text-xs font-mono text-tech">bg: #FAFAFA | accent: #1A1A1A</p>
             </div>
           </div>
 

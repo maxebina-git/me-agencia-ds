@@ -944,30 +944,27 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
           <div className="text-center flex flex-col h-full justify-center">
             <Sparkles 
               className={`${isMockup ? 'w-6 h-6' : 'w-10 h-10'} mx-auto mb-${isMockup ? '3' : '6'}`}
-              style={{ color: 'var(--slide-bg)' }}
+              style={{ color: 'var(--slide-accent)' }}
             />
             <h2 
               className={`${isMockup ? 'text-base' : 'text-2xl'} font-bold leading-tight mb-${isMockup ? '2' : '4'}`}
-              style={{ color: 'var(--slide-bg)' }}
+              style={{ color: 'var(--slide-text)' }}
             >
               {title}
             </h2>
             {subtitle && (
               <p 
                 className={`${subtitleSize} mb-${isMockup ? '4' : '8'}`}
-                style={{ 
-                  color: 'var(--slide-bg)',
-                  opacity: 0.7
-                }}
+                style={{ color: 'var(--slide-text-muted)' }}
               >
                 {subtitle}
               </p>
             )}
             <div 
-              className={`inline-flex items-center gap-2 rounded-full ${isMockup ? 'px-3 py-1.5' : 'px-6 py-3'} mx-auto`}
+              className={`inline-flex items-center gap-2 rounded-full ${isMockup ? 'px-3 py-1.5' : 'px-6 py-3'} mx-auto shadow-lg`}
               style={{ 
-                backgroundColor: 'var(--slide-bg)',
-                opacity: 0.2
+                backgroundColor: 'var(--slide-accent)',
+                color: 'var(--slide-bg)'
               }}
             >
               <span 
