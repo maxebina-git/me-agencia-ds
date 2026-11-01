@@ -1313,7 +1313,6 @@ function NavbarSection() {
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
         <div className="rounded-xl border border-[var(--surface-border)] overflow-hidden bg-bg-dark relative min-h-[200px]">
           <Navbar
-            logo="MAX"
             links={[
               { label: 'Serviços', href: '#servicos' },
               { label: 'Cases', href: '#cases' },
@@ -1330,7 +1329,7 @@ function NavbarSection() {
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
         <PropsTable props={[
-          { name: 'logo', type: 'string', default: "'MAX'", description: 'Texto do logo' },
+          { name: 'logo', type: 'ReactNode', default: 'Logo SVG', description: 'Logo da empresa (SVG ou imagem)' },
           { name: 'links', type: 'Array<{label: string, href: string}>', default: '[]', description: 'Links de navegação' },
           { name: 'ctaText', type: 'string', default: "'Diagnóstico Gratuito'", description: 'Texto do botão CTA' },
           { name: 'ctaHref', type: 'string', default: "'#'", description: 'URL do botão CTA' },
@@ -1340,7 +1339,6 @@ function NavbarSection() {
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
         <CodeBlock code={`<Navbar
-  logo="MAX"
   links={[
     { label: 'Serviços', href: '#servicos' },
     { label: 'Cases', href: '#cases' },
@@ -1349,6 +1347,12 @@ function NavbarSection() {
   ]}
   ctaText="Diagnóstico Gratuito"
   ctaHref="#contato"
+/>
+
+// Com logo customizado
+<Navbar
+  logo={<img src="/logo.png" alt="Max Ebina" className="h-10" />}
+  links={[...]}
 />`} />
       </div>
 
@@ -2608,7 +2612,6 @@ function PreviewSection() {
         <div className="rounded-2xl border border-[var(--surface-border)] overflow-hidden bg-bg-dark">
           {/* 1. Navbar */}
           <Navbar
-            logo="MAX"
             links={[
               { label: 'Serviços', href: '#servicos' },
               { label: 'Cases', href: '#cases' },
