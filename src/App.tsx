@@ -7,13 +7,13 @@ import {
 import {
   Button, ServiceCard, SectionHeader, TestimonialCard,
   FAQ, WhatsAppFloat, Navbar, LeadCaptureForm, AnimatedCounter,
-  InstagramSlide, Footer
+  InstagramSlide, Footer, Table
 } from './components/ui';
 import { PhoneMockup } from './components/PhoneMockup';
 import { CodeBlock, PropsTable } from './components/DocsComponents';
 import { HeroSection } from './components/HeroSection';
 
-type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'buttons' | 'cards' | 'forms' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'instagram' | 'brand-voice' | 'preview';
+type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'buttons' | 'cards' | 'forms' | 'table' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'instagram' | 'brand-voice' | 'preview';
 
 interface NavItem {
   id: Section;
@@ -31,6 +31,7 @@ const navItems: NavItem[] = [
   { id: 'buttons', label: 'Button', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'cards', label: 'ServiceCard', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'forms', label: 'Formulário', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
+  { id: 'table', label: 'Tabela', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'navbar', label: 'Navbar', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'hero', label: 'Hero Section', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'faq', label: 'FAQ', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
@@ -204,6 +205,7 @@ export default function App() {
           {activeSection === 'buttons' && <ButtonsSection />}
           {activeSection === 'cards' && <CardsSection />}
           {activeSection === 'forms' && <FormsSection />}
+          {activeSection === 'table' && <TableSection />}
           {activeSection === 'navbar' && <NavbarSection />}
           {activeSection === 'hero' && <HeroSectionDocs />}
           {activeSection === 'faq' && <FAQSection />}
@@ -997,6 +999,186 @@ function FormsSection() {
               <p className="text-xs text-[var(--text-on-surface-muted)]">{s.desc}</p>
             </div>
           ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TableSection() {
+  const pricingColumns = [
+    { key: 'plan', label: 'Plano' },
+    { key: 'price', label: 'Preço', align: 'right' as const },
+    { key: 'features', label: 'Recursos' },
+    { key: 'cta', label: 'Ação', align: 'center' as const },
+  ];
+
+  const pricingData = [
+    {
+      plan: 'Starter',
+      price: 'R$ 97/mês',
+      features: '1 site, 5 páginas, SEO básico',
+      cta: <Button variant="ghost" size="sm">Escolher</Button>,
+    },
+    {
+      plan: 'Professional',
+      price: 'R$ 297/mês',
+      features: '3 sites, páginas ilimitadas, SEO avançado',
+      cta: <Button variant="tech" size="sm">Escolher</Button>,
+    },
+    {
+      plan: 'Enterprise',
+      price: 'R$ 997/mês',
+      features: 'Sites ilimitados, suporte prioritário, API',
+      cta: <Button variant="primary" size="sm">Escolher</Button>,
+    },
+  ];
+
+  const metricsColumns = [
+    { key: 'metric', label: 'Métrica' },
+    { key: 'value', label: 'Valor', align: 'right' as const },
+    { key: 'change', label: 'Variação', align: 'right' as const },
+  ];
+
+  const metricsData = [
+    { metric: 'Leads gerados', value: '1.247', change: <span className="text-success">+23%</span> },
+    { metric: 'Taxa de conversão', value: '4.8%', change: <span className="text-success">+12%</span> },
+    { metric: 'Tempo médio de resposta', value: '2.3h', change: <span className="text-success">-45%</span> },
+    { metric: 'Satisfação do cliente', value: '98%', change: <span className="text-success">+5%</span> },
+  ];
+
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
+        
+        <div className="space-y-8">
+          <div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mb-3">Tabela de Preços (com hover e botões)</p>
+            <Table columns={pricingColumns} data={pricingData} hover />
+          </div>
+
+          <div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mb-3">Tabela de Métricas (com variação colorida)</p>
+            <Table columns={metricsColumns} data={metricsData} striped hover />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'columns', type: 'Array<{key: string, label: string, align?: "left" | "center" | "right"}>', default: '—', description: 'Definição das colunas da tabela' },
+          { name: 'data', type: 'Array<Record<string, ReactNode>>', default: '—', description: 'Dados da tabela (array de objetos)' },
+          { name: 'striped', type: 'boolean', default: 'false', description: 'Linhas alternadas com fundo sutil' },
+          { name: 'hover', type: 'boolean', default: 'true', description: 'Destaque na linha ao passar o mouse' },
+          { name: 'bordered', type: 'boolean', default: 'false', description: 'Bordas em todas as células' },
+          { name: 'compact', type: 'boolean', default: 'false', description: 'Padding reduzido para tabelas densas' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<Table
+  columns={[
+    { key: 'plan', label: 'Plano' },
+    { key: 'price', label: 'Preço', align: 'right' },
+    { key: 'features', label: 'Recursos' },
+    { key: 'cta', label: 'Ação', align: 'center' },
+  ]}
+  data={[
+    {
+      plan: 'Starter',
+      price: 'R$ 97/mês',
+      features: '1 site, 5 páginas, SEO básico',
+      cta: <Button variant="ghost" size="sm">Escolher</Button>,
+    },
+    {
+      plan: 'Professional',
+      price: 'R$ 297/mês',
+      features: '3 sites, páginas ilimitadas, SEO avançado',
+      cta: <Button variant="tech" size="sm">Escolher</Button>,
+    },
+  ]}
+  hover
+  striped
+/>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Colunas com alinhamento configurável (left, center, right)',
+            'Linhas com hover effect (tech/5)',
+            'Modo striped (linhas alternadas)',
+            'Suporte a qualquer ReactNode nas células (botões, badges, ícones)',
+            'Overflow horizontal em telas pequenas',
+            'Borda arredondada no container',
+            'Header com fundo sutil',
+            '100% responsivo',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Casos de Uso</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+          <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
+            <li>✅ <strong>Tabelas de preços:</strong> Compare planos com CTAs em cada linha</li>
+            <li>✅ <strong>Dashboards:</strong> Exiba métricas com variação colorida (verde/vermelho)</li>
+            <li>✅ <strong>Listas de features:</strong> Compare recursos entre produtos</li>
+            <li>✅ <strong>Dados financeiros:</strong> Valores monetários alinhados à direita</li>
+            <li>✅ <strong>Relatórios:</strong> Tabelas densas com modo compact</li>
+            <li>❌ <strong>Evite em mobile:</strong> Para muitas colunas, considere cards ou accordion</li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Variações</h3>
+        <div className="space-y-6">
+          <div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mb-3">Compact (padding reduzido)</p>
+            <Table 
+              columns={[
+                { key: 'id', label: 'ID' },
+                { key: 'name', label: 'Nome' },
+                { key: 'status', label: 'Status' },
+              ]}
+              data={[
+                { id: '#001', name: 'Site Institucional', status: <span className="text-success">● Ativo</span> },
+                { id: '#002', name: 'Landing Page', status: <span className="text-success">● Ativo</span> },
+                { id: '#003', name: 'CRM Dashboard', status: <span className="text-warning">● Em desenvolvimento</span> },
+              ]}
+              compact
+              hover
+            />
+          </div>
+
+          <div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mb-3">Striped (linhas alternadas)</p>
+            <Table 
+              columns={[
+                { key: 'month', label: 'Mês' },
+                { key: 'leads', label: 'Leads', align: 'right' as const },
+                { key: 'conversion', label: 'Conversão', align: 'right' as const },
+              ]}
+              data={[
+                { month: 'Janeiro', leads: '142', conversion: '3.2%' },
+                { month: 'Fevereiro', leads: '189', conversion: '4.1%' },
+                { month: 'Março', leads: '234', conversion: '4.8%' },
+                { month: 'Abril', leads: '287', conversion: '5.2%' },
+              ]}
+              striped
+              hover
+            />
+          </div>
         </div>
       </div>
     </div>

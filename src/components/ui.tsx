@@ -595,6 +595,68 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
 }
 
 /* ═══════════════════════════════════════════════════════════
+   TABLE COMPONENT
+   ═══════════════════════════════════════════════════════════ */
+
+interface TableProps {
+  columns: { key: string; label: string; align?: 'left' | 'center' | 'right' }[];
+  data: Record<string, React.ReactNode>[];
+  striped?: boolean;
+  hover?: boolean;
+  bordered?: boolean;
+  compact?: boolean;
+}
+
+export function Table({ 
+  columns, 
+  data, 
+  striped = false, 
+  hover = true,
+  bordered = false,
+  compact = false 
+}: TableProps) {
+  return (
+    <div className="overflow-x-auto rounded-xl border border-[var(--surface-border)]">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="bg-black/5 dark:bg-white/5 border-b border-[var(--surface-border)]">
+            {columns.map((col) => (
+              <th
+                key={col.key}
+                className={`px-4 py-3 font-semibold text-[var(--text-on-surface)] text-${col.align || 'left'} ${compact ? 'text-xs' : 'text-sm'}`}
+              >
+                {col.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, rowIndex) => (
+            <tr
+              key={rowIndex}
+              className={`
+                border-b border-[var(--surface-border)]
+                ${striped && rowIndex % 2 === 1 ? 'bg-black/2 dark:bg-white/2' : ''}
+                ${hover ? 'hover:bg-tech/5 transition-colors' : ''}
+              `}
+            >
+              {columns.map((col) => (
+                <td
+                  key={col.key}
+                  className={`px-4 py-3 text-[var(--text-on-surface-muted)] text-${col.align || 'left'} ${compact ? 'text-xs py-2' : 'text-sm'}`}
+                >
+                  {row[col.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
    FOOTER COMPONENT
    ═══════════════════════════════════════════════════════════ */
 
