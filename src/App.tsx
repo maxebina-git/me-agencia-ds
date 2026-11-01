@@ -13,7 +13,7 @@ import { PhoneMockup } from './components/PhoneMockup';
 import { CodeBlock, PropsTable } from './components/DocsComponents';
 import { HeroSection } from './components/HeroSection';
 
-type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'buttons' | 'cards' | 'forms' | 'table' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'instagram' | 'brand-voice' | 'preview';
+type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'buttons' | 'cards' | 'forms' | 'table' | 'section-header' | 'animated-counter' | 'whatsapp-float' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'instagram' | 'brand-voice' | 'preview' | 'accessibility' | 'responsiveness' | 'icons' | 'borders' | 'grid';
 
 interface NavItem {
   id: Section;
@@ -28,10 +28,18 @@ const navItems: NavItem[] = [
   { id: 'typography', label: 'Tipografia', group: '📦 Fundações', icon: <Type className="w-4 h-4" /> },
   { id: 'spacing', label: 'Espaçamento', group: '📦 Fundações', icon: <Ruler className="w-4 h-4" /> },
   { id: 'motion', label: 'Motion', group: '📦 Fundações', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'borders', label: 'Bordas & Radius', group: '📦 Fundações', icon: <Box className="w-4 h-4" /> },
+  { id: 'icons', label: 'Ícones', group: '📦 Fundações', icon: <Box className="w-4 h-4" /> },
+  { id: 'grid', label: 'Grid & Layout', group: '📦 Fundações', icon: <Layout className="w-4 h-4" /> },
+  { id: 'accessibility', label: 'Acessibilidade', group: '📦 Fundações', icon: <Eye className="w-4 h-4" /> },
+  { id: 'responsiveness', label: 'Responsividade', group: '📦 Fundações', icon: <Layout className="w-4 h-4" /> },
   { id: 'buttons', label: 'Button', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'cards', label: 'ServiceCard', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'forms', label: 'Formulário', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'table', label: 'Tabela', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
+  { id: 'section-header', label: 'SectionHeader', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
+  { id: 'animated-counter', label: 'AnimatedCounter', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
+  { id: 'whatsapp-float', label: 'WhatsAppFloat', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'navbar', label: 'Navbar', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'hero', label: 'Hero Section', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'faq', label: 'FAQ', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
@@ -202,10 +210,18 @@ export default function App() {
           {activeSection === 'typography' && <TypographySection />}
           {activeSection === 'spacing' && <SpacingSection />}
           {activeSection === 'motion' && <MotionSection />}
+          {activeSection === 'borders' && <BordersSection />}
+          {activeSection === 'icons' && <IconsSection />}
+          {activeSection === 'grid' && <GridSection />}
+          {activeSection === 'accessibility' && <AccessibilitySection />}
+          {activeSection === 'responsiveness' && <ResponsivenessSection />}
           {activeSection === 'buttons' && <ButtonsSection />}
           {activeSection === 'cards' && <CardsSection />}
           {activeSection === 'forms' && <FormsSection />}
           {activeSection === 'table' && <TableSection />}
+          {activeSection === 'section-header' && <SectionHeaderSection />}
+          {activeSection === 'animated-counter' && <AnimatedCounterSection />}
+          {activeSection === 'whatsapp-float' && <WhatsAppFloatSection />}
           {activeSection === 'navbar' && <NavbarSection />}
           {activeSection === 'hero' && <HeroSectionDocs />}
           {activeSection === 'faq' && <FAQSection />}
@@ -1930,6 +1946,616 @@ function BrandVoiceSection() {
               <li>• "Escale seu negócio com inteligência digital"</li>
             </ul>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BordersSection() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Border Radius</h3>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[
+            { name: 'sm', value: '8px' },
+            { name: 'md', value: '12px' },
+            { name: 'lg', value: '16px' },
+            { name: 'xl', value: '24px' },
+            { name: 'full', value: '9999px' },
+          ].map(r => (
+            <div key={r.name} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)] text-center">
+              <div
+                className="w-full h-20 bg-gradient-to-br from-tech to-primary mb-3"
+                style={{ borderRadius: r.value }}
+              />
+              <p className="font-mono text-sm text-tech">--radius-{r.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-muted)]">{r.value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Uso Recomendado</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            { radius: 'sm (8px)', use: 'Inputs, badges pequenos, tags' },
+            { radius: 'md (12px)', use: 'Cards, botões, modais' },
+            { radius: 'lg (16px)', use: 'Seções grandes, containers' },
+            { radius: 'xl (24px)', use: 'Hero sections, cards destacados' },
+            { radius: 'full (9999px)', use: 'Avatares, pills, badges circulares' },
+          ].map(item => (
+            <div key={item.radius} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+              <p className="font-mono text-sm text-tech mb-1">{item.radius}</p>
+              <p className="text-sm text-[var(--text-on-surface-muted)]">{item.use}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplos de Código</h3>
+        <CodeBlock code={`/* Border Radius no Tailwind */
+.rounded-sm { border-radius: 8px; }
+.rounded-md { border-radius: 12px; }
+.rounded-lg { border-radius: 16px; }
+.rounded-xl { border-radius: 24px; }
+.rounded-full { border-radius: 9999px; }
+
+/* Uso em componentes */
+<Button className="rounded-xl" />
+<Card className="rounded-2xl" />
+<Avatar className="rounded-full" />`} />
+      </div>
+    </div>
+  );
+}
+
+function IconsSection() {
+  const icons = [
+    'Globe', 'Layout', 'Code2', 'Bot', 'Megaphone', 'Workflow',
+    'ArrowRight', 'ArrowUpRight', 'Check', 'ChevronDown', 'ChevronRight',
+    'MessageCircle', 'Star', 'Loader2', 'X', 'Menu', 'Lock',
+    'Sparkles', 'Zap', 'TrendingUp', 'Clock', 'Eye', 'Search',
+    'Copy', 'Heart', 'Send', 'Bookmark', 'MoreHorizontal'
+  ];
+
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Ícones Disponíveis (Lucide)</h3>
+        <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+          {icons.map(icon => (
+            <div key={icon} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)] text-center hover:border-tech/30 transition-colors">
+              <div className="w-8 h-8 mx-auto mb-2 text-tech flex items-center justify-center">
+                <span className="text-2xl">•</span>
+              </div>
+              <p className="text-xs font-mono text-[var(--text-on-surface-muted)] truncate">{icon}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-sm text-[var(--text-on-surface-muted)] mt-4">
+          Biblioteca completa: <a href="https://lucide.dev" target="_blank" rel="noopener" className="text-tech hover:underline">lucide.dev</a>
+        </p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Como Usar</h3>
+        <CodeBlock code={`import { Globe, ArrowRight, Check } from 'lucide-react';
+
+// Ícone simples
+<Globe className="w-6 h-6 text-tech" />
+
+// Ícone com tamanho customizado
+<ArrowRight className="w-4 h-4" />
+
+// Ícone com cor e preenchimento
+<Check className="w-5 h-5 text-success fill-success" />
+
+// Ícone em botão
+<Button>
+  Saiba mais
+  <ArrowRight className="w-4 h-4 ml-2" />
+</Button>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Tamanhos Padrão</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { size: 'w-4 h-4', use: 'Ícones inline, botões pequenos' },
+            { size: 'w-5 h-5', use: 'Ícones padrão, inputs' },
+            { size: 'w-6 h-6', use: 'Ícones destacados, cards' },
+            { size: 'w-8 h-8', use: 'Ícones grandes, hero sections' },
+          ].map(item => (
+            <div key={item.size} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+              <p className="font-mono text-sm text-tech mb-1">{item.size}</p>
+              <p className="text-xs text-[var(--text-on-surface-muted)]">{item.use}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GridSection() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Container</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+          <div className="max-w-6xl mx-auto bg-tech/10 border-2 border-dashed border-tech/30 rounded-lg p-4 text-center">
+            <p className="text-sm text-tech font-mono">max-w-6xl (1152px)</p>
+          </div>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <p className="font-mono text-tech">max-w-sm</p>
+              <p className="text-[var(--text-on-surface-muted)]">384px</p>
+            </div>
+            <div>
+              <p className="font-mono text-tech">max-w-md</p>
+              <p className="text-[var(--text-on-surface-muted)]">448px</p>
+            </div>
+            <div>
+              <p className="font-mono text-tech">max-w-lg</p>
+              <p className="text-[var(--text-on-surface-muted)]">512px</p>
+            </div>
+            <div>
+              <p className="font-mono text-tech">max-w-6xl</p>
+              <p className="text-[var(--text-on-surface-muted)]">1152px</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Grid System</h3>
+        <div className="space-y-4">
+          <div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mb-2">Grid 2 colunas</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-tech/10 border border-tech/30 rounded-lg p-4 text-center text-sm text-tech">Col 1</div>
+              <div className="bg-tech/10 border border-tech/30 rounded-lg p-4 text-center text-sm text-tech">Col 2</div>
+            </div>
+          </div>
+          <div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mb-2">Grid 3 colunas</p>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-tech/10 border border-tech/30 rounded-lg p-4 text-center text-sm text-tech">Col 1</div>
+              <div className="bg-tech/10 border border-tech/30 rounded-lg p-4 text-center text-sm text-tech">Col 2</div>
+              <div className="bg-tech/10 border border-tech/30 rounded-lg p-4 text-center text-sm text-tech">Col 3</div>
+            </div>
+          </div>
+          <div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mb-2">Grid responsivo (1-2-3 colunas)</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="bg-tech/10 border border-tech/30 rounded-lg p-4 text-center text-sm text-tech">Col 1</div>
+              <div className="bg-tech/10 border border-tech/30 rounded-lg p-4 text-center text-sm text-tech">Col 2</div>
+              <div className="bg-tech/10 border border-tech/30 rounded-lg p-4 text-center text-sm text-tech">Col 3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplos de Código</h3>
+        <CodeBlock code={`<!-- Container centralizado -->
+<div className="max-w-6xl mx-auto px-6">
+  <h1>Título da Seção</h1>
+</div>
+
+<!-- Grid responsivo -->
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <Card />
+  <Card />
+  <Card />
+</div>
+
+<!-- Flexbox com espaçamento -->
+<div className="flex flex-col md:flex-row gap-6">
+  <Sidebar />
+  <MainContent />
+</div>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Breakpoints</h3>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[
+            { name: 'sm', value: '640px' },
+            { name: 'md', value: '768px' },
+            { name: 'lg', value: '1024px' },
+            { name: 'xl', value: '1280px' },
+            { name: '2xl', value: '1536px' },
+          ].map(bp => (
+            <div key={bp.name} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)] text-center">
+              <p className="font-mono text-lg text-tech">{bp.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-muted)]">{bp.value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AccessibilitySection() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Contraste de Cores (WCAG AA)</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            { bg: '#17120e', text: '#F6EEE7', ratio: '12.5:1', status: 'AAA' },
+            { bg: '#F6EEE7', text: '#17120e', ratio: '12.5:1', status: 'AAA' },
+            { bg: '#17120e', text: '#06B6D4', ratio: '7.2:1', status: 'AA' },
+            { bg: '#ffffff', text: '#8f6424', ratio: '5.1:1', status: 'AA' },
+          ].map((item, i) => (
+            <div key={i} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+              <div className="flex items-center justify-between mb-3">
+                <div
+                  className="px-4 py-2 rounded-lg text-sm font-semibold"
+                  style={{ backgroundColor: item.bg, color: item.text }}
+                >
+                  Texto de exemplo
+                </div>
+                <span className={`text-xs font-bold px-2 py-1 rounded ${item.status === 'AAA' ? 'bg-success/20 text-success' : 'bg-warning/20 text-warning'}`}>
+                  {item.status}
+                </span>
+              </div>
+              <p className="text-xs text-[var(--text-on-surface-muted)] font-mono">
+                {item.bg} / {item.text} → {item.ratio}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Focus States</h3>
+        <div className="grid md:grid-cols-3 gap-4">
+          <div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mb-2">Botão com focus</p>
+            <button className="px-4 py-2 bg-tech text-bg-dark rounded-lg focus:outline-none focus:ring-2 focus:ring-tech focus:ring-offset-2 focus:ring-offset-bg-dark">
+              Clique e use Tab
+            </button>
+          </div>
+          <div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mb-2">Input com focus</p>
+            <input
+              type="text"
+              placeholder="Digite aqui..."
+              className="px-4 py-2 bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-tech"
+            />
+          </div>
+          <div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mb-2">Link com focus</p>
+            <a href="#" className="text-tech underline focus:outline-none focus:ring-2 focus:ring-tech focus:ring-offset-2 rounded">
+              Link acessível
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Checklist de Acessibilidade</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Todos os botões têm aria-label descritivo',
+            'Imagens têm alt text significativo',
+            'Contraste mínimo de 4.5:1 para texto normal',
+            'Contraste mínimo de 3:1 para texto grande',
+            'Focus visible em todos os elementos interativos',
+            'Navegação completa por teclado (Tab, Enter, Esc)',
+            'Formulários têm labels associados',
+            'Mensagens de erro são claras e específicas',
+            'Animações respeitam prefers-reduced-motion',
+            'Ícones têm texto alternativo quando necessário',
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplos de Código</h3>
+        <CodeBlock code={`<!-- Botão acessível -->
+<button
+  aria-label="Fechar modal"
+  className="focus:ring-2 focus:ring-tech"
+>
+  <X className="w-5 h-5" />
+</button>
+
+<!-- Imagem com alt -->
+<img
+  src="/logo.png"
+  alt="Max Ebina - Agência de Marketing Digital"
+/>
+
+<!-- Input com label -->
+<label htmlFor="email">Email</label>
+<input
+  id="email"
+  type="email"
+  aria-required="true"
+  aria-describedby="email-error"
+/>
+
+<!-- Link acessível -->
+<a
+  href="/cases"
+  aria-label="Ver todos os cases de sucesso"
+>
+  Ver Cases
+</a>`} />
+      </div>
+    </div>
+  );
+}
+
+function ResponsivenessSection() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Breakpoints</h3>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[
+            { name: 'sm', value: '640px', desc: 'Mobile landscape' },
+            { name: 'md', value: '768px', desc: 'Tablet' },
+            { name: 'lg', value: '1024px', desc: 'Laptop' },
+            { name: 'xl', value: '1280px', desc: 'Desktop' },
+            { name: '2xl', value: '1536px', desc: 'Large desktop' },
+          ].map(bp => (
+            <div key={bp.name} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)] text-center">
+              <p className="font-mono text-lg text-tech">{bp.name}</p>
+              <p className="text-sm text-[var(--text-on-surface)]">{bp.value}</p>
+              <p className="text-xs text-[var(--text-on-surface-muted)] mt-1">{bp.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Mobile First</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+          <p className="text-sm text-[var(--text-on-surface-muted)] mb-4">
+            O Design System segue a abordagem <strong>mobile-first</strong>: estilos base são para mobile, e usamos breakpoints para adicionar complexidade em telas maiores.
+          </p>
+          <CodeBlock code={`<!-- Mobile first: 1 coluna -->
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <Card />
+  <Card />
+  <Card />
+</div>
+
+<!-- Texto responsivo -->
+<h1 className="text-2xl md:text-3xl lg:text-4xl">
+  Título Responsivo
+</h1>
+
+<!-- Padding responsivo -->
+<section className="px-4 md:px-6 lg:px-8 py-12 md:py-16 lg:py-24">
+  Conteúdo
+</section>`} />
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Tipografia Fluida</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+          <p className="text-sm text-[var(--text-on-surface-muted)] mb-4">
+            Usamos <code className="text-tech">clamp()</code> para tipografia que escala suavemente entre breakpoints.
+          </p>
+          <CodeBlock code={`/* Tipografia fluida com clamp() */
+--text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+--text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+--text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+--text-lg: clamp(1.125rem, 1rem + 0.6vw, 1.25rem);
+--text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+--text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+--text-3xl: clamp(1.875rem, 1.5rem + 1.8vw, 2.5rem);
+--text-4xl: clamp(2.25rem, 1.8rem + 2.2vw, 3.5rem);
+--text-5xl: clamp(3rem, 2.2rem + 4vw, 5rem);`} />
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Testando Responsividade</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            { tool: 'Chrome DevTools', desc: 'F12 → Toggle device toolbar (Ctrl+Shift+M)' },
+            { tool: 'Firefox Responsive', desc: 'F12 → Responsive Design Mode (Ctrl+Shift+M)' },
+            { tool: 'Safari Responsive', desc: 'Develop → Enter Responsive Design Mode' },
+            { tool: 'Teste em dispositivos reais', desc: 'Sempre teste em mobile e tablet físicos' },
+          ].map((item, i) => (
+            <div key={i} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{item.tool}</p>
+              <p className="text-xs text-[var(--text-on-surface-muted)]">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SectionHeaderSection() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
+        <div className="space-y-8">
+          <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card)]">
+            <SectionHeader
+              eyebrow="Nossos Serviços"
+              title="Soluções que Geram Resultado"
+              subtitle="Cada serviço é pensado para acelerar o crescimento do seu negócio."
+            />
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card)]">
+            <SectionHeader
+              eyebrow="Alinhado à esquerda"
+              title="Título com Alinhamento Left"
+              subtitle="Use align='left' para layouts assimétricos."
+              align="left"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'eyebrow', type: 'string', default: 'undefined', description: 'Texto pequeno acima do título (ex: "Nossos Serviços")' },
+          { name: 'title', type: 'string', default: '—', description: 'Título principal (obrigatório)' },
+          { name: 'subtitle', type: 'string', default: 'undefined', description: 'Subtítulo descritivo abaixo do título' },
+          { name: 'align', type: "'center' | 'left'", default: "'center'", description: 'Alinhamento do conteúdo' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<SectionHeader
+  eyebrow="Nossos Serviços"
+  title="Soluções que Geram Resultado"
+  subtitle="Cada serviço é pensado para acelerar o crescimento do seu negócio."
+  align="center"
+/>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Eyebrow com cor tech e tracking-wide',
+            'Título com gradiente primary→tech',
+            'Subtítulo com cor muted',
+            'Alinhamento configurável (center/left)',
+            'Tipografia responsiva com clamp()',
+            'Espaçamento consistente (mb-12)',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AnimatedCounterSection() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card)]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <AnimatedCounter end={150} suffix="+" label="Projetos Entregues" icon={<Layout className="w-6 h-6" />} />
+            <AnimatedCounter end={40} suffix="%" label="Aumento em Leads" icon={<TrendingUp className="w-6 h-6" />} />
+            <AnimatedCounter end={98} suffix="%" label="Satisfação" icon={<Star className="w-6 h-6" />} />
+            <AnimatedCounter end={10} suffix="+" label="Anos de Mercado" icon={<Clock className="w-6 h-6" />} />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'end', type: 'number', default: '—', description: 'Valor final do contador (obrigatório)' },
+          { name: 'suffix', type: 'string', default: "''", description: 'Texto após o número (ex: "+", "%", "k")' },
+          { name: 'label', type: 'string', default: '—', description: 'Texto descritivo abaixo do número' },
+          { name: 'icon', type: 'ReactNode', default: '—', description: 'Ícone acima do número' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<AnimatedCounter
+  end={150}
+  suffix="+"
+  label="Projetos Entregues"
+  icon={<Layout className="w-6 h-6" />}
+/>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Animação de 0 até valor final em 2s',
+            'IntersectionObserver (anima ao entrar no viewport)',
+            'Ícone com fundo tech/10',
+            'Número com gradiente tech',
+            'Label com cor muted',
+            'Centralizado horizontalmente',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WhatsAppFloatSection() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card)] relative min-h-[200px]">
+          <p className="text-sm text-[var(--text-on-surface-muted)] mb-4">O botão flutuante aparece no canto inferior direito da tela:</p>
+          <div className="absolute bottom-8 right-8">
+            <WhatsAppFloat />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'number', type: 'string', default: "'5511999999999'", description: 'Número do WhatsApp com código do país' },
+          { name: 'message', type: 'string', default: "'Olá! Gostaria de saber mais sobre os serviços.'", description: 'Mensagem pré-preenchida' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<WhatsAppFloat
+  number="5511999999999"
+  message="Olá! Gostaria de saber mais sobre os serviços."
+/>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Posição fixa no canto inferior direito',
+            'Ícone WhatsApp com cor oficial (#25D366)',
+            'Animação pulse-ring (anel expansivo)',
+            'Hover com scale (1.1)',
+            'Link para wa.me com mensagem pré-preenchida',
+            'Target _blank (abre em nova aba)',
+            'Aria-label para acessibilidade',
+            'Z-index 50 (sempre visível)',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
