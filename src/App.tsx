@@ -458,6 +458,27 @@ function ColorsSection({ copiedColor, copyToClipboard }: { copiedColor: string |
         { name: 'Info', hex: '#3B82F6', use: 'Informação, dicas' },
       ]
     },
+    {
+      title: 'Neutras (Minimal)',
+      colors: [
+        { name: 'Neutral Black', hex: '#0A0A0A', use: 'Preto puro, fundos Minimal' },
+        { name: 'Neutral Gray 900', hex: '#171717', use: 'Quase preto, textos fortes' },
+        { name: 'Neutral Gray 700', hex: '#404040', use: 'Textos terciários' },
+        { name: 'Neutral Gray 500', hex: '#737373', use: 'Textos secundários' },
+        { name: 'Neutral Gray 300', hex: '#D4D4D4', use: 'Bordas sutis' },
+        { name: 'Neutral Gray 100', hex: '#F5F5F5', use: 'Off-white, fundos claros' },
+      ]
+    },
+    {
+      title: 'Neon',
+      colors: [
+        { name: 'Neon Pink', hex: '#FF006E', use: 'Rosa vibrante, destaque principal' },
+        { name: 'Neon Pink Light', hex: '#FF4D94', use: 'Hover/gradiente' },
+        { name: 'Neon Purple', hex: '#8338EC', use: 'Roxo neon, secundário' },
+        { name: 'Neon Cyan', hex: '#00F0FF', use: 'Ciano ultra vibrante' },
+        { name: 'Neon Cyan Light', hex: '#7FF7FF', use: 'Hover/gradiente' },
+      ]
+    },
   ];
 
   return (
@@ -493,7 +514,10 @@ function ColorsSection({ copiedColor, copyToClipboard }: { copiedColor: string |
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Gradientes</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
-            { name: 'Primary', css: 'linear-gradient(135deg, #8f6424 0%, #06B6D4 100%)' },
+            { name: 'Primary (Midnight)', css: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)' },
+            { name: 'Sunrise', css: 'linear-gradient(135deg, #8f6424 0%, #06B6D4 100%)' },
+            { name: 'Neon', css: 'linear-gradient(135deg, #FF006E 0%, #00F0FF 100%)' },
+            { name: 'Minimal', css: 'linear-gradient(135deg, #0A0A0A 0%, #404040 100%)' },
             { name: 'Tech', css: 'linear-gradient(135deg, #06B6D4 0%, #0EA5E9 100%)' },
             { name: 'Dark', css: 'linear-gradient(180deg, #17120e 0%, #1f1a16 100%)' },
           ].map(g => (
@@ -1821,6 +1845,14 @@ function FooterSection() {
 function InstagramSection() {
   const [showSafeZone, setShowSafeZone] = useState(false);
   const [showPhone, setShowPhone] = useState(false);
+  const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
+
+  const themes = [
+    { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#F6EEE7', border: '#8f6424', desc: 'Dicas, conteúdo educativo' },
+    { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#F5F5F5', border: '#0A0A0A', desc: 'Depoimentos, elegância' },
+  ];
 
   const slides = [
     { type: 'capa' as const, title: '5 Automações que Toda Empresa Precisa', subtitle: 'Max Ebina — Marketing Digital', caption: '5 automações que toda empresa precisa em 2026 🚀', label: 'Capa' },
@@ -1832,6 +1864,41 @@ function InstagramSection() {
 
   return (
     <div className="space-y-12">
+      {/* Seletor de Tema */}
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-4">🎨 Selecione o Tema</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {themes.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setTheme(t.id)}
+              className={`relative p-4 rounded-xl border-2 transition-all ${
+                theme === t.id 
+                  ? 'border-tech scale-105 shadow-lg' 
+                  : 'border-[var(--surface-border)] hover:border-tech/50'
+              }`}
+              aria-label={`Tema ${t.name}`}
+              aria-pressed={theme === t.id}
+            >
+              <div 
+                className="w-12 h-12 rounded-full mx-auto mb-3 border-4"
+                style={{ 
+                  backgroundColor: t.bg,
+                  borderColor: t.border
+                }}
+              />
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{t.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{t.desc}</p>
+              {theme === t.id && (
+                <div className="absolute top-2 right-2">
+                  <Check className="w-4 h-4 text-tech" />
+                </div>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
         <p className="text-tech font-semibold mb-2">📸 Como usar os templates</p>
         <ol className="text-sm text-[var(--text-on-surface-muted)] space-y-2 list-decimal list-inside">
@@ -1906,7 +1973,15 @@ function InstagramSection() {
 
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">5 Tipos de Slide</h3>
-        <div className="space-y-12">
+        
+        {/* Container com tema aplicado */}
+        <div 
+          data-theme={theme}
+          className="space-y-12 transition-all duration-500"
+          style={{
+            transition: 'background-color 0.4s ease, color 0.4s ease'
+          }}
+        >
           {slides.map((slide, index) => (
             <div key={index}>
               <div className="flex flex-wrap gap-8 justify-center">
@@ -1949,6 +2024,50 @@ function InstagramSection() {
               )}
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Documentação do Sistema de Temas */}
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">🎨 Sistema de Temas</h3>
+        <div className="space-y-4 text-sm text-[var(--text-on-surface-muted)]">
+          <p>O Design System possui 4 temas visuais para Instagram, cada um com personalidade própria:</p>
+          
+          <div className="grid md:grid-cols-2 gap-4 mt-4">
+            <div className="rounded-lg border border-[var(--surface-border)] p-4">
+              <p className="font-semibold text-[var(--text-on-surface)] mb-2">🌙 Midnight (Padrão)</p>
+              <p className="text-xs mb-2">Fundo escuro com acentos em ciano. Ideal para posts técnicos, autoridade e cases.</p>
+              <p className="text-xs font-mono text-tech">bg: #0a0a0f | accent: #06B6D4</p>
+            </div>
+            
+            <div className="rounded-lg border border-[var(--surface-border)] p-4">
+              <p className="font-semibold text-[var(--text-on-surface)] mb-2">🌅 Sunrise</p>
+              <p className="text-xs mb-2">Fundo claro com acentos em laranja. Perfeito para dicas, conteúdo educativo e leveza.</p>
+              <p className="text-xs font-mono text-tech">bg: #F6EEE7 | accent: #8f6424</p>
+            </div>
+            
+            <div className="rounded-lg border border-[var(--surface-border)] p-4">
+              <p className="font-semibold text-[var(--text-on-surface)] mb-2">⚡ Neon</p>
+              <p className="text-xs mb-2">Fundo preto com cores neon vibrantes. Ótimo para lançamentos, promoções e urgência.</p>
+              <p className="text-xs font-mono text-tech">bg: #000000 | accent: #FF006E</p>
+            </div>
+            
+            <div className="rounded-lg border border-[var(--surface-border)] p-4">
+              <p className="font-semibold text-[var(--text-on-surface)] mb-2">✨ Minimal</p>
+              <p className="text-xs mb-2">Fundo off-white monocromático. Ideal para depoimentos, citações e elegância.</p>
+              <p className="text-xs font-mono text-tech">bg: #F5F5F5 | accent: #0A0A0A</p>
+            </div>
+          </div>
+
+          <div className="mt-6 p-4 rounded-lg bg-tech/5 border border-tech/20">
+            <p className="font-semibold text-tech mb-2">💡 Como criar um novo tema:</p>
+            <ol className="text-xs space-y-1 list-decimal list-inside">
+              <li>Adicione as variáveis CSS em <code className="text-tech">src/index.css</code></li>
+              <li>Use o seletor <code className="text-tech">[data-theme="seu-tema"]</code></li>
+              <li>Defina: --slide-bg, --slide-text, --slide-accent, --slide-primary, --slide-gradient</li>
+              <li>Adicione o tema no array <code className="text-tech">themes</code> em InstagramSection</li>
+            </ol>
+          </div>
         </div>
       </div>
     </div>

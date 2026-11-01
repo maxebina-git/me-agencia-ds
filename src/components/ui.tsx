@@ -770,22 +770,18 @@ interface InstagramSlideProps {
 }
 
 export function InstagramSlide({ type, title, subtitle, body, number, metric, metricLabel, showSafeZone = false, isMockup = false }: InstagramSlideProps) {
-  const slideStyles: Record<string, string> = {
-    capa: 'bg-gradient-to-br from-bg-dark via-bg-dark-secondary to-bg-dark',
-    dica: 'bg-gradient-to-br from-tech/10 to-bg-dark',
-    servico: 'bg-gradient-to-br from-primary/10 to-bg-dark',
-    'prova-social': 'bg-gradient-to-br from-tech/5 via-bg-dark to-primary/5',
-    cta: 'bg-gradient-to-br from-tech to-tech-light',
-  };
-
   const titleSize = isMockup ? 'text-lg' : 'text-3xl';
   const subtitleSize = isMockup ? 'text-xs' : 'text-sm';
   const bodySize = isMockup ? 'text-xs' : 'text-sm';
 
   return (
     <div
-      className={`instagram-slide ${slideStyles[type]}`}
-      style={{ fontFamily: 'var(--font-display)' }}
+      className="instagram-slide"
+      style={{ 
+        fontFamily: 'var(--font-display)',
+        backgroundColor: 'var(--slide-bg)',
+        color: 'var(--slide-text)',
+      }}
     >
       {showSafeZone && (
         <>
@@ -794,8 +790,21 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
         </>
       )}
 
-      <div className="absolute top-[5%] right-[5%] w-20 h-20 rounded-full bg-tech/10 blur-xl" />
-      <div className="absolute bottom-[8%] left-[5%] w-16 h-16 rounded-full bg-primary/10 blur-xl" />
+      {/* Elementos decorativos com cores do tema */}
+      <div 
+        className="absolute top-[5%] right-[5%] w-20 h-20 rounded-full blur-xl" 
+        style={{ 
+          background: 'var(--slide-accent)',
+          opacity: 0.1
+        }}
+      />
+      <div 
+        className="absolute bottom-[8%] left-[5%] w-16 h-16 rounded-full blur-xl" 
+        style={{ 
+          background: 'var(--slide-primary)',
+          opacity: 0.1
+        }}
+      />
 
       <div 
         className="absolute flex flex-col" 
@@ -809,46 +818,123 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
       >
         {type === 'capa' && (
           <div className="flex flex-col h-full justify-center">
-            <p className={`text-tech ${subtitleSize} font-semibold tracking-widest uppercase mb-2`}>Max Ebina</p>
-            <h2 className={`${titleSize} font-bold text-white leading-tight mb-3`}>{title}</h2>
-            {subtitle && <p className={`text-white/60 ${subtitleSize}`}>{subtitle}</p>}
+            <p 
+              className={`${subtitleSize} font-semibold tracking-widest uppercase mb-2`}
+              style={{ color: 'var(--slide-accent)' }}
+            >
+              Max Ebina
+            </p>
+            <h2 
+              className={`${titleSize} font-bold leading-tight mb-3`}
+              style={{ color: 'var(--slide-text)' }}
+            >
+              {title}
+            </h2>
+            {subtitle && (
+              <p 
+                className={subtitleSize}
+                style={{ color: 'var(--slide-text-muted)' }}
+              >
+                {subtitle}
+              </p>
+            )}
           </div>
         )}
 
         {type === 'dica' && (
           <div className="flex flex-col h-full justify-center">
-            <span className={`inline-block px-3 py-1 bg-tech/20 text-tech ${isMockup ? 'text-[10px]' : 'text-xs'} font-semibold rounded-full mb-${isMockup ? '3' : '6'} w-fit`}>
+            <span 
+              className={`inline-block px-3 py-1 ${isMockup ? 'text-[10px]' : 'text-xs'} font-semibold rounded-full mb-${isMockup ? '3' : '6'} w-fit`}
+              style={{ 
+                backgroundColor: 'var(--slide-accent)',
+                color: 'var(--slide-bg)',
+                opacity: 0.9
+              }}
+            >
               Dica #{number || 1}
             </span>
-            <h2 className={`${isMockup ? 'text-base' : 'text-2xl'} font-bold text-white leading-tight mb-${isMockup ? '2' : '4'}`}>{title}</h2>
-            {body && <p className={`text-white/60 ${bodySize} leading-relaxed`}>{body}</p>}
+            <h2 
+              className={`${isMockup ? 'text-base' : 'text-2xl'} font-bold leading-tight mb-${isMockup ? '2' : '4'}`}
+              style={{ color: 'var(--slide-text)' }}
+            >
+              {title}
+            </h2>
+            {body && (
+              <p 
+                className={`${bodySize} leading-relaxed`}
+                style={{ color: 'var(--slide-text-muted)' }}
+              >
+                {body}
+              </p>
+            )}
           </div>
         )}
 
         {type === 'servico' && (
           <div className="flex flex-col h-full">
-            <h2 className={`${isMockup ? 'text-base' : 'text-2xl'} font-bold text-white leading-tight mb-${isMockup ? '3' : '6'}`}>{title}</h2>
+            <h2 
+              className={`${isMockup ? 'text-base' : 'text-2xl'} font-bold leading-tight mb-${isMockup ? '3' : '6'}`}
+              style={{ color: 'var(--slide-text)' }}
+            >
+              {title}
+            </h2>
             <div className={`space-y-${isMockup ? '2' : '3'} flex-1`}>
               {['Automatize processos', 'Gere mais leads', 'Escale resultados'].map((item, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <Check className={`${isMockup ? 'w-3 h-3' : 'w-5 h-5'} text-tech flex-shrink-0`} />
-                  <span className={`text-white/80 ${bodySize}`}>{item}</span>
+                  <Check 
+                    className={`${isMockup ? 'w-3 h-3' : 'w-5 h-5'} flex-shrink-0`}
+                    style={{ color: 'var(--slide-accent)' }}
+                  />
+                  <span 
+                    className={bodySize}
+                    style={{ color: 'var(--slide-text-muted)' }}
+                  >
+                    {item}
+                  </span>
                 </div>
               ))}
             </div>
             <div className={`pt-${isMockup ? '2' : '6'}`}>
-              <p className={`text-tech ${bodySize} font-semibold`}>Link na bio →</p>
+              <p 
+                className={`${bodySize} font-semibold`}
+                style={{ color: 'var(--slide-accent)' }}
+              >
+                Link na bio →
+              </p>
             </div>
           </div>
         )}
 
         {type === 'prova-social' && (
           <div className="text-center flex flex-col h-full justify-center">
-            <div className={`${isMockup ? 'text-4xl' : 'text-6xl'} font-bold gradient-text-tech mb-2`}>{metric || '+150'}</div>
-            <p className={`text-white/60 ${subtitleSize} mb-${isMockup ? '4' : '8'}`}>{metricLabel || 'Projetos entregues'}</p>
+            <div 
+              className={`${isMockup ? 'text-4xl' : 'text-6xl'} font-bold mb-2`}
+              style={{ 
+                background: 'var(--slide-gradient)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
+              {metric || '+150'}
+            </div>
+            <p 
+              className={`${subtitleSize} mb-${isMockup ? '4' : '8'}`}
+              style={{ color: 'var(--slide-text-muted)' }}
+            >
+              {metricLabel || 'Projetos entregues'}
+            </p>
             <div className="flex justify-center gap-2">
               {[1, 2, 3, 4, 5].map(i => (
-                <div key={i} className={`${isMockup ? 'w-5 h-5' : 'w-8 h-8'} rounded-full bg-gradient-to-br from-tech/30 to-primary/30 border border-white/10`} />
+                <div 
+                  key={i} 
+                  className={`${isMockup ? 'w-5 h-5' : 'w-8 h-8'} rounded-full border`}
+                  style={{ 
+                    background: 'var(--slide-gradient)',
+                    borderColor: 'var(--slide-border)',
+                    opacity: 0.3
+                  }}
+                />
               ))}
             </div>
           </div>
@@ -856,12 +942,44 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
 
         {type === 'cta' && (
           <div className="text-center flex flex-col h-full justify-center">
-            <Sparkles className={`${isMockup ? 'w-6 h-6' : 'w-10 h-10'} text-bg-dark mx-auto mb-${isMockup ? '3' : '6'}`} />
-            <h2 className={`${isMockup ? 'text-base' : 'text-2xl'} font-bold text-bg-dark leading-tight mb-${isMockup ? '2' : '4'}`}>{title}</h2>
-            {subtitle && <p className={`text-bg-dark/70 ${subtitleSize} mb-${isMockup ? '4' : '8'}`}>{subtitle}</p>}
-            <div className={`inline-flex items-center gap-2 bg-bg-dark/20 rounded-full ${isMockup ? 'px-3 py-1.5' : 'px-6 py-3'} mx-auto`}>
-              <span className={`text-bg-dark font-semibold ${isMockup ? 'text-xs' : 'text-sm'}`}>Link na bio</span>
-              <ArrowRight className={`${isMockup ? 'w-3 h-3' : 'w-4 h-4'} text-bg-dark`} />
+            <Sparkles 
+              className={`${isMockup ? 'w-6 h-6' : 'w-10 h-10'} mx-auto mb-${isMockup ? '3' : '6'}`}
+              style={{ color: 'var(--slide-bg)' }}
+            />
+            <h2 
+              className={`${isMockup ? 'text-base' : 'text-2xl'} font-bold leading-tight mb-${isMockup ? '2' : '4'}`}
+              style={{ color: 'var(--slide-bg)' }}
+            >
+              {title}
+            </h2>
+            {subtitle && (
+              <p 
+                className={`${subtitleSize} mb-${isMockup ? '4' : '8'}`}
+                style={{ 
+                  color: 'var(--slide-bg)',
+                  opacity: 0.7
+                }}
+              >
+                {subtitle}
+              </p>
+            )}
+            <div 
+              className={`inline-flex items-center gap-2 rounded-full ${isMockup ? 'px-3 py-1.5' : 'px-6 py-3'} mx-auto`}
+              style={{ 
+                backgroundColor: 'var(--slide-bg)',
+                opacity: 0.2
+              }}
+            >
+              <span 
+                className={`font-semibold ${isMockup ? 'text-xs' : 'text-sm'}`}
+                style={{ color: 'var(--slide-bg)' }}
+              >
+                Link na bio
+              </span>
+              <ArrowRight 
+                className={`${isMockup ? 'w-3 h-3' : 'w-4 h-4'}`}
+                style={{ color: 'var(--slide-bg)' }}
+              />
             </div>
           </div>
         )}

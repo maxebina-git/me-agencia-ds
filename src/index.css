@@ -28,6 +28,21 @@
   --color-error: #EF4444;
   --color-info: #3B82F6;
 
+  /* Colors - Neutral (for Minimal theme) */
+  --color-neutral-black: #0A0A0A;
+  --color-neutral-gray-900: #171717;
+  --color-neutral-gray-700: #404040;
+  --color-neutral-gray-500: #737373;
+  --color-neutral-gray-300: #D4D4D4;
+  --color-neutral-gray-100: #F5F5F5;
+
+  /* Colors - Neon (for Neon theme) */
+  --color-neon-pink: #FF006E;
+  --color-neon-pink-light: #FF4D94;
+  --color-neon-purple: #8338EC;
+  --color-neon-cyan: #00F0FF;
+  --color-neon-cyan-light: #7FF7FF;
+
   /* Typography */
   --font-display: 'Space Grotesk', sans-serif;
   --font-body: 'Inter', sans-serif;
@@ -83,6 +98,70 @@ html.dark {
   --surface-card: rgba(31, 26, 22, 0.9);
   --surface-card-secondary: #1f1a16;
   --surface-border: rgba(246, 238, 231, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Instagram Theme Variables
+   ═══════════════════════════════════════════════════════════ */
+
+/* Default theme: Midnight */
+:root {
+  --slide-bg: #0a0a0f;
+  --slide-bg-secondary: #1a1a2e;
+  --slide-text: #ffffff;
+  --slide-text-muted: rgba(255, 255, 255, 0.6);
+  --slide-accent: #06B6D4;
+  --slide-primary: #8f6424;
+  --slide-gradient: linear-gradient(135deg, #06B6D4 0%, #8f6424 100%);
+  --slide-border: rgba(6, 182, 212, 0.2);
+}
+
+/* Theme: Midnight (default) */
+[data-theme="midnight"] {
+  --slide-bg: #0a0a0f;
+  --slide-bg-secondary: #1a1a2e;
+  --slide-text: #ffffff;
+  --slide-text-muted: rgba(255, 255, 255, 0.6);
+  --slide-accent: #06B6D4;
+  --slide-primary: #8f6424;
+  --slide-gradient: linear-gradient(135deg, #06B6D4 0%, #8f6424 100%);
+  --slide-border: rgba(6, 182, 212, 0.2);
+}
+
+/* Theme: Sunrise */
+[data-theme="sunrise"] {
+  --slide-bg: #F6EEE7;
+  --slide-bg-secondary: #F0E4D9;
+  --slide-text: #17120e;
+  --slide-text-muted: rgba(23, 18, 14, 0.7);
+  --slide-accent: #8f6424;
+  --slide-primary: #06B6D4;
+  --slide-gradient: linear-gradient(135deg, #8f6424 0%, #06B6D4 100%);
+  --slide-border: rgba(143, 100, 36, 0.2);
+}
+
+/* Theme: Neon */
+[data-theme="neon"] {
+  --slide-bg: #000000;
+  --slide-bg-secondary: #0a0a0a;
+  --slide-text: #ffffff;
+  --slide-text-muted: rgba(255, 255, 255, 0.7);
+  --slide-accent: #FF006E;
+  --slide-primary: #00F0FF;
+  --slide-gradient: linear-gradient(135deg, #FF006E 0%, #00F0FF 100%);
+  --slide-border: rgba(255, 0, 110, 0.3);
+}
+
+/* Theme: Minimal */
+[data-theme="minimal"] {
+  --slide-bg: #F5F5F5;
+  --slide-bg-secondary: #E5E5E5;
+  --slide-text: #0A0A0A;
+  --slide-text-muted: rgba(10, 10, 10, 0.6);
+  --slide-accent: #0A0A0A;
+  --slide-primary: #0A0A0A;
+  --slide-gradient: linear-gradient(135deg, #0A0A0A 0%, #404040 100%);
+  --slide-border: rgba(10, 10, 10, 0.1);
 }
 
 * {
