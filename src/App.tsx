@@ -7,12 +7,13 @@ import {
 import {
   Button, ServiceCard, SectionHeader, TestimonialCard,
   FAQ, WhatsAppFloat, Navbar, LeadCaptureForm, AnimatedCounter,
-  InstagramSlide
+  InstagramSlide, Footer
 } from './components/ui';
 import { PhoneMockup } from './components/PhoneMockup';
 import { CodeBlock, PropsTable } from './components/DocsComponents';
+import { HeroSection } from './components/HeroSection';
 
-type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'buttons' | 'cards' | 'forms' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'instagram' | 'brand-voice' | 'preview';
+type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'buttons' | 'cards' | 'forms' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'instagram' | 'brand-voice' | 'preview';
 
 interface NavItem {
   id: Section;
@@ -34,6 +35,7 @@ const navItems: NavItem[] = [
   { id: 'hero', label: 'Hero Section', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'faq', label: 'FAQ', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'testimonials', label: 'Depoimentos', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
+  { id: 'footer', label: 'Footer', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'instagram', label: 'Instagram', group: '📱 Templates', icon: <Image className="w-4 h-4" /> },
   { id: 'brand-voice', label: 'Brand Voice', group: '📝 Conteúdo', icon: <BookOpen className="w-4 h-4" /> },
   { id: 'preview', label: 'LP Preview', group: '🚀 Preview', icon: <Eye className="w-4 h-4" /> },
@@ -206,6 +208,7 @@ export default function App() {
           {activeSection === 'hero' && <HeroSectionDocs />}
           {activeSection === 'faq' && <FAQSection />}
           {activeSection === 'testimonials' && <TestimonialsSection />}
+          {activeSection === 'footer' && <FooterSection />}
           {activeSection === 'instagram' && <InstagramSection />}
           {activeSection === 'brand-voice' && <BrandVoiceSection />}
           {activeSection === 'preview' && <PreviewSection />}
@@ -1006,24 +1009,14 @@ function HeroSectionDocs() {
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
         <div className="rounded-xl border border-[var(--surface-border)] overflow-hidden">
-          <div className="bg-bg-dark min-h-[600px] relative flex items-center justify-center">
-            <div className="max-w-4xl mx-auto px-6 py-24 text-center">
-              <h1 className="text-5xl md:text-6xl font-display font-bold text-white mb-6">
-                Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span>
-              </h1>
-              <p className="text-xl text-white/70 mb-8 max-w-2xl mx-auto">
-                Sites, LPs e CRM que geram resultados reais. Escalabilidade com inteligência digital para o seu negócio crescer.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button variant="tech" size="lg" icon>
-                  Quero Escalar Meu Negócio
-                </Button>
-                <Button variant="ghost" size="lg">
-                  Ver Cases
-                </Button>
-              </div>
-            </div>
-          </div>
+          <HeroSection
+            headline={<>Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span></>}
+            subheadline="Sites, LPs e CRM que geram resultados reais. Escalabilidade com inteligência digital para o seu negócio crescer."
+            ctaPrimary="Quero Escalar Meu Negócio"
+            ctaSecondary="Ver Cases"
+            ctaPrimaryHref="#contato"
+            ctaSecondaryHref="#cases"
+          />
         </div>
       </div>
 
@@ -1376,6 +1369,126 @@ function TestimonialsSection() {
   );
 }
 
+function FooterSection() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] overflow-hidden">
+          <Footer />
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'logo', type: 'string', default: "'MAX'", description: 'Texto do logo' },
+          { name: 'links', type: 'Array<{title: string, items: Array<{label: string, href: string}>}>', default: '[]', description: 'Seções de links do footer' },
+          { name: 'social', type: 'Array<{platform: string, href: string, icon: ReactNode}>', default: '[]', description: 'Links de redes sociais' },
+          { name: 'copyright', type: 'string', default: "'© 2026 Max Ebina. Todos os direitos reservados.'", description: 'Texto de copyright' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<Footer
+  logo="MAX"
+  links={[
+    {
+      title: 'Serviços',
+      items: [
+        { label: 'Sites Institucionais', href: '#sites' },
+        { label: 'Landing Pages', href: '#landing-pages' },
+        { label: 'SaaS', href: '#saas' },
+      ],
+    },
+    {
+      title: 'Empresa',
+      items: [
+        { label: 'Sobre Nós', href: '#sobre' },
+        { label: 'Cases', href: '#cases' },
+        { label: 'Contato', href: '#contato' },
+      ],
+    },
+  ]}
+  social={[
+    { platform: 'Instagram', href: 'https://instagram.com/maxebina', icon: <InstagramIcon /> },
+    { platform: 'LinkedIn', href: 'https://linkedin.com/company/maxebina', icon: <LinkedInIcon /> },
+  ]}
+  copyright="© 2026 Max Ebina. Todos os direitos reservados."
+/>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Logo com gradiente tech',
+            'Descrição da empresa',
+            'Links organizados em colunas',
+            'Ícones de redes sociais',
+            'Barra inferior com copyright',
+            'Links legais (Privacidade, Termos, Cookies)',
+            '100% responsivo (grid adaptativo)',
+            'Background escuro com borda sutil',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Estrutura do Footer</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+          <div className="space-y-4 text-sm">
+            <div>
+              <p className="font-semibold text-[var(--text-on-surface)] mb-2">📍 Coluna 1 (Logo + Descrição)</p>
+              <ul className="text-[var(--text-on-surface-muted)] space-y-1 ml-4">
+                <li>• Logo com gradiente</li>
+                <li>• Descrição da empresa (max 2 linhas)</li>
+                <li>• Ícones de redes sociais</li>
+              </ul>
+            </div>
+            <div>
+              <p className="font-semibold text-[var(--text-on-surface)] mb-2">📍 Colunas 2-4 (Links)</p>
+              <ul className="text-[var(--text-on-surface-muted)] space-y-1 ml-4">
+                <li>• Título da seção</li>
+                <li>• Lista de links (4-6 itens)</li>
+                <li>• Hover com cor tech</li>
+              </ul>
+            </div>
+            <div>
+              <p className="font-semibold text-[var(--text-on-surface)] mb-2">📍 Barra Inferior</p>
+              <ul className="text-[var(--text-on-surface-muted)] space-y-1 ml-4">
+                <li>• Copyright à esquerda</li>
+                <li>• Links legais à direita</li>
+                <li>• Borda superior sutil</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Dicas de Conteúdo</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+          <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
+            <li>✅ <strong>Descrição concisa:</strong> Máximo 2 linhas explicando o que a empresa faz</li>
+            <li>✅ <strong>Links organizados:</strong> Agrupe por tema (Serviços, Empresa, Legal)</li>
+            <li>✅ <strong>Redes sociais:</strong> Apenas as que você mantém ativas</li>
+            <li>✅ <strong>Links legais:</strong> Privacidade e Termos são obrigatórios (LGPD)</li>
+            <li>❌ <strong>Evite links quebrados:</strong> Teste todos os links antes de publicar</li>
+            <li>❌ <strong>Não sobrecarregue:</strong> Máximo 6 links por coluna</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function InstagramSection() {
   const [showSafeZone, setShowSafeZone] = useState(false);
   const [showPhone, setShowPhone] = useState(false);
@@ -1721,12 +1834,7 @@ function PreviewSection() {
             </div>
           </section>
 
-          <footer className="py-12 px-6 border-t border-white/5 bg-bg-dark">
-            <div className="max-w-6xl mx-auto text-center">
-              <p className="font-display font-bold text-xl gradient-text">MAX</p>
-              <p className="text-sm text-white/40 mt-1">© 2026 Max Ebina. Todos os direitos reservados.</p>
-            </div>
-          </footer>
+          <Footer />
         </div>
       </div>
 

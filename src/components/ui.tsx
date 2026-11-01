@@ -593,3 +593,126 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
     </div>
   );
 }
+
+/* ═══════════════════════════════════════════════════════════
+   FOOTER COMPONENT
+   ═══════════════════════════════════════════════════════════ */
+
+interface FooterProps {
+  logo?: string;
+  links?: {
+    title: string;
+    items: { label: string; href: string }[];
+  }[];
+  social?: {
+    platform: string;
+    href: string;
+    icon: React.ReactNode;
+  }[];
+  copyright?: string;
+}
+
+export function Footer({
+  logo = 'MAX',
+  links = [
+    {
+      title: 'Serviços',
+      items: [
+        { label: 'Sites Institucionais', href: '#sites' },
+        { label: 'Landing Pages', href: '#landing-pages' },
+        { label: 'SaaS', href: '#saas' },
+        { label: 'CRM', href: '#crm' },
+        { label: 'Tráfego Pago', href: '#trafego' },
+        { label: 'Automação WhatsApp', href: '#automacao' },
+      ],
+    },
+    {
+      title: 'Empresa',
+      items: [
+        { label: 'Sobre Nós', href: '#sobre' },
+        { label: 'Cases', href: '#cases' },
+        { label: 'Blog', href: '#blog' },
+        { label: 'Contato', href: '#contato' },
+      ],
+    },
+    {
+      title: 'Legal',
+      items: [
+        { label: 'Privacidade', href: '#privacidade' },
+        { label: 'Termos de Uso', href: '#termos' },
+        { label: 'Cookies', href: '#cookies' },
+      ],
+    },
+  ],
+  social = [],
+  copyright = '© 2026 Max Ebina. Todos os direitos reservados.',
+}: FooterProps) {
+  return (
+    <footer className="bg-bg-dark border-t border-white/5 py-16 px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+          {/* Logo and description */}
+          <div className="lg:col-span-2">
+            <div className="font-display font-bold text-3xl gradient-text mb-4">
+              {logo}
+            </div>
+            <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-md">
+              Transformamos negócios com tecnologia e automação. Sites, LPs, CRM e tráfego pago que geram resultados reais.
+            </p>
+            {social.length > 0 && (
+              <div className="flex gap-4">
+                {social.map((s, i) => (
+                  <a
+                    key={i}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-tech hover:border-tech/30 transition-all"
+                    aria-label={s.platform}
+                  >
+                    {s.icon}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Links */}
+          {links.map((section, i) => (
+            <div key={i}>
+              <h4 className="font-display font-semibold text-white mb-4">{section.title}</h4>
+              <ul className="space-y-3">
+                {section.items.map((item, j) => (
+                  <li key={j}>
+                    <a
+                      href={item.href}
+                      className="text-sm text-white/60 hover:text-tech transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom bar */}
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-white/40">{copyright}</p>
+          <div className="flex items-center gap-6">
+            <a href="#privacidade" className="text-sm text-white/40 hover:text-tech transition-colors">
+              Privacidade
+            </a>
+            <a href="#termos" className="text-sm text-white/40 hover:text-tech transition-colors">
+              Termos
+            </a>
+            <a href="#cookies" className="text-sm text-white/40 hover:text-tech transition-colors">
+              Cookies
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
