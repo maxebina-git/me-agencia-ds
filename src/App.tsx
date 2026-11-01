@@ -1798,30 +1798,48 @@ function PreviewSection() {
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Preview Visual</h3>
         <div className="rounded-2xl border border-[var(--surface-border)] overflow-hidden bg-bg-dark">
+          {/* 1. Navbar */}
           <Navbar
             logo="MAX"
             links={[
               { label: 'Serviços', href: '#servicos' },
               { label: 'Cases', href: '#cases' },
+              { label: 'Depoimentos', href: '#depoimentos' },
+              { label: 'FAQ', href: '#faq' },
             ]}
             ctaText="Diagnóstico Gratuito"
           />
 
+          {/* 2. Hero Section */}
+          <HeroSection
+            headline={<>Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span></>}
+            subheadline="Sites, LPs e CRM que geram resultados reais. Escalabilidade com inteligência digital para o seu negócio crescer."
+            ctaPrimary="Quero Escalar Meu Negócio"
+            ctaSecondary="Ver Cases"
+            ctaPrimaryHref="#contato"
+            ctaSecondaryHref="#cases"
+          />
+
+          {/* 3. Serviços */}
           <section className="py-24 px-6 bg-bg-dark">
             <div className="max-w-6xl mx-auto">
               <SectionHeader
                 eyebrow="Nossos Serviços"
                 title="Soluções que Geram Resultado"
-                subtitle="Cada serviço é pensado para acelerar o crescimento do seu negócio."
+                subtitle="Cada serviço é pensado para acelerar o crescimento do seu negócio com tecnologia de ponta."
               />
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <ServiceCard title="Sites Institucionais" description="Presença digital profissional que converte." icon="Globe" badge="Popular" />
-                <ServiceCard title="Landing Pages" description="Páginas de alta conversão para campanhas." icon="Layout" badge="+40% leads" />
-                <ServiceCard title="SaaS" description="Plataformas web sob medida." icon="Code2" />
+                <ServiceCard title="Sites Institucionais" description="Presença digital profissional que converte visitantes em clientes." icon="Globe" badge="Popular" />
+                <ServiceCard title="Landing Pages" description="Páginas de alta conversão para campanhas de tráfego pago." icon="Layout" badge="+40% leads" />
+                <ServiceCard title="SaaS" description="Plataformas web sob medida para escalar seu modelo de negócio." icon="Code2" />
+                <ServiceCard title="CRM" description="Gestão inteligente de clientes e automação de vendas." icon="Bot" />
+                <ServiceCard title="Tráfego Pago" description="Investimento estratégico em mídia com ROI mensurável." icon="Megaphone" />
+                <ServiceCard title="Automação WhatsApp" description="Fluxos inteligentes que vendem 24h por dia." icon="Workflow" badge="Novo" />
               </div>
             </div>
           </section>
 
+          {/* 4. Prova Social */}
           <section className="py-24 px-6 bg-bg-dark-secondary">
             <div className="max-w-4xl mx-auto">
               <SectionHeader eyebrow="Prova Social" title="Números que Falam" />
@@ -1834,6 +1852,44 @@ function PreviewSection() {
             </div>
           </section>
 
+          {/* 5. Depoimentos */}
+          <section id="depoimentos" className="py-24 px-6 bg-bg-dark">
+            <div className="max-w-6xl mx-auto">
+              <SectionHeader eyebrow="Depoimentos" title="O que Nossos Clientes Dizem" />
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <TestimonialCard name="Carlos Mendes" company="TechStart" role="CEO" rating={5} testimonial="A Max Ebina transformou completamente nossa presença digital. Em 3 meses, triplicamos os leads qualificados." />
+                <TestimonialCard name="Ana Silva" company="ModaFit" role="Diretora" rating={5} testimonial="A automação de WhatsApp economiza 4 horas por dia da minha equipe. Resultado incrível!" />
+                <TestimonialCard name="Roberto Lima" company="Construmax" role="Gerente" rating={4} testimonial="O CRM que desenvolveram é intuitivo e poderoso. Nossa taxa de conversão subiu 60%." />
+              </div>
+            </div>
+          </section>
+
+          {/* 6. Lead Magnet */}
+          <section id="contato" className="py-24 px-6 bg-gradient-to-br from-bg-dark via-bg-dark-secondary to-bg-dark relative overflow-hidden">
+            <div className="absolute inset-0 opacity-30">
+              <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-tech/10 rounded-full blur-3xl" />
+              <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
+            </div>
+            <div className="max-w-lg mx-auto relative z-10">
+              <LeadCaptureForm />
+            </div>
+          </section>
+
+          {/* 7. FAQ */}
+          <section id="faq" className="py-24 px-6 bg-bg-dark">
+            <div className="max-w-2xl mx-auto">
+              <SectionHeader eyebrow="Dúvidas Frequentes" title="Perguntas e Respostas" />
+              <FAQ items={[
+                { question: 'Quanto tempo leva para criar um site?', answer: 'Dependendo da complexidade, um site institucional fica pronto em 2-4 semanas. Landing pages em 1-2 semanas.' },
+                { question: 'Vocês fazem manutenção após a entrega?', answer: 'Sim! Oferecemos planos de manutenção mensal que incluem atualizações de segurança, backups e suporte prioritário.' },
+                { question: 'Como funciona o tráfego pago?', answer: 'Criamos campanhas estratégicas no Google Ads e Meta Ads, com foco em ROI. Você acompanha tudo em relatórios semanais.' },
+                { question: 'A automação de WhatsApp substitui atendentes?', answer: 'Não substitui — potencializa! A automação cuida do primeiro contato e qualificação, liberando sua equipe para fechar vendas.' },
+                { question: 'Preciso ter conhecimento técnico?', answer: 'Absolutamente não! Nós cuidamos de toda a parte técnica. Você foca no seu negócio enquanto nós transformamos sua presença digital.' },
+              ]} />
+            </div>
+          </section>
+
+          {/* 8. Footer */}
           <Footer />
         </div>
       </div>
