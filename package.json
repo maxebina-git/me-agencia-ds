@@ -1,11 +1,48 @@
 {
-  "name": "sandbox-workspace",
-  "private": true,
+  "name": "@maxebina/max-ds",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Design System da Agência Max Ebina - Templates Instagram, Landing Pages e componentes reutilizáveis",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "typecheck": "tsc --noEmit"
+    "build:lib": "vite build --mode lib",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "design-system",
+    "react",
+    "components",
+    "instagram",
+    "landing-page",
+    "max-ebina",
+    "templates",
+    "ui-components"
+  ],
+  "author": "Max Ebina",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxebina/max-ds.git"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
@@ -16,8 +53,6 @@
     "date-fns": "^2.30.0",
     "framer-motion": "^11.16.1",
     "lucide-react": "^0.294.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.0",
     "recharts": "^2.10.0",
     "uuid": "^9.0.1"
