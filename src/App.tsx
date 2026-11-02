@@ -2099,7 +2099,7 @@ function InstagramSection() {
           <div className="mt-4 p-4 rounded-lg bg-tech/5 border border-tech/20">
             <p className="font-semibold text-tech mb-2">📐 Especificações do Logo:</p>
             <ul className="text-xs space-y-1 list-decimal list-inside">
-              <li><strong>Posição:</strong> Canto inferior direito (10% do bottom e right)</li>
+              <li><strong>Posição:</strong> Canto inferior direito (16% do bottom, 14% do right) - <span className="text-success">DENTRO da safe zone</span></li>
               <li><strong>Tamanho:</strong> 60x29px (slide normal) | 40x19px (mockup)</li>
               <li><strong>Opacidade:</strong> 85% (sutil mas visível)</li>
               <li><strong>Cor:</strong> Usa <code className="text-tech">var(--slide-accent)</code> (adapta ao tema)</li>

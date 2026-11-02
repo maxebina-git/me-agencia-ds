@@ -808,12 +808,13 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
 
       {/* Logo Max Ebina - posicionado no canto inferior direito */}
       {/* Não aparece em slides de "dica" para evitar poluição visual */}
+      {/* Posicionado DENTRO da safe zone (bottom: 16%, right: 14%) */}
       {type !== 'dica' && (
         <div 
           className="absolute"
           style={{ 
-            bottom: isMockup ? '8%' : '10%',
-            right: isMockup ? '8%' : '10%',
+            bottom: isMockup ? '16%' : '16%',
+            right: isMockup ? '14%' : '14%',
             opacity: 0.85,
             zIndex: 5
           }}
