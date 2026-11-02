@@ -2070,6 +2070,55 @@ function InstagramSection() {
           </div>
         </div>
       </div>
+
+      {/* Documentação do Logo nos Templates */}
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">🎯 Logo nos Templates</h3>
+        <div className="space-y-4 text-sm text-[var(--text-on-surface-muted)]">
+          <p>O logo Max Ebina aparece automaticamente em 4 dos 5 tipos de slide para reforçar branding e profissionalismo:</p>
+          
+          <div className="grid md:grid-cols-2 gap-4 mt-4">
+            <div className="rounded-lg border border-success/20 bg-success/5 p-4">
+              <p className="font-semibold text-success mb-2">✅ Inclui Logo</p>
+              <ul className="text-xs space-y-1">
+                <li>• <strong>Capa</strong> - Identifica a marca no primeiro contato</li>
+                <li>• <strong>Serviço</strong> - Reforça quem oferece o serviço</li>
+                <li>• <strong>Prova Social</strong> - Aumenta credibilidade</li>
+                <li>• <strong>CTA</strong> - Autoridade no call to action</li>
+              </ul>
+            </div>
+            
+            <div className="rounded-lg border border-warning/20 bg-warning/5 p-4">
+              <p className="font-semibold text-warning mb-2">⚠️ Não Inclui Logo</p>
+              <ul className="text-xs space-y-1">
+                <li>• <strong>Dica</strong> - Evita poluição visual em conteúdo rápido</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-4 p-4 rounded-lg bg-tech/5 border border-tech/20">
+            <p className="font-semibold text-tech mb-2">📐 Especificações do Logo:</p>
+            <ul className="text-xs space-y-1 list-decimal list-inside">
+              <li><strong>Posição:</strong> Canto inferior direito (10% do bottom e right)</li>
+              <li><strong>Tamanho:</strong> 60x29px (slide normal) | 40x19px (mockup)</li>
+              <li><strong>Opacidade:</strong> 85% (sutil mas visível)</li>
+              <li><strong>Cor:</strong> Usa <code className="text-tech">var(--slide-accent)</code> (adapta ao tema)</li>
+              <li><strong>Z-index:</strong> 5 (atrás do conteúdo principal)</li>
+            </ul>
+          </div>
+
+          <div className="mt-4 p-4 rounded-lg bg-primary/5 border border-primary/20">
+            <p className="font-semibold text-primary mb-2">💡 Por que o logo é importante?</p>
+            <ul className="text-xs space-y-1">
+              <li>• <strong>Branding consistente</strong> - Reforça a marca em todos os posts</li>
+              <li>• <strong>Reconhecimento imediato</strong> - Seguidores identificam conteúdo oficial</li>
+              <li>• <strong>Profissionalismo</strong> - Posts parecem mais confiáveis</li>
+              <li>• <strong>Compartilhamento</strong> - Logo vai junto quando compartilham</li>
+              <li>• <strong>Diferenciação</strong> - Destaca em um feed cheio de conteúdo</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
