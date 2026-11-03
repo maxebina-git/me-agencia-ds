@@ -280,9 +280,16 @@ interface NavbarProps {
   ctaHref?: string;
 }
 
-export function Navbar({ logo = 'MAX', links = [], ctaText = 'Diagnóstico Gratuito', ctaHref = '#' }: NavbarProps) {
+export function Navbar({ logo = 'MAX', links = [
+    { label: 'Serviços', href: '/servicos' },
+    { label: 'Cases', href: '/cases' },
+    { label: 'Depoimentos', href: '/depoimentos' },
+    { label: 'FAQ', href: '/faq' },
+    { label: 'Contato', href: '/contato' },
+  ], ctaText = 'Diagnóstico Gratuito', ctaHref = '#' }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeLink, setActiveLink] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -297,7 +304,7 @@ export function Navbar({ logo = 'MAX', links = [], ctaText = 'Diagnóstico Gratu
       <div className={`mx-4 md:mx-8 rounded-2xl px-6 py-3 transition-all duration-300 ${
         scrolled
           ? 'bg-white/80 dark:bg-bg-dark/80 backdrop-blur-xl shadow-lg border border-[var(--surface-border)]'
-          : 'bg-transparent border border-transparent'
+          : 'bg-white/20 dark:bg-bg-dark/20 backdrop-blur-md shadow-sm border border-white/5'
       }`}>
         <div className="flex items-center justify-between">
           <a href="#" className="flex items-center">
@@ -311,11 +318,22 @@ export function Navbar({ logo = 'MAX', links = [], ctaText = 'Diagnóstico Gratu
             {links.map((link) => (
               <a
                 key={link.href}
-                href={link.href}
-                className="relative text-sm font-medium text-[var(--text-on-surface-muted)] hover:text-[var(--text-on-surface)] transition-colors group"
+                href={link.href.startsWith('#') ? link.href.replace('#', '/') : link.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const targetHref = link.href.startsWith('#') ? link.href.replace('#', '/') : link.href;
+                  if (targetHref !== window.location.pathname + window.location.search) {
+                    window.history.pushState(null, '', targetHref);
+                  }
+                  const id = targetHref.replace('/', '');
+                  const el = document.getElementById(id);
+                  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  setActiveLink(link.href);
+                }}
+                className={`relative text-sm font-medium transition-colors group ${activeLink === link.href ? 'text-[var(--text-on-surface)]' : 'text-[var(--text-on-surface-muted)] hover:text-[var(--text-on-surface)]'}`}
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-tech transition-all duration-300 group-hover:w-full" />
+                <span className={`absolute -bottom-1 left-0 h-0.5 bg-tech transition-all duration-300 ${activeLink === link.href ? 'w-full' : 'w-0 group-hover:w-full'}`} />
               </a>
             ))}
           </div>
