@@ -82,8 +82,8 @@ export function OceanBackground({ className = '' }: { className?: string }) {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       if (scrollY <= 0) {
-        camera.position.set(30, 10, 100);
-        camera.lookAt(0, -3, 0);
+    camera.position.set(30, 30, 100);
+    camera.lookAt(0, -1, 0);
         dirLight.intensity = 0.8;
         return;
       }
