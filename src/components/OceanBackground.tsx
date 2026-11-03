@@ -23,7 +23,8 @@ export function OceanBackground({ className = '' }: { className?: string }) {
     scene.background = new THREE.Color(0x060b1a);
 
     const camera = new THREE.PerspectiveCamera(55, width / height, 1, 20000);
-    camera.position.set(30, 10, 100);
+    camera.position.set(30, 30, 100);
+    camera.lookAt(0, -1, 0);
 
     // Sun position
     const sun = new THREE.Vector3();
