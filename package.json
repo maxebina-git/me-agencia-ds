@@ -1,6 +1,6 @@
 {
   "name": "@maxebina/max-ds",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Design System da Agência Max Ebina - Templates Instagram, Landing Pages e componentes reutilizáveis",
   "main": "./dist/index.js",
