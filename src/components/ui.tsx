@@ -297,7 +297,7 @@ export function Navbar({ logo = 'MAX', links = [], ctaText = 'Diagnóstico Gratu
       <div className={`mx-4 md:mx-8 rounded-2xl px-6 py-3 transition-all duration-300 ${
         scrolled
           ? 'bg-white/80 dark:bg-bg-dark/80 backdrop-blur-xl shadow-lg border border-[var(--surface-border)]'
-          : 'bg-transparent'
+          : 'bg-transparent border border-transparent'
       }`}>
         <div className="flex items-center justify-between">
           <a href="#" className="flex items-center">

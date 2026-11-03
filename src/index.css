@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Navbar scroll transition fix */
-nav, [data-nav] { transition: border-color 300ms ease, background-color 300ms ease; }
+nav, [data-nav], .nav-glass, .glass-nav {transition:border-color .3s,background-color .3s;border-color:var(--surface-border)!important}
 
 @theme {
   /* Colors - Primary (Laranja-terra) */
