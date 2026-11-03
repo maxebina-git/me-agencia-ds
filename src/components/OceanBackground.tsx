@@ -20,10 +20,10 @@ export function OceanBackground({ className = '' }: { className?: string }) {
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87CEEB);
+    scene.background = new THREE.Color(0x060b1a);
 
     const camera = new THREE.PerspectiveCamera(55, width / height, 1, 20000);
-    camera.position.set(30, 30, 100);
+    camera.position.set(30, 10, 100);
 
     // Sun position
     const sun = new THREE.Vector3();
@@ -55,8 +55,8 @@ export function OceanBackground({ className = '' }: { className?: string }) {
     sky.scale.setScalar(10000);
     scene.add(sky);
     const skyUniforms = sky.material.uniforms;
-    skyUniforms['turbidity'].value = 10;
-    skyUniforms['rayleigh'].value = 2;
+    skyUniforms['turbidity'].value = 4;
+    skyUniforms['rayleigh'].value = 1;
     skyUniforms['mieCoefficient'].value = 0.005;
     skyUniforms['mieDirectionalG'].value = 0.8;
     skyUniforms['cloudCoverage'].value = 0.4;
@@ -85,7 +85,7 @@ export function OceanBackground({ className = '' }: { className?: string }) {
       const t = Math.min(scrollY / maxScroll, 1);
       camera.position.y = 30 - t * 28; // 30 -> 2
       camera.position.z = 100 - t * 80; // 100 -> 20 (aproxima)
-      camera.lookAt(0, -1, 0);
+      camera.lookAt(0, -3, 0);
       dirLight.intensity = 0.8 - t * 0.7;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
