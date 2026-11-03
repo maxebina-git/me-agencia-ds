@@ -7,7 +7,7 @@ import {
 import {
   Button, ServiceCard, SectionHeader, TestimonialCard,
   FAQ, WhatsAppFloat, Navbar, LeadCaptureForm, AnimatedCounter,
-  InstagramSlide, Footer, Table
+  InstagramSlide, Footer, Table, Drawer, Modal
 } from './components/ui';
 import { PhoneMockup } from './components/PhoneMockup';
 import { CodeBlock, PropsTable } from './components/DocsComponents';
@@ -45,6 +45,8 @@ const navItems: NavItem[] = [
   { id: 'faq', label: 'FAQ', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'testimonials', label: 'Depoimentos', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'footer', label: 'Footer', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
+  { id: 'drawer', label: 'Drawer', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
+  { id: 'modal', label: 'Modal', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'instagram', label: 'Instagram', group: '📱 Templates', icon: <Image className="w-4 h-4" /> },
   { id: 'brand-voice', label: 'Brand Voice', group: '📝 Conteúdo', icon: <BookOpen className="w-4 h-4" /> },
   { id: 'preview', label: 'LP Preview', group: '🚀 Preview', icon: <Eye className="w-4 h-4" /> },
@@ -227,6 +229,8 @@ export default function App() {
           {activeSection === 'faq' && <FAQSection />}
           {activeSection === 'testimonials' && <TestimonialsSection />}
           {activeSection === 'footer' && <FooterSection />}
+          {activeSection === 'drawer' && <DrawerSection />}
+          {activeSection === 'modal' && <ModalSection />}
           {activeSection === 'instagram' && <InstagramSection />}
           {activeSection === 'brand-voice' && <BrandVoiceSection />}
           {activeSection === 'preview' && <PreviewSection />}
@@ -1842,6 +1846,146 @@ function FooterSection() {
   );
 }
 
+function DrawerSection() {
+  const [open, setOpen] = useState(false);
+  const [currentWidth, setCurrentWidth] = useState<'md' | 'half' | 'threequarter'>('md');
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] overflow-hidden bg-bg-dark relative min-h-[200px] p-8 flex flex-wrap items-center justify-center gap-3">
+          <Button onClick={() => { setCurrentWidth('md'); setOpen(true); }} variant="tech">Abrir (md)</Button>
+          <Button onClick={() => { setCurrentWidth('half'); setOpen(true); }} variant="secondary">50% (half)</Button>
+          <Button onClick={() => { setCurrentWidth('threequarter'); setOpen(true); }} variant="secondary">75% (threequarter)</Button>
+          <Drawer
+            open={open}
+            onClose={() => setOpen(false)}
+            width={currentWidth}
+            title="Contexto da Drawer"
+            description="Esta drawer pode ser usada para exibir informações contextuais, disclaimers e ações secundárias sem interromper o fluxo principal do usuário."
+            disclaimer="As ações realizadas nesta drawer são apenas demonstrativas."
+            actions={[
+              { label: 'Confirmar', variant: 'primary' },
+              { label: 'Cancelar', variant: 'secondary', onClick: () => setOpen(false) },
+            ]}
+          />
+        </div>
+      </div>
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'open', type: 'boolean', default: 'false', description: 'Estado aberto/fechado' },
+          { name: 'onClose', type: '() => void', default: 'undefined', description: 'Callback ao fechar' },
+          { name: 'title', type: 'string', default: "'Contexto da Drawer'", description: 'Título do drawer' },
+          { name: 'description', type: 'string', default: 'texto padrão', description: 'Texto explicativo' },
+          { name: 'disclaimer', type: 'string', default: 'texto padrão', description: 'Aviso legal/aviso' },
+          { name: 'width', type: "'sm' | 'md' | 'lg' | 'xl' | 'half' | 'threequarter'", default: "'md'", description: 'Largura do drawer: md=420px, half=50%, threequarter=75%' },
+          { name: 'actions', type: 'Array<{label, href?, onClick?, variant?}>', default: "[{label:'Confirmar'}, {label:'Cancelar'}]", description: 'Botões de ação' },
+        ]} />
+      </div>
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`const [open, setOpen] = useState(false);
+
+<Button onClick={() => setOpen(true)}>Abrir Drawer</Button>
+<Drawer
+  open={open}
+  onClose={() => setOpen(false)}
+  title="Contexto da Drawer"
+  description="Texto sobre o contexto da drawer."
+  disclaimer="Aviso: conteúdo demonstrativo."
+  width="half"
+  actions={[
+    { label: 'Confirmar', variant: 'primary' },
+    { label: 'Cancelar', variant: 'secondary', onClick: () => setOpen(false) },
+  ]}
+/>`} />
+      </div>
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Slide da direita para esquerda',
+            'Animação easeOutElastic',
+            'Drag handle à esquerda para arrastar e fechar',
+            'Overlay com blur e clique para fechar',
+            'Conteúdo: título, descrição, disclaimer, ações',
+            'Responsivo (max-w-[92vw])',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ModalSection() {
+  const [openDefault, setOpenDefault] = useState(false);
+  const [openNoSlot, setOpenNoSlot] = useState(false);
+  const [openSm, setOpenSm] = useState(false);
+  const [openMd, setOpenMd] = useState(false);
+  const [openLg, setOpenLg] = useState(false);
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] overflow-hidden bg-bg-dark relative min-h-[200px] p-8 flex items-center justify-center gap-4">
+          <Button onClick={() => setOpenDefault(true)} variant="tech">Abrir Modal</Button>
+          <Modal open={openDefault} onClose={() => setOpenDefault(false)} title="Título do Modal" size="md" image="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80" actions={[{label:'Confirmar', variant:'primary'}, {label:'Cancelar', variant:'secondary', onClick:()=>setOpenDefault(false)}]}>
+            <p>Conteúdo da modal com slot de imagem à esquerda e ações no footer.</p>
+          </Modal>
+        </div>
+      </div>
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'open', type: 'boolean', default: 'false', description: 'Estado aberto/fechado' },
+          { name: 'onClose', type: '() => void', default: 'undefined', description: 'Callback ao fechar' },
+          { name: 'title', type: 'string', default: "''", description: 'Título no header' },
+          { name: 'image', type: 'string', default: 'undefined', description: 'URL opcional do slot à esquerda' },
+          { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Largura da modal' },
+          { name: 'children', type: 'ReactNode', default: 'undefined', description: 'Conteúdo' },
+          { name: 'actions', type: 'Array<{label, href?, onClick?, variant?}>', default: "[{label:'Confirmar'}, {label:'Cancelar'}]", description: 'Botões de ação' },
+        ]} />
+      </div>
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Variações</h3>
+        <div className="grid sm:grid-cols-3 gap-4">
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <p className="font-semibold text-sm mb-2">Sem slot (sm)</p>
+            <Button onClick={() => setOpenNoSlot(true)} variant="tech" size="sm">Ver</Button>
+            <Modal open={openNoSlot} onClose={() => setOpenNoSlot(false)} title="Sem imagem" size="sm" actions={[{label:'Fechar', variant:'secondary', onClick:()=>setOpenNoSlot(false)}]}>
+              <p>Modal sem slot de imagem, apenas conteúdo e ação.</p>
+            </Modal>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <p className="font-semibold text-sm mb-2">md</p>
+            <Button onClick={() => setOpenMd(true)} variant="secondary" size="sm">Ver md</Button>
+            <Modal open={openMd} onClose={() => setOpenMd(false)} title="Tamanho md" size="md" actions={[{label:'Fechar', variant:'secondary', onClick:()=>setOpenMd(false)}]}>
+              <p>Modal de tamanho médio (640px).</p>
+            </Modal>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <p className="font-semibold text-sm mb-2">lg</p>
+            <Button onClick={() => setOpenLg(true)} variant="secondary" size="sm">Ver lg</Button>
+            <Modal open={openLg} onClose={() => setOpenLg(false)} title="Tamanho lg" size="lg" actions={[{label:'Fechar', variant:'secondary', onClick:()=>setOpenLg(false)}]}>
+              <p>Modal grande (960px).</p>
+            </Modal>
+          </div>
+        </div>
+        <div className="mt-4 text-xs text-[var(--text-on-surface-muted)]">
+          <p>• <strong>Sem slot:</strong> omitir prop <code>image</code>.</p>
+          <p>• <strong>Tamanhos:</strong> <code>size={"sm"}</code> (400px), <code>size={"md"}</code> (640px), <code>size={"lg"}</code> (960px).</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function InstagramSection() {
   const [showSafeZone, setShowSafeZone] = useState(false);
   const [showPhone, setShowPhone] = useState(false);
@@ -2885,6 +3029,7 @@ function PreviewSection() {
               { name: 'Lead Magnet', component: 'LeadCaptureForm', desc: 'Formulário de captura com gradiente de fundo' },
               { name: 'FAQ', component: 'FAQ', desc: '5 perguntas frequentes em accordion' },
               { name: 'Footer', component: 'Footer', desc: 'Links, redes sociais, copyright' },
+              { name: 'Drawer', component: 'Drawer', desc: 'Slide dir→esq com drag handle, easeOutElastic, conteúdo modal' },
               { name: 'WhatsApp Float', component: 'WhatsAppFloat', desc: 'Botão flutuante fixo no canto inferior direito' },
             ].map((section, i) => (
               <div key={i} className="flex items-center gap-4 p-4 bg-[var(--surface-card)]">

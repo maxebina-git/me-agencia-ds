@@ -3,7 +3,7 @@ import {
   ArrowRight, ArrowUpRight, Check, ChevronDown,
   MessageCircle, Star, Loader2, Globe, Layout, Code2,
   Bot, Megaphone, Workflow, X, Menu, Lock, Sparkles,
-  Zap, TrendingUp, Clock
+  Zap, TrendingUp, Clock, GripVertical
 } from 'lucide-react';
 
 /* ═══════════════════════════════════════════════════════════
@@ -1138,9 +1138,12 @@ export function Footer({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           {/* Logo and description */}
           <div className="lg:col-span-2">
-            <div className="font-display font-bold text-3xl gradient-text mb-4">
-              {logo}
-            </div>
+            <a href="#" className="inline-block mb-4">
+              <svg width="91" height="43" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"/>
+                <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
+              </svg>
+            </a>
             <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-md">
               Transformamos negócios com tecnologia e automação. Sites, LPs, CRM e tráfego pago que geram resultados reais.
             </p>
@@ -1199,5 +1202,230 @@ export function Footer({
         </div>
       </div>
     </footer>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DRAWER COMPONENT
+   ═══════════════════════════════════════════════════════════ */
+
+interface DrawerProps {
+  open?: boolean;
+  onClose?: () => void;
+  title?: string;
+  description?: string;
+  disclaimer?: string;
+  width?: 'sm' | 'md' | 'lg' | 'xl' | 'half' | 'threequarter';
+  actions?: { label: string; href?: string; onClick?: () => void; variant?: 'primary' | 'secondary' }[];
+}
+
+export function Drawer({
+  open = false,
+  onClose,
+  title = 'Contexto da Drawer',
+  description = 'Esta drawer pode ser usada para exibir informações contextuais, disclaimers e ações secundárias sem interromper o fluxo principal do usuário.',
+  disclaimer = 'As ações realizadas nesta drawer são apenas demonstrativas.',
+  width = 'md',
+  actions = [
+    { label: 'Confirmar', variant: 'primary' },
+    { label: 'Cancelar', variant: 'secondary' },
+  ],
+}: DrawerProps) {
+  const [isOpen, setIsOpen] = useState(open);
+  const [dragX, setDragX] = useState(0);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const startXRef = useRef(0);
+  const draggingRef = useRef(false);
+
+  useEffect(() => { setIsOpen(open); }, [open]);
+
+  const closeDrawer = () => {
+    setDragX(0);
+    setIsOpen(false);
+    onClose?.();
+  };
+
+  const getWidthClass = () => {
+    switch (width) {
+      case 'sm': return 'w-[320px]';
+      case 'md': return 'w-[420px]';
+      case 'lg': return 'w-[560px]';
+      case 'xl': return 'w-[720px]';
+      case 'half': return 'w-1/2';
+      case 'threequarter': return 'w-3/4';
+      default: return 'w-[420px]';
+    }
+  };
+
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    draggingRef.current = true;
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    startXRef.current = clientX;
+    setDragX(0);
+
+    const handleMove = (ev: MouseEvent | TouchEvent) => {
+      if (!draggingRef.current) return;
+      const moveX = 'touches' in ev ? ev.touches[0].clientX : ev.clientX;
+      const delta = moveX - startXRef.current;
+      if (delta > 0) setDragX(delta);
+      if (delta > 120) {
+        draggingRef.current = false;
+        closeDrawer();
+      }
+    };
+
+    const handleUp = () => {
+      draggingRef.current = false;
+      setDragX(0);
+      window.removeEventListener('mousemove', handleMove as any);
+      window.removeEventListener('touchmove', handleMove as any, { passive: true } as any);
+      window.removeEventListener('mouseup', handleUp);
+      window.removeEventListener('touchend', handleUp);
+    };
+
+    window.addEventListener('mousemove', handleMove as any);
+    window.addEventListener('touchmove', handleMove as any, { passive: true } as any);
+    window.addEventListener('mouseup', handleUp);
+    window.addEventListener('touchend', handleUp);
+  };
+
+  return (
+    <>
+      {/* Overlay */}
+      <div
+        className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        onClick={closeDrawer}
+      />
+
+      {/* Drawer panel */}
+      <aside
+        ref={drawerRef}
+        className={`fixed top-0 right-0 bottom-0 z-50 ${getWidthClass()} max-w-[92vw] bg-bg-dark border-l border-white/10 shadow-2xl transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        style={draggingRef.current ? { transform: `translateX(${dragX}px)` } : undefined}
+      >
+        <div className="relative h-full flex flex-col p-8">
+          {/* Drag handle - meio à esquerda, visível apenas quando aberto */}
+          <button
+            aria-label="Arrastar para fechar"
+            className={`absolute left-[-14px] top-1/2 -translate-y-1/2 z-10 w-7 h-14 rounded-full bg-tech shadow-xl border-2 border-bg-dark flex items-center justify-center text-white cursor-grab active:cursor-grabbing hover:scale-110 transition-all duration-300 ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-50 pointer-events-none'}`}
+            onMouseDown={handleDragStart}
+            onTouchStart={handleDragStart}
+            title="Arraste para a direita para fechar"
+          >
+            <GripVertical className="w-4 h-4" />
+          </button>
+
+          <div className="flex-1 overflow-y-auto">
+            <h2 className="font-display font-bold text-2xl text-[var(--text-on-surface)] mb-4">{title}</h2>
+            <p className="text-white/70 text-sm leading-relaxed mb-6">{description}</p>
+
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-6">
+              <p className="text-xs text-tech font-medium uppercase tracking-wider mb-1">Disclaimer</p>
+              <p className="text-sm text-white/60">{disclaimer}</p>
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-6 border-t border-white/10">
+            {actions.map((a, i) => (
+              <a
+                key={i}
+                href={a.href || '#'}
+                onClick={(e) => { if (a.onClick) { e.preventDefault(); a.onClick(); } if (a.label === 'Cancelar') closeDrawer(); }}
+                className={`flex-1 text-center py-2.5 rounded-lg text-sm font-medium transition-colors ${a.variant === 'primary' ? 'bg-tech text-white hover:bg-tech/90' : 'bg-white/10 text-white hover:bg-white/15'}`}
+              >
+                {a.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </aside>
+    </>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL COMPONENT
+   ═══════════════════════════════════════════════════════════ */
+
+interface ModalProps {
+  open?: boolean;
+  onClose?: () => void;
+  title?: string;
+  image?: string;
+  size?: 'sm' | 'md' | 'lg';
+  children?: React.ReactNode;
+  actions?: { label: string; href?: string; onClick?: () => void; variant?: 'primary' | 'secondary' }[];
+}
+
+export function Modal({
+  open = false,
+  onClose,
+  title = '',
+  image,
+  size = 'md',
+  children,
+  actions = [
+    { label: 'Confirmar', variant: 'primary' },
+    { label: 'Cancelar', variant: 'secondary' },
+  ],
+}: ModalProps) {
+  const [isOpen, setIsOpen] = useState(open);
+  useEffect(() => { setIsOpen(open); }, [open]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close(); };
+    if (isOpen) window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen]);
+
+  const close = () => { setIsOpen(false); onClose?.(); };
+
+  const sizeClass = size === 'sm' ? 'max-w-[400px]' : size === 'lg' ? 'max-w-[960px]' : 'max-w-[640px]';
+
+  return (
+    <>
+      <div
+        className={`fixed inset-0 z-50 bg-black/60 backdrop-blur-md transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        onClick={close}
+      />
+      <div
+        className={`fixed z-50 top-1/2 left-1/2 w-[92vw] ${sizeClass} bg-bg-dark border border-white/10 shadow-2xl transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}
+        style={{ borderRadius: '0 1rem 0 1rem', transform: isOpen ? 'translate(-50%, -50%)' : 'translate(-50%, 120%)', opacity: isOpen ? 1 : 0 }}
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+          <h3 className="font-display font-bold text-xl text-[var(--text-on-surface)]">{title}</h3>
+          <button
+            onClick={close}
+            aria-label="Fechar"
+            className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        <div className={`flex px-6 py-6 ${image ? 'gap-6' : ''}`}>
+          {image && (
+            <div className="flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden border border-white/10" style={{ borderRadius: '0 1rem 0 1rem' }}>
+              <img src={image} alt="" className="w-full h-full object-cover" />
+            </div>
+          )}
+          <div className="flex-1 text-sm text-white/80 leading-relaxed">
+            {children}
+          </div>
+        </div>
+        <div className="flex gap-3 px-6 py-4 border-t border-white/10">
+          {actions.map((a, i) => (
+            <a
+              key={i}
+              href={a.href || '#'}
+              onClick={(e) => { if (a.onClick) { e.preventDefault(); a.onClick(); } if (a.label === 'Cancelar') close(); }}
+              className={`flex-1 text-center py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${a.variant === 'primary' ? 'bg-tech text-white hover:bg-tech/90' : 'bg-white/10 text-white hover:bg-white/15'}`}
+            >
+              {a.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ParticlesBackground } from './ParticlesBackground';
+import { OceanBackground } from './OceanBackground';
 
 interface HeroSectionProps {
   headline: React.ReactNode;
@@ -43,8 +43,8 @@ export function HeroSection({
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-bg-dark">
-      {/* Particles */}
-      <ParticlesBackground />
+      {/* Ocean shader background */}
+      <OceanBackground />
 
       {/* Gradient orbs */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-tech/5 rounded-full blur-3xl animate-float" />
