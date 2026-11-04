@@ -61,7 +61,7 @@ export function HeroSection({
           <Badge pulseDot>{eyebrow}</Badge>
         </div>
 
-        <GlitchText as="h1" text={headlineText} className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold leading-tight mb-8">
+        <GlitchText as="h1" text={headlineText ?? (typeof headline === 'string' ? headline : undefined)} className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold leading-tight mb-8">
           {typeof headline === 'string' ? (
             words.map((word, i) => (
               <React.Fragment key={i}>
