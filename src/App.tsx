@@ -5,7 +5,7 @@ import {
   Copy, Check, Eye, TrendingUp, Star, Clock
 } from 'lucide-react';
 import {
-  Button, ServiceCard, SectionHeader, TestimonialCard,
+  Badge, Button, ServiceCard, SectionHeader, TestimonialCard, GlitchText,
   FAQ, WhatsAppFloat, Navbar, LeadCaptureForm, AnimatedCounter,
   InstagramSlide, Footer, Table, Drawer, Modal
 } from './components/ui';
@@ -13,7 +13,7 @@ import { PhoneMockup } from './components/PhoneMockup';
 import { CodeBlock, PropsTable } from './components/DocsComponents';
 import { HeroSection } from './components/HeroSection';
 
-type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'buttons' | 'cards' | 'forms' | 'table' | 'section-header' | 'animated-counter' | 'whatsapp-float' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'instagram' | 'brand-voice' | 'preview' | 'accessibility' | 'responsiveness' | 'icons' | 'borders' | 'grid';
+type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'glitch-text' | 'buttons' | 'badge' | 'cards' | 'forms' | 'table' | 'section-header' | 'animated-counter' | 'whatsapp-float' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'instagram' | 'brand-voice' | 'preview' | 'accessibility' | 'responsiveness' | 'icons' | 'borders' | 'grid' | 'drawer' | 'modal';
 
 interface NavItem {
   id: Section;
@@ -28,12 +28,14 @@ const navItems: NavItem[] = [
   { id: 'typography', label: 'Tipografia', group: '📦 Fundações', icon: <Type className="w-4 h-4" /> },
   { id: 'spacing', label: 'Espaçamento', group: '📦 Fundações', icon: <Ruler className="w-4 h-4" /> },
   { id: 'motion', label: 'Motion', group: '📦 Fundações', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'glitch-text', label: 'GlitchText', group: '📦 Fundações', icon: <Sparkles className="w-4 h-4" /> },
   { id: 'borders', label: 'Bordas & Radius', group: '📦 Fundações', icon: <Box className="w-4 h-4" /> },
   { id: 'icons', label: 'Ícones', group: '📦 Fundações', icon: <Box className="w-4 h-4" /> },
   { id: 'grid', label: 'Grid & Layout', group: '📦 Fundações', icon: <Layout className="w-4 h-4" /> },
   { id: 'accessibility', label: 'Acessibilidade', group: '📦 Fundações', icon: <Eye className="w-4 h-4" /> },
   { id: 'responsiveness', label: 'Responsividade', group: '📦 Fundações', icon: <Layout className="w-4 h-4" /> },
   { id: 'buttons', label: 'Button', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
+  { id: 'badge', label: 'Badge', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'cards', label: 'ServiceCard', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'forms', label: 'Formulário', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'table', label: 'Tabela', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
@@ -212,12 +214,14 @@ export default function App() {
           {activeSection === 'typography' && <TypographySection />}
           {activeSection === 'spacing' && <SpacingSection />}
           {activeSection === 'motion' && <MotionSection />}
+          {activeSection === 'glitch-text' && <GlitchTextSection />}
           {activeSection === 'borders' && <BordersSection />}
           {activeSection === 'icons' && <IconsSection />}
           {activeSection === 'grid' && <GridSection />}
           {activeSection === 'accessibility' && <AccessibilitySection />}
           {activeSection === 'responsiveness' && <ResponsivenessSection />}
           {activeSection === 'buttons' && <ButtonsSection />}
+          {activeSection === 'badge' && <BadgeSection />}
           {activeSection === 'cards' && <CardsSection />}
           {activeSection === 'forms' && <FormsSection />}
           {activeSection === 'table' && <TableSection />}
@@ -260,6 +264,22 @@ function LogoSection() {
     navigator.clipboard.writeText(logoSvg);
     setCopiedSvg(true);
     setTimeout(() => setCopiedSvg(false), 2000);
+  };
+
+  const faviconSvg = `<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="64" height="64" rx="14" fill="#8f6424"/>
+<g transform="translate(9.25 21.1) scale(0.25)" fill="#F6EEE7">
+<path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z"/>
+<path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z"/>
+</g>
+</svg>`;
+
+  const [copiedFavicon, setCopiedFavicon] = useState(false);
+
+  const handleCopyFavicon = () => {
+    navigator.clipboard.writeText(faviconSvg);
+    setCopiedFavicon(true);
+    setTimeout(() => setCopiedFavicon(false), 2000);
   };
 
   return (
@@ -333,8 +353,7 @@ function LogoSection() {
               <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
             </svg>
             <div>
-              <p className="font-display font-bold text-2xl text-[var(--text-on-surface)]">Max Ebina</p>
-              <p className="text-xs text-[var(--text-on-surface-muted)]">Marketing Digital</p>
+              <p className="font-display font-bold text-2xl text-[var(--text-on-surface)]">Marketing Digital</p>
             </div>
           </div>
 
@@ -345,8 +364,7 @@ function LogoSection() {
               <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
             </svg>
             <div>
-              <p className="font-display font-bold text-2xl text-bg-light">Max Ebina</p>
-              <p className="text-xs text-bg-light/60">Marketing Digital</p>
+              <p className="font-display font-bold text-2xl text-bg-light">Marketing Digital</p>
             </div>
           </div>
         </div>
@@ -405,6 +423,40 @@ function LogoSection() {
         <p className="text-sm text-[var(--text-on-surface-muted)] mt-4">
           Mantenha uma margem mínima de 32px ao redor do logo para garantir legibilidade.
         </p>
+      </div>
+
+      {/* Favicon */}
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Favicon</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card)] space-y-6">
+          <div className="flex flex-wrap items-end gap-8">
+            {([16, 32, 48] as const).map(size => (
+              <div key={size}>
+                <p className="text-xs text-[var(--text-on-surface-subtle)] mb-2">{size}x{size}</p>
+                <img src="/favicon.svg" width={size} height={size} alt={`Favicon ${size}x${size}`} />
+              </div>
+            ))}
+            <div className="bg-bg-dark rounded-xl p-4 flex items-end gap-6">
+              {([16, 32, 48] as const).map(size => (
+                <div key={size}>
+                  <p className="text-xs text-white/40 mb-2">{size}x{size}</p>
+                  <img src="/favicon.svg" width={size} height={size} alt={`Favicon ${size}x${size} em fundo escuro`} />
+                </div>
+              ))}
+            </div>
+          </div>
+          <p className="text-sm text-[var(--text-on-surface-muted)]">
+            Tile da cor primária (#8f6424) com o monograma na cor clara (#F6EEE7) — contraste garantido em abas claras e escuras. Adicione no <code className="text-tech">&lt;head&gt;</code>:
+          </p>
+          <CodeBlock code={`<link rel="icon" type="image/svg+xml" href="/favicon.svg" />`} />
+          <button
+            onClick={handleCopyFavicon}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-tech/10 border border-tech/20 text-tech hover:bg-tech/20 transition-all"
+          >
+            {copiedFavicon ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            {copiedFavicon ? 'Copiado!' : 'Copiar SVG do favicon'}
+          </button>
+        </div>
       </div>
 
       {/* Download */}
@@ -1364,6 +1416,7 @@ function HeroSectionDocs() {
         <div className="rounded-xl border border-[var(--surface-border)] overflow-hidden">
           <HeroSection
             headline={<>Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span></>}
+            headlineText="Transforme Sua Empresa com Tecnologia"
             subheadline="Sites, LPs e CRM que geram resultados reais. Escalabilidade com inteligência digital para o seu negócio crescer."
             ctaPrimary="Quero Escalar Meu Negócio"
             ctaSecondary="Ver Cases"
@@ -1376,7 +1429,8 @@ function HeroSectionDocs() {
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
         <PropsTable props={[
-          { name: 'headline', type: 'string', default: '—', description: 'Título principal do hero (suporta <span> para destaque)' },
+          { name: 'headline', type: 'string | ReactNode', default: '—', description: 'Título principal do hero (suporta <span> para destaque)' },
+          { name: 'headlineText', type: 'string', default: 'undefined', description: 'Texto plano para as camadas RGB do glitch quando headline é JSX (sem ele, o glitch não aplica)' },
           { name: 'subheadline', type: 'string', default: '—', description: 'Subtítulo descritivo' },
           { name: 'ctaPrimary', type: 'string', default: '—', description: 'Texto do botão CTA principal' },
           { name: 'ctaSecondary', type: 'string', default: '—', description: 'Texto do botão CTA secundário' },
@@ -1389,6 +1443,7 @@ function HeroSectionDocs() {
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
         <CodeBlock code={`<HeroSection
   headline={<>Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span></>}
+  headlineText="Transforme Sua Empresa com Tecnologia"
   subheadline="Sites, LPs e CRM que geram resultados reais. Escalabilidade com inteligência digital."
   ctaPrimary="Quero Escalar Meu Negócio"
   ctaSecondary="Ver Cases"
@@ -1402,10 +1457,11 @@ function HeroSectionDocs() {
         <div className="grid md:grid-cols-2 gap-4">
           {[
             'Headline com stagger animation (palavra por palavra)',
+            'GlitchText no headline (RGB split; Tecnologia mantém azul via gradient-text-tech)',
+            'Badge (eyebrow) customizável via prop eyebrow',
             'Partículas tsParticles no background',
             'Gradientes radiais decorativos',
             '2 CTAs com variantes diferentes',
-            'Badge animado no topo',
             'Scroll indicator animado',
             'Subheadline com fade-in + blur',
             '100% responsivo',
@@ -2829,6 +2885,132 @@ function ResponsivenessSection() {
   );
 }
 
+function GlitchTextSection() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
+        <div className="space-y-8">
+          <div className="rounded-xl border border-[var(--surface-border)] p-12 bg-bg-dark text-center">
+            <GlitchText as="h1" className="text-4xl md:text-6xl font-display font-extrabold text-bg-light tracking-wide">
+              Glitch Distortion
+            </GlitchText>
+            <p className="text-xs text-white/40 mt-8">Passe o mouse para intensificar · clique/tap para o burst</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card)]">
+            <p className="text-xs font-semibold uppercase tracking-widest text-tech text-center mb-6">Com glitch (default)</p>
+            <SectionHeader title="Soluções que Geram Resultado" />
+            <div className="my-8 border-t border-[var(--surface-border)]" />
+            <p className="text-xs font-semibold uppercase tracking-widest text-tech text-center mb-6">Opt-out</p>
+            <SectionHeader glitch={false} title="Sem Efeito Glitch" />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props — GlitchText</h3>
+        <PropsTable props={[
+          { name: 'as', type: "'h1'…'h6' | 'span'", default: "'h2'", description: 'Heading level renderizado' },
+          { name: 'children', type: 'string', default: '—', description: 'Texto (obrigatório; string para duplicar nas camadas RGB)' },
+          { name: 'className', type: 'string', default: "''", description: 'Classes extras (tamanho, cor, font-display…)' },
+        ]} />
+        <p className="text-xs text-[var(--text-on-surface-muted)] mt-3">
+          O SectionHeader ganhou a prop <code className="text-tech">glitch?: boolean</code> (default <code className="text-tech">true</code>) — desliga via <code className="text-tech">glitch={'{false}'}</code>.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<GlitchText as="h1" className="text-6xl font-display font-extrabold">
+  Glitch Distortion
+</GlitchText>
+
+// SectionHeader já aplica por padrão
+<SectionHeader title="Soluções que Geram Resultado" />
+<SectionHeader glitch={false} title="Sem glitch" />`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'RGB split automático (error + tech) em todo heading',
+            'Hover intensifica o glitch (0.6s infinite)',
+            'Clique/tap dispara burst de shake (0.28s)',
+            'Camadas decorativas com aria-hidden="true"',
+            'prefers-reduced-motion: animações desativadas',
+            'Cores via tokens do DS (--color-error / --color-tech)',
+            'SectionHeader usa GlitchText por padrão (opt-out: glitch={false})',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BadgeSection() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
+        <div className="space-y-8">
+          <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card)] flex flex-wrap items-center gap-4">
+            <Badge pulseDot>Agência de Marketing Digital</Badge>
+            <Badge>Lançamento</Badge>
+            <Badge size="sm">Novo</Badge>
+            <Badge size="sm" pulseDot>Atualizado</Badge>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-bg-dark flex flex-wrap items-center gap-4">
+            <Badge pulseDot>Agência de Marketing Digital</Badge>
+            <Badge size="sm">Novo</Badge>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'children', type: 'ReactNode', default: '—', description: 'Conteúdo do badge (obrigatório)' },
+          { name: 'size', type: "'sm' | 'md'", default: "'md'", description: 'sm: px-3 py-1 text-xs · md: px-4 py-2 text-sm' },
+          { name: 'pulseDot', type: 'boolean', default: 'false', description: 'Dot pulsante (bg-tech animate-pulse) à esquerda do texto' },
+          { name: 'className', type: 'string', default: "''", description: 'Classes extras para extensão pontual' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<Badge pulseDot>Agência de Marketing Digital</Badge>
+
+<Badge size="sm">Novo</Badge>`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Pill rounded-full com tint tech (bg-tech/10 + border-tech/20)',
+            'Dot pulsante opcional (pulseDot)',
+            '2 tamanhos: sm (px-3 py-1, text-xs) e md (px-4 py-2, text-sm)',
+            'children aceita qualquer ReactNode',
+            'className para extensão sem criar variante nova',
+            'Usado no HeroSection via prop eyebrow',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SectionHeaderSection() {
   return (
     <div className="space-y-12">
@@ -3064,6 +3246,7 @@ function PreviewSection() {
           {/* 2. Hero Section */}
           <HeroSection
             headline={<>Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span></>}
+            headlineText="Transforme Sua Empresa com Tecnologia"
             subheadline="Sites, LPs e CRM que geram resultados reais. Escalabilidade com inteligência digital para o seu negócio crescer."
             ctaPrimary="Quero Escalar Meu Negócio"
             ctaSecondary="Ver Cases"
