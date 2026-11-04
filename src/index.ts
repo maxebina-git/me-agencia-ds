@@ -2,6 +2,8 @@
 // Exporta todos os componentes para uso em outros projetos
 
 // Componentes UI
+export { Badge } from './components/ui';
+export { GlitchText } from './components/ui';
 export { Button } from './components/ui';
 export { ServiceCard } from './components/ui';
 export { LeadCaptureForm } from './components/ui';

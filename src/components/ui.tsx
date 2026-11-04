@@ -93,6 +93,58 @@ export function Button({
 }
 
 /* ═══════════════════════════════════════════════════════════
+   BADGE COMPONENT
+   ═══════════════════════════════════════════════════════════ */
+
+interface BadgeProps {
+  children: React.ReactNode;
+  size?: 'sm' | 'md';
+  pulseDot?: boolean;
+  className?: string;
+}
+
+export function Badge({ children, size = 'md', pulseDot = false, className = '' }: BadgeProps) {
+  const sizeClasses = {
+    sm: 'px-3 py-1 text-xs font-semibold',
+    md: 'px-4 py-2 text-sm font-medium',
+  };
+
+  return (
+    <span className={`inline-flex items-center gap-2 rounded-full bg-tech/20 border border-tech/30 text-tech ${sizeClasses[size]} ${className}`}>
+      {pulseDot && <span className="w-2 h-2 rounded-full bg-tech animate-pulse" />}
+      {children}
+    </span>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GLITCH TEXT COMPONENT
+   ═══════════════════════════════════════════════════════════ */
+
+interface GlitchTextProps {
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span';
+  children: React.ReactNode;
+  text?: string;
+  className?: string;
+}
+
+export function GlitchText({ as: Tag = 'h2', children, text, className = '' }: GlitchTextProps) {
+  const layerText = text ?? (typeof children === 'string' ? children : undefined);
+
+  return (
+    <Tag className={`glitch-text${Tag === 'span' ? ' glitch-text--inline' : ''} ${className}`}>
+      <span className="glitch-text__base">{children}</span>
+      {layerText !== undefined && (
+        <>
+          <span aria-hidden="true" className="glitch-text__layer glitch-text__layer--error">{layerText}</span>
+          <span aria-hidden="true" className="glitch-text__layer glitch-text__layer--tech">{layerText}</span>
+        </>
+      )}
+    </Tag>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
    SERVICE CARD COMPONENT
    ═══════════════════════════════════════════════════════════ */
 
@@ -146,9 +198,12 @@ interface SectionHeaderProps {
   title: string;
   subtitle?: string;
   align?: 'center' | 'left';
+  glitch?: boolean;
 }
 
-export function SectionHeader({ eyebrow, title, subtitle, align = 'center' }: SectionHeaderProps) {
+export function SectionHeader({ eyebrow, title, subtitle, align = 'center', glitch = true }: SectionHeaderProps) {
+  const titleClasses = 'text-3xl md:text-4xl font-display font-bold mb-4 gradient-text';
+
   return (
     <div className={`mb-12 ${align === 'center' ? 'text-center' : 'text-left'}`}>
       {eyebrow && (
@@ -156,9 +211,13 @@ export function SectionHeader({ eyebrow, title, subtitle, align = 'center' }: Se
           {eyebrow}
         </span>
       )}
-      <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 gradient-text">
-        {title}
-      </h2>
+      {glitch ? (
+        <GlitchText as="h2" className={titleClasses}>{title}</GlitchText>
+      ) : (
+        <h2 className={titleClasses}>
+          {title}
+        </h2>
+      )}
       {subtitle && (
         <p className={`text-lg max-w-2xl ${align === 'center' ? 'mx-auto' : ''} text-[var(--text-on-surface-muted)]`}>
           {subtitle}

@@ -212,6 +212,104 @@ html.dark body {
   background-clip: text;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   Glitch Distortion Text
+   ═══════════════════════════════════════════════════════════ */
+.glitch-text {
+  display: block;
+  position: relative;
+}
+
+.glitch-text--inline {
+  display: inline-block;
+}
+
+.glitch-text__base {
+  position: relative;
+  z-index: 3;
+}
+
+.glitch-text__layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+
+.glitch-text__layer--error {
+  color: var(--color-error);
+  -webkit-text-fill-color: var(--color-error);
+  z-index: 1;
+  animation: glitch-dist-top 2s infinite;
+}
+
+.glitch-text__layer--tech {
+  color: var(--color-tech);
+  -webkit-text-fill-color: var(--color-tech);
+  z-index: 2;
+  animation: glitch-dist-bottom 2s infinite reverse;
+}
+
+.glitch-text:hover .glitch-text__layer--error {
+  animation: glitch-dist-hover-top 0.6s infinite;
+}
+
+.glitch-text:hover .glitch-text__layer--tech {
+  animation: glitch-dist-hover-bottom 0.6s infinite;
+}
+
+.glitch-text:active {
+  animation: glitch-dist-shake 0.28s linear;
+}
+
+@keyframes glitch-dist-top {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-3px, -2px); }
+  40% { transform: translate(3px, 1px); }
+  60% { transform: translate(-2px, 2px); }
+  80% { transform: translate(2px, -1px); }
+}
+
+@keyframes glitch-dist-bottom {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(3px, 2px); }
+  40% { transform: translate(-3px, -1px); }
+  60% { transform: translate(2px, -2px); }
+  80% { transform: translate(-2px, 1px); }
+}
+
+@keyframes glitch-dist-hover-top {
+  0%, 100% { transform: translate(-2px, -1px); }
+  50% { transform: translate(-8px, -4px); }
+}
+
+@keyframes glitch-dist-hover-bottom {
+  0%, 100% { transform: translate(2px, 1px); }
+  50% { transform: translate(8px, 4px); }
+}
+
+@keyframes glitch-dist-shake {
+  0% { transform: translate(0); }
+  25% { transform: translate(-5px, 3px); }
+  50% { transform: translate(5px, -3px); }
+  75% { transform: translate(-3px, 2px); }
+  100% { transform: translate(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch-text,
+  .glitch-text__layer--error,
+  .glitch-text__layer--tech {
+    animation: none;
+  }
+
+  .glitch-text:active {
+    animation: none;
+  }
+}
+
 /* Instagram Slide */
 .instagram-slide {
   position: relative;

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { OceanBackground } from './OceanBackground';
+import { Badge, GlitchText } from './ui';
 
 interface HeroSectionProps {
   headline: React.ReactNode;
@@ -8,6 +9,8 @@ interface HeroSectionProps {
   ctaSecondary: string;
   ctaPrimaryHref?: string;
   ctaSecondaryHref?: string;
+  eyebrow?: React.ReactNode;
+  headlineText?: string;
 }
 
 export function HeroSection({
@@ -17,13 +20,15 @@ export function HeroSection({
   ctaSecondary,
   ctaPrimaryHref = '#',
   ctaSecondaryHref = '#',
+  eyebrow = 'Agência de Marketing Digital',
+  headlineText,
 }: HeroSectionProps) {
-  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (!headlineRef.current) return;
+    if (!sectionRef.current) return;
 
-    const words = headlineRef.current.querySelectorAll('.word');
+    const words = sectionRef.current.querySelectorAll('.word');
     words.forEach((word, i) => {
       const el = word as HTMLElement;
       el.style.opacity = '0';
@@ -42,7 +47,7 @@ export function HeroSection({
   const words = typeof headline === 'string' ? headline.split(' ') : [];
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-bg-dark">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-bg-dark">
       {/* Ocean shader background */}
       <OceanBackground />
 
@@ -53,23 +58,23 @@ export function HeroSection({
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-32 text-center">
         <div className="mb-6">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-tech/10 border border-tech/20 text-tech text-sm font-medium">
-            <span className="w-2 h-2 rounded-full bg-tech animate-pulse" />
-            Agência de Marketing Digital
-          </span>
+          <Badge pulseDot>{eyebrow}</Badge>
         </div>
 
-        <h1 ref={headlineRef} className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold leading-tight mb-8">
+        <GlitchText as="h1" text={headlineText} className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold leading-tight mb-8">
           {typeof headline === 'string' ? (
             words.map((word, i) => (
-              <span key={i} className="word inline-block mr-3 text-bg-light">
-                {word}
-              </span>
+              <React.Fragment key={i}>
+                <span className="word inline-block text-bg-light">
+                  {word}
+                </span>
+                {i < words.length - 1 ? ' ' : ''}
+              </React.Fragment>
             ))
           ) : (
             headline
           )}
-        </h1>
+        </GlitchText>
 
         <p
           className="text-lg md:text-xl text-bg-light/60 max-w-2xl mx-auto mb-12 opacity-0"
