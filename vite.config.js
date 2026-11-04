@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
         lib: {
           entry: resolve(__dirname, "src/index.ts"),
           name: "MaxDS",
-          fileName: (format) => `index.${format}.js`,
+          fileName: (format) => (format === "es" ? "index.mjs" : "index.cjs"),
           formats: ["es", "cjs"],
         },
         rollupOptions: {

@@ -3,16 +3,14 @@
   "version": "1.0.10",
   "type": "module",
   "description": "Design System da Agência Max Ebina - Templates Instagram, Landing Pages e componentes reutilizáveis",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     },
-    "./styles.css": "./dist/styles.css"
+    "./styles.css": "./dist/max-ds.css"
   },
   "files": [
     "dist"
