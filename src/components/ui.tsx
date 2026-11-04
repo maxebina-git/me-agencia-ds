@@ -110,7 +110,7 @@ export function Badge({ children, size = 'md', pulseDot = false, className = '' 
   };
 
   return (
-    <span className={`inline-flex items-center gap-2 rounded-full bg-tech/20 border border-tech/30 text-tech ${sizeClasses[size]} ${className}`}>
+    <span className={`inline-flex items-center gap-2 rounded-full bg-tech/50 border border-tech/30 text-tech ${sizeClasses[size]} ${className}`}>
       {pulseDot && <span className="w-2 h-2 rounded-full bg-tech animate-pulse" />}
       {children}
     </span>
