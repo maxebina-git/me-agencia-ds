@@ -97,6 +97,21 @@ npm run build:lib
 npm publish --access public
 ```
 
+## 🔗 Desenvolvimento com a Landing Page (LP)
+
+O LP consome o DS de duas formas:
+
+- **Produção:** `npm install @maxebina/max-ds` (pacote publicado no npm)
+- **Desenvolvimento local:** se o DS estiver clonado ao lado (`../me-agencia-ds`), o Vite da LP resolve o `dist/` automaticamente. Cada salvamento no DS recarrega a LP sem alterar o `package-lock.json`.
+
+```bash
+# No repositório me-agencia-ds
+npm run watch:lib
+```
+
+Em seguida, na LP, `npm run dev` reflete as alterações instantaneamente.
+
+
 ## 📝 Licença
 
 MIT © Max Ebina
