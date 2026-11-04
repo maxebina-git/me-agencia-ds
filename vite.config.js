@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
     return {
       plugins: [react(), tailwindcss()],
       build: {
+        emptyOutDir: true,
         lib: {
           entry: resolve(__dirname, "src/index.ts"),
           name: "MaxDS",

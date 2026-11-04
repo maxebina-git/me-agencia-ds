@@ -38,7 +38,7 @@ export function OceanBackground({ className = '' }: { className?: string }) {
     const water = new Water(waterGeometry, {
       textureWidth: 512,
       textureHeight: 512,
-      waterNormals: textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/waternormals.jpg', (texture: THREE.Texture) => {
+      waterNormals: textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/waternormals.jpg', (texture: any) => {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       }),
       sunDirection: new THREE.Vector3(),
