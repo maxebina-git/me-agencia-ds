@@ -63,7 +63,7 @@ export function HeroSection({
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 pb-24 flex flex-col items-center justify-center text-center gap-[clamp(1.25rem,calc(3vh+8px),2.5rem)]">
         {logo && (
           <div className="flex items-center justify-center gap-3">
-            {logo}
+            <span className="hidden md:inline-flex items-center">{logo}</span>
             {logoText && (
               <div>
                 <p className="font-display font-bold text-2xl text-[var(--text-on-surface)]">{logoText}</p>

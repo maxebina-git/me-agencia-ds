@@ -10,11 +10,14 @@ export { LeadCaptureForm } from './components/ui';
 export { FAQ } from './components/ui';
 export { TestimonialCard } from './components/ui';
 export { WhatsAppFloat } from './components/ui';
+export { ScrollToTop } from './components/ui';
 export { Navbar } from './components/ui';
 export { Footer } from './components/ui';
 export { Table } from './components/ui';
 export { SectionHeader } from './components/ui';
 export { AnimatedCounter } from './components/ui';
+export { Modal } from './components/ui';
+export { Drawer } from './components/ui';
 
 // Componentes de Seção
 export { HeroSection } from './components/HeroSection';

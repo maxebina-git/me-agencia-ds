@@ -9,8 +9,17 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Corrigido
 - **HeroSection**: `@keyframes slide-up` passa a ser sempre emitido no CSS final (movido para fora de `@theme`) — CTAs e subheadline (que dependiam de `animation` inline com `opacity-0`) não ficam mais invisíveis no pacote publicado
+- **Live Preview**: badge (`eyebrow`) alinhado entre docs e Live Preview — ambos exibem "Tecnologia que gera resultado" (removido `eyebrow=""` que escondia a badge na LP)
 
 ### Alterado
+- **ServiceCard**: nova prop opcional `onClick?: () => void` — quando presente renderiza `<button>` em vez de `<a href>` (retrocompatível); export `Modal` disponível no pacote
+- **Modal**: ações aceitam `target?: '_blank' | '_self'` — com `rel="noopener noreferrer"` quando `_blank` (permite CTA externo como WhatsApp sem sair da LP); ações sem `href` renderizam `<button>` (fecha como o X, sem navegar/scroll)
+- **Footer**: nova prop opcional `linksClassName?: string` — classe aplicada a cada coluna de links (ex. `lg:col-start-5` para alinhar à direita)
+- **Drawer**: nova prop opcional `children?: ReactNode` (conteúdo rico abaixo da descrição) e `target?: '_blank' | '_self'` nas ações; ações sem `href` renderizam `<button>` (fecha como o overlay/drag, sem navegar/scroll); export `Drawer` disponível no pacote
+- **Navbar**: links mobile com URL limpa (`#x` → `/x`) + scroll suave + `pushState` + link ativo (igual ao desktop); logo vai para `/` com scroll ao topo; rola via `pushState` sem recarregar; scroll sincroniza URL (`replaceState`) + link ativo via `IntersectionObserver` (com lock de 700ms durante scroll por clique); inclui seção do CTA (`ctaHref`, ex. `contato`) ao rolar; no topo sem seção visível volta para `/`
+- **HeroSection**: SVG do `logo` escondido no mobile (`hidden md:inline-flex`) para não duplicar a marca do `Navbar` fixo — `logoText` permanece visível em todos os tamanhos
+- **ScrollToTop**: novo componente `ScrollToTop` (fixo `bottom-6 right-24`, `bg-tech`, ícone `ArrowUp`) — aparece quando o scroll passa da seção `targetId` (ou `showAfter` px) e some no topo; clique desliza ao topo com `pushState("/")`; exportado no pacote
+- **WhatsAppFloat**: props opcionais `phone?: string` e `message?: string` — monta `wa.me/<phone>` com `?text=` pré-preenchido (retrocompatível)
 - **HeroSection**: conteúdo empilhado em container `flex flex-col` com `gap` via `clamp(1.25rem, calc(3vh + 8px), 2.5rem)` (proporcional à altura da viewport); margens `mb-*` manuais removidas; scroll indicator (mouse) movido para filho direto da `<section>` (posição visual mantida) com `z-10`
 - **HeroSection**: `subheadline` e `ctaSecondary` agora são opcionais — não renderizam quando omitidos (hero com CTA único); previews da LP e docs (`HeroSectionDocs`, EXAMPLES.md) atualizados
 

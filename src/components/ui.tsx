@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  ArrowRight, ArrowUpRight, Check, ChevronDown,
+  ArrowRight, ArrowUpRight, ArrowUp, Check, ChevronDown,
   MessageCircle, Star, Loader2, Globe, Layout, Code2,
   Bot, Megaphone, Workflow, X, Menu, Lock, Sparkles,
   Zap, TrendingUp, Clock, GripVertical
@@ -155,6 +155,7 @@ interface ServiceCardProps {
   badge?: string;
   ctaText?: string;
   href?: string;
+  onClick?: () => void;
 }
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -166,7 +167,14 @@ const iconMap: Record<string, React.ReactNode> = {
   Workflow: <Workflow className="w-8 h-8" />,
 };
 
-export function ServiceCard({ title, description, icon, badge, ctaText = 'Saiba mais', href = '#' }: ServiceCardProps) {
+export function ServiceCard({ title, description, icon, badge, ctaText = 'Saiba mais', href = '#', onClick }: ServiceCardProps) {
+  const ctaClasses = "inline-flex items-center gap-2 text-tech text-sm font-semibold group-hover:gap-3 transition-all duration-300";
+  const ctaContent = (
+    <>
+      {ctaText}
+      <ArrowRight className="w-4 h-4" />
+    </>
+  );
   return (
     <div className="group relative rounded-2xl p-[1px] bg-gradient-to-r from-tech/30 via-primary/30 to-tech/30 hover:from-tech hover:via-primary hover:to-tech transition-all duration-500">
       <div className="relative h-full rounded-2xl bg-white dark:bg-bg-dark/90 p-8 backdrop-blur-sm shadow-lg transition-all duration-500 group-hover:-translate-y-2">
@@ -180,10 +188,15 @@ export function ServiceCard({ title, description, icon, badge, ctaText = 'Saiba 
         </div>
         <h3 className="text-xl font-display font-bold mb-3 text-[var(--text-on-surface)]">{title}</h3>
         <p className="text-sm text-[var(--text-on-surface-muted)] mb-6 leading-relaxed">{description}</p>
-        <a href={href} className="inline-flex items-center gap-2 text-tech text-sm font-semibold group-hover:gap-3 transition-all duration-300">
-          {ctaText}
-          <ArrowRight className="w-4 h-4" />
-        </a>
+        {onClick ? (
+          <button type="button" onClick={onClick} className={`${ctaClasses} cursor-pointer bg-transparent border-0 p-0`}>
+            {ctaContent}
+          </button>
+        ) : (
+          <a href={href} className={ctaClasses}>
+            {ctaContent}
+          </a>
+        )}
       </div>
     </div>
   );
@@ -311,11 +324,15 @@ export function FAQ({ items }: FAQProps) {
    WHATSAPP FLOAT COMPONENT
    ═══════════════════════════════════════════════════════════ */
 
-export function WhatsAppFloat() {
+export function WhatsAppFloat({ phone = '5511999999999', message }: { phone?: string; message?: string }) {
+  const normalizedPhone = String(phone).replace(/\D/g, '');
+  const href = message
+    ? `https://wa.me/${normalizedPhone}?text=${encodeURIComponent(message)}`
+    : `https://wa.me/${normalizedPhone}`;
   return (
     <div className="fixed bottom-6 right-6 z-50">
       <a
-        href="https://wa.me/5511999999999"
+        href={href}
         target="_blank"
         rel="noopener noreferrer"
         className="relative flex items-center justify-center w-16 h-16 bg-[#25D366] rounded-full shadow-lg hover:scale-110 transition-transform duration-300"
@@ -325,6 +342,54 @@ export function WhatsAppFloat() {
         <MessageCircle className="w-7 h-7 text-white relative z-10" />
       </a>
     </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLL TO TOP COMPONENT
+   ═══════════════════════════════════════════════════════════ */
+
+interface ScrollToTopProps {
+  targetId?: string;
+  showAfter?: number;
+  offset?: number;
+  className?: string;
+}
+
+export function ScrollToTop({ targetId, showAfter = 600, offset = 200, className = '' }: ScrollToTopProps) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      const el = targetId ? document.getElementById(targetId) : null;
+      const threshold = el ? el.getBoundingClientRect().top + window.scrollY - offset : showAfter;
+      setVisible(window.scrollY >= threshold);
+    };
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check);
+    return () => {
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+    };
+  }, [targetId, showAfter, offset]);
+
+  const handleClick = () => {
+    if (window.location.pathname !== '/') {
+      window.history.pushState(null, '', '/');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      aria-label="Voltar ao topo"
+      className={`fixed bottom-6 right-24 z-50 flex items-center justify-center w-16 h-16 rounded-full bg-tech text-white shadow-lg transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-110 ${visible ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 translate-y-4 scale-90 pointer-events-none'} ${className}`}
+    >
+      <ArrowUp className="w-7 h-7" />
+    </button>
   );
 }
 
@@ -358,6 +423,106 @@ export function Navbar({ logo = 'MAX', links = [
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const toCleanHref = (href: string) => (href.startsWith('#') ? href.replace('#', '/') : href);
+
+  const isProgrammaticScrollRef = useRef(false);
+  const programmaticScrollTimeoutRef = useRef<number | null>(null);
+
+  const startProgrammaticScroll = () => {
+    isProgrammaticScrollRef.current = true;
+    if (programmaticScrollTimeoutRef.current !== null) {
+      window.clearTimeout(programmaticScrollTimeoutRef.current);
+    }
+    programmaticScrollTimeoutRef.current = window.setTimeout(() => {
+      isProgrammaticScrollRef.current = false;
+    }, 700);
+  };
+
+  useEffect(() => {
+    const observed = links
+      .map((link) => {
+        const id = toCleanHref(link.href).replace('/', '').split('/')[0];
+        const el = id ? document.getElementById(id) : null;
+        return el ? { el, href: link.href } : null;
+      })
+      .filter((item): item is { el: HTMLElement; href: string } => item !== null);
+
+    if (ctaHref && ctaHref !== '#' && ctaHref !== '/') {
+      const ctaId = toCleanHref(ctaHref).replace('/', '').split('/')[0];
+      const ctaEl = ctaId ? document.getElementById(ctaId) : null;
+      if (ctaEl && !observed.some((o) => o.el === ctaEl)) {
+        observed.push({ el: ctaEl, href: ctaHref });
+      }
+    }
+
+    if (observed.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (isProgrammaticScrollRef.current) return;
+        const visible = entries.find((e) => e.isIntersecting);
+        if (!visible) return;
+        const match = observed.find((o) => o.el === visible.target);
+        if (!match) return;
+        setActiveLink(match.href);
+        const targetHref = toCleanHref(match.href);
+        if (targetHref !== window.location.pathname + window.location.search) {
+          window.history.replaceState(null, '', targetHref);
+        }
+      },
+      { rootMargin: '-40% 0px -55% 0px' },
+    );
+
+    observed.forEach((o) => observer.observe(o.el));
+
+    const syncHomeOnScroll = () => {
+      if (isProgrammaticScrollRef.current) return;
+      if (window.scrollY < 200 && window.location.pathname !== '/') {
+        setActiveLink('');
+        window.history.replaceState(null, '', '/');
+      }
+    };
+    window.addEventListener('scroll', syncHomeOnScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', syncHomeOnScroll);
+      if (programmaticScrollTimeoutRef.current !== null) {
+        window.clearTimeout(programmaticScrollTimeoutRef.current);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [links, ctaHref]);
+
+  const handleNavClick = (e: React.MouseEvent, href: string, closeMobile = false) => {
+    e.preventDefault();
+    const targetHref = toCleanHref(href);
+    if (targetHref !== window.location.pathname + window.location.search) {
+      window.history.pushState(null, '', targetHref);
+    }
+    const id = targetHref.replace('/', '').split('/')[0];
+    const el = id ? document.getElementById(id) : null;
+    startProgrammaticScroll();
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (!id) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    setActiveLink(href);
+    if (closeMobile) setMobileOpen(false);
+  };
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (window.location.pathname !== '/') {
+      window.history.pushState(null, '', '/');
+    }
+    startProgrammaticScroll();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setActiveLink('');
+    setMobileOpen(false);
+  };
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'py-2' : 'py-4'}`}>
       <div className={`mx-4 md:mx-8 rounded-2xl px-6 py-3 transition-all duration-300 ${
@@ -366,7 +531,7 @@ export function Navbar({ logo = 'MAX', links = [
           : 'bg-white/20 dark:bg-bg-dark/20 backdrop-blur-md shadow-sm border border-white/5'
       }`}>
         <div className="flex items-center justify-between">
-          <a href="#" className="flex items-center">
+          <a href="/" onClick={handleLogoClick} className="flex items-center">
             <svg width="91" height="43" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"/>
               <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
@@ -377,18 +542,8 @@ export function Navbar({ logo = 'MAX', links = [
             {links.map((link) => (
               <a
                 key={link.href}
-                href={link.href.startsWith('#') ? link.href.replace('#', '/') : link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  const targetHref = link.href.startsWith('#') ? link.href.replace('#', '/') : link.href;
-                  if (targetHref !== window.location.pathname + window.location.search) {
-                    window.history.pushState(null, '', targetHref);
-                  }
-                  const id = targetHref.replace('/', '');
-                  const el = document.getElementById(id);
-                  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  setActiveLink(link.href);
-                }}
+                href={toCleanHref(link.href)}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className={`relative text-sm font-medium transition-colors group ${activeLink === link.href ? 'text-[var(--text-on-surface)]' : 'text-[var(--text-on-surface-muted)] hover:text-[var(--text-on-surface)]'}`}
               >
                 {link.label}
@@ -417,9 +572,9 @@ export function Navbar({ logo = 'MAX', links = [
             {links.map((link) => (
               <a
                 key={link.href}
-                href={link.href}
-                className="block py-3 text-[var(--text-on-surface-muted)] hover:text-tech transition-colors"
-                onClick={() => setMobileOpen(false)}
+                href={toCleanHref(link.href)}
+                className={`block py-3 transition-colors ${activeLink === link.href ? 'text-[var(--text-on-surface)] font-medium' : 'text-[var(--text-on-surface-muted)] hover:text-tech'}`}
+                onClick={(e) => handleNavClick(e, link.href, true)}
               >
                 {link.label}
               </a>
@@ -1173,6 +1328,7 @@ interface FooterProps {
   }[];
   copyright?: string;
   onLinkClick?: (label: string, href: string) => void;
+  linksClassName?: string;
 }
 
 export function Footer({
@@ -1210,6 +1366,7 @@ export function Footer({
   social = [],
   copyright = '© 2026 Max Ebina. Todos os direitos reservados.',
   onLinkClick,
+  linksClassName,
 }: FooterProps) {
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, label: string, href: string) => {
     e.preventDefault();
@@ -1251,7 +1408,7 @@ export function Footer({
 
           {/* Links */}
           {links.map((section, i) => (
-            <div key={i}>
+            <div key={i} className={linksClassName}>
               <h4 className="font-display font-semibold text-white mb-4">{section.title}</h4>
               <ul className="space-y-3">
                 {section.items.map((item, j) => (
@@ -1312,8 +1469,9 @@ interface DrawerProps {
   title?: string;
   description?: string;
   disclaimer?: string;
+  children?: React.ReactNode;
   width?: 'sm' | 'md' | 'lg' | 'xl' | 'half' | 'threequarter';
-  actions?: { label: string; href?: string; onClick?: () => void; variant?: 'primary' | 'secondary' }[];
+  actions?: { label: string; href?: string; onClick?: () => void; variant?: 'primary' | 'secondary'; target?: '_blank' | '_self' }[];
 }
 
 export function Drawer({
@@ -1322,6 +1480,7 @@ export function Drawer({
   title = 'Contexto da Drawer',
   description = 'Esta drawer pode ser usada para exibir informações contextuais, disclaimers e ações secundárias sem interromper o fluxo principal do usuário.',
   disclaimer = 'As ações realizadas nesta drawer são apenas demonstrativas.',
+  children,
   width = 'md',
   actions = [
     { label: 'Confirmar', variant: 'primary' },
@@ -1416,6 +1575,7 @@ export function Drawer({
           <div className="flex-1 overflow-y-auto">
             <h2 className="font-display font-bold text-2xl text-[var(--text-on-surface)] mb-4">{title}</h2>
             <p className="text-white/70 text-sm leading-relaxed mb-6">{description}</p>
+            {children && <div className="text-white/80 text-sm leading-relaxed mb-6 space-y-3">{children}</div>}
 
             <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-6">
               <p className="text-xs text-tech font-medium uppercase tracking-wider mb-1">Disclaimer</p>
@@ -1424,16 +1584,33 @@ export function Drawer({
           </div>
 
           <div className="flex gap-3 pt-6 border-t border-white/10">
-            {actions.map((a, i) => (
-              <a
-                key={i}
-                href={a.href || '#'}
-                onClick={(e) => { if (a.onClick) { e.preventDefault(); a.onClick(); } if (a.label === 'Cancelar') closeDrawer(); }}
-                className={`flex-1 text-center py-2.5 rounded-lg text-sm font-medium transition-colors ${a.variant === 'primary' ? 'bg-tech text-white hover:bg-tech/90' : 'bg-white/10 text-white hover:bg-white/15'}`}
-              >
-                {a.label}
-              </a>
-            ))}
+            {actions.map((a, i) => {
+              const className = `flex-1 text-center py-2.5 rounded-lg text-sm font-medium transition-colors ${a.variant === 'primary' ? 'bg-tech text-white hover:bg-tech/90' : 'bg-white/10 text-white hover:bg-white/15'}`;
+              if (!a.href) {
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => { a.onClick?.(); closeDrawer(); }}
+                    className={className}
+                  >
+                    {a.label}
+                  </button>
+                );
+              }
+              return (
+                <a
+                  key={i}
+                  href={a.href}
+                  target={a.target}
+                  rel={a.target === '_blank' ? 'noopener noreferrer' : undefined}
+                  onClick={(e) => { if (a.onClick) { e.preventDefault(); a.onClick(); } if (a.label === 'Cancelar') closeDrawer(); }}
+                  className={className}
+                >
+                  {a.label}
+                </a>
+              );
+            })}
           </div>
         </div>
       </aside>
@@ -1452,7 +1629,7 @@ interface ModalProps {
   image?: string;
   size?: 'sm' | 'md' | 'lg';
   children?: React.ReactNode;
-  actions?: { label: string; href?: string; onClick?: () => void; variant?: 'primary' | 'secondary' }[];
+  actions?: { label: string; href?: string; onClick?: () => void; variant?: 'primary' | 'secondary'; target?: '_blank' | '_self' }[];
 }
 
 export function Modal({
@@ -1511,16 +1688,33 @@ export function Modal({
           </div>
         </div>
         <div className="flex gap-3 px-6 py-4 border-t border-white/10">
-          {actions.map((a, i) => (
-            <a
-              key={i}
-              href={a.href || '#'}
-              onClick={(e) => { if (a.onClick) { e.preventDefault(); a.onClick(); } if (a.label === 'Cancelar') close(); }}
-              className={`flex-1 text-center py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${a.variant === 'primary' ? 'bg-tech text-white hover:bg-tech/90' : 'bg-white/10 text-white hover:bg-white/15'}`}
-            >
-              {a.label}
-            </a>
-          ))}
+          {actions.map((a, i) => {
+            const className = `flex-1 text-center py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${a.variant === 'primary' ? 'bg-tech text-white hover:bg-tech/90' : 'bg-white/10 text-white hover:bg-white/15'}`;
+            if (!a.href) {
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => { a.onClick?.(); close(); }}
+                  className={className}
+                >
+                  {a.label}
+                </button>
+              );
+            }
+            return (
+              <a
+                key={i}
+                href={a.href}
+                target={a.target}
+                rel={a.target === '_blank' ? 'noopener noreferrer' : undefined}
+                onClick={(e) => { if (a.onClick) { e.preventDefault(); a.onClick(); } if (a.label === 'Cancelar') close(); }}
+                className={className}
+              >
+                {a.label}
+              </a>
+            );
+          })}
         </div>
       </div>
     </>

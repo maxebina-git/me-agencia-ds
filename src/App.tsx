@@ -6,14 +6,14 @@ import {
 } from 'lucide-react';
 import {
   Badge, Button, ServiceCard, SectionHeader, TestimonialCard, GlitchText,
-  FAQ, WhatsAppFloat, Navbar, LeadCaptureForm, AnimatedCounter,
+  FAQ, WhatsAppFloat, ScrollToTop, Navbar, LeadCaptureForm, AnimatedCounter,
   InstagramSlide, Footer, Table, Drawer, Modal
 } from './components/ui';
 import { PhoneMockup } from './components/PhoneMockup';
 import { CodeBlock, PropsTable } from './components/DocsComponents';
 import { HeroSection } from './components/HeroSection';
 
-type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'glitch-text' | 'buttons' | 'badge' | 'cards' | 'forms' | 'table' | 'section-header' | 'animated-counter' | 'whatsapp-float' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'instagram' | 'brand-voice' | 'preview' | 'accessibility' | 'responsiveness' | 'icons' | 'borders' | 'grid' | 'drawer' | 'modal';
+type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'glitch-text' | 'buttons' | 'badge' | 'cards' | 'forms' | 'table' | 'section-header' | 'animated-counter' | 'whatsapp-float' | 'scroll-to-top' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'instagram' | 'brand-voice' | 'preview' | 'accessibility' | 'responsiveness' | 'icons' | 'borders' | 'grid' | 'drawer' | 'modal';
 
 interface NavItem {
   id: Section;
@@ -42,6 +42,7 @@ const navItems: NavItem[] = [
   { id: 'section-header', label: 'SectionHeader', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'animated-counter', label: 'AnimatedCounter', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'whatsapp-float', label: 'WhatsAppFloat', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
+  { id: 'scroll-to-top', label: 'ScrollToTop', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'navbar', label: 'Navbar', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'hero', label: 'Hero Section', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'faq', label: 'FAQ', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
@@ -228,6 +229,7 @@ export default function App() {
           {activeSection === 'section-header' && <SectionHeaderSection />}
           {activeSection === 'animated-counter' && <AnimatedCounterSection />}
           {activeSection === 'whatsapp-float' && <WhatsAppFloatSection />}
+          {activeSection === 'scroll-to-top' && <ScrollToTopSection />}
           {activeSection === 'navbar' && <NavbarSection />}
           {activeSection === 'hero' && <HeroSectionDocs />}
           {activeSection === 'faq' && <FAQSection />}
@@ -1415,6 +1417,7 @@ function HeroSectionDocs() {
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
         <div className="rounded-xl border border-[var(--surface-border)] overflow-hidden">
           <HeroSection
+            eyebrow="Tecnologia que gera resultado"
             headline={<>Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span></>}
             headlineText="Transforme Sua Empresa com Tecnologia"
             ctaPrimary="Quero Escalar Meu Negócio"
@@ -3183,6 +3186,57 @@ function WhatsAppFloatSection() {
   );
 }
 
+function ScrollToTopSection() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card)] relative min-h-[200px]">
+          <p className="text-sm text-[var(--text-on-surface-muted)] mb-4">O botão aparece após o scroll alcançar a seção alvo (ou `showAfter` px) — fixe a posição ao lado do `WhatsAppFloat` (preview usa `showAfter={0}` para ficar sempre visível):</p>
+          <ScrollToTop showAfter={0} />
+          <WhatsAppFloat />
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'targetId', type: 'string', default: "'undefined'", description: 'Id da seção que dispara a exibição (ex: "servicos")' },
+          { name: 'showAfter', type: 'number', default: '600', description: 'Fallback em px quando targetId não existe' },
+          { name: 'offset', type: 'number', default: '200', description: 'Quantos px antes do topo da seção o botão aparece' },
+          { name: 'className', type: 'string', default: "''", description: 'Classes extras (ex: reposicionar)' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo de Uso</h3>
+        <CodeBlock code={`<ScrollToTop targetId="servicos" />
+<WhatsAppFloat phone="5511971610688" message="Olá! Vim pelo site" />`} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Features</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            'Posição fixa bottom-6 right-24 (ao lado do WhatsAppFloat)',
+            'Aparece ao alcançar a seção alvo (targetId) ou showAfter px',
+            'Some no topo (scrollY ~ 0)',
+            'Clique desliza ao topo e atualiza URL para /',
+            'Animação ease cubic-bezier(0.34,1.56,0.64,1)',
+            'Aria-label para acessibilidade',
+            'Z-index 50 (mesma camada do WhatsAppFloat)',
+          ].map(f => (
+            <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+              <Check className="w-4 h-4 text-tech flex-shrink-0" />
+              <span className="text-sm text-[var(--text-on-surface-muted)]">{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PreviewSection() {
   return (
     <div className="space-y-12">
@@ -3241,7 +3295,7 @@ function PreviewSection() {
 
           {/* 2. Hero Section */}
           <HeroSection
-            eyebrow=""
+            eyebrow="Tecnologia que gera resultado"
             headline={<>Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span></>}
             headlineText="Transforme Sua Empresa com Tecnologia"
             ctaPrimary="Quero Escalar Meu Negócio"
