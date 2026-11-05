@@ -29,7 +29,7 @@ O assistente **não pode** concluir sozinho as etapas 5–6. Após o `npm publis
 
 1.  Usuário clica no link da PR.
 2.  Usuário revisa, resolve conflitos (ex.: versão do pacote em `package.json`/`package-lock.json` — manter `1.0.15` novo, nunca `1.0.14` antigo), depois executa o merge (qualquer botão: *Commit merge*, *Squash and merge* ou *Rebase and merge*).
-3.  Só depois do merge o assistente monitora o `Deploy FTP` no GitHub Actions e valida o site em produção.
+3.  Após o merge, o deploy da LP com GitHub Actions + FTP é de **responsabilidade do agente** (não do usuário): monitorar `deploy.yml` (lint → build → FTP), confirmar sucesso e validar o site em produção (`maxebina.com.br`).
 
 Sem a ação humana no merge, nenhum deploy da LP acontece — automatizar o merge violaria o ADR-001 (aprovação visual antes de publicar).
 
