@@ -4,9 +4,9 @@ import { Badge, GlitchText } from './ui';
 
 interface HeroSectionProps {
   headline: React.ReactNode;
-  subheadline: string;
+  subheadline?: string;
   ctaPrimary: string;
-  ctaSecondary: string;
+  ctaSecondary?: string;
   ctaPrimaryHref?: string;
   ctaSecondaryHref?: string;
   eyebrow?: React.ReactNode;
@@ -60,9 +60,9 @@ export function HeroSection({
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
 
       {/* Content */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-32 text-center">
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 pb-24 flex flex-col items-center justify-center text-center gap-[clamp(1.25rem,calc(3vh+8px),2.5rem)]">
         {logo && (
-          <div className="mb-4 flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-3">
             {logo}
             {logoText && (
               <div>
@@ -71,11 +71,11 @@ export function HeroSection({
             )}
           </div>
         )}
-        <div className="mb-6">
+        {eyebrow && typeof eyebrow === 'string' && eyebrow.trim().length > 0 && (
           <Badge pulseDot>{eyebrow}</Badge>
-        </div>
+        )}
 
-        <GlitchText as="h1" text={headlineText ?? (typeof headline === 'string' ? headline : undefined)} className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold leading-tight mb-8">
+        <GlitchText as="h1" text={headlineText ?? (typeof headline === 'string' ? headline : undefined)} className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold leading-tight">
           {typeof headline === 'string' ? (
             words.map((word, i) => (
               <React.Fragment key={i}>
@@ -90,14 +90,16 @@ export function HeroSection({
           )}
         </GlitchText>
 
-        <p
-          className="text-lg md:text-xl text-bg-light/60 max-w-2xl mx-auto mb-12 opacity-0"
-          style={{
-            animation: 'slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards',
-          }}
-        >
-          {subheadline}
-        </p>
+        {subheadline && (
+          <p
+            className="text-lg md:text-xl text-bg-light/60 max-w-2xl mx-auto opacity-0"
+            style={{
+              animation: 'slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards',
+            }}
+          >
+            {subheadline}
+          </p>
+        )}
 
         <div
           className="flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0"
@@ -114,22 +116,25 @@ export function HeroSection({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H7M17 7V17" />
             </svg>
           </a>
-          <a
-            href={ctaSecondaryHref}
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-display font-semibold rounded-xl border border-[#06B6D4]/50 text-[#06B6D4] hover:bg-[#06B6D4]/10 hover:border-[#06B6D4] hover:scale-105 transition-all duration-300"
-          >
-            {ctaSecondary}
-          </a>
+          {ctaSecondary && (
+            <a
+              href={ctaSecondaryHref}
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-display font-semibold rounded-xl border border-[#06B6D4]/50 text-[#06B6D4] hover:bg-[#06B6D4]/10 hover:border-[#06B6D4] hover:scale-105 transition-all duration-300"
+            >
+              {ctaSecondary}
+            </a>
+          )}
         </div>
 
-        {/* Scroll indicator */}
-        <div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-0"
-          style={{ animation: 'fade-in 1s ease 2s forwards' }}
-        >
-          <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
-            <div className="w-1.5 h-3 rounded-full bg-tech animate-bounce" />
-          </div>
+      </div>
+
+      {/* Scroll indicator */}
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 opacity-0"
+        style={{ animation: 'fade-in 1s ease 2s forwards' }}
+      >
+        <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
+          <div className="w-1.5 h-3 rounded-full bg-tech animate-bounce" />
         </div>
       </div>
     </section>

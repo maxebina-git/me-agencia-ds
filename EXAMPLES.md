@@ -117,9 +117,7 @@ export function Home() {
       {/* Hero */}
       <HeroSection
         headline="Transforme Sua Empresa com Tecnologia"
-        subheadline="Sites, LPs e CRM que geram resultados reais"
         ctaPrimary="Quero Escalar Meu Negócio"
-        ctaSecondary="Ver Cases"
       />
 
       {/* Serviços */}

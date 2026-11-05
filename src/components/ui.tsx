@@ -1209,7 +1209,8 @@ export function Footer({
   ],
   social = [],
   copyright = '© 2026 Max Ebina. Todos os direitos reservados.',
-  }: FooterProps) {
+  onLinkClick,
+}: FooterProps) {
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, label: string, href: string) => {
     e.preventDefault();
     onLinkClick?.(label, href);

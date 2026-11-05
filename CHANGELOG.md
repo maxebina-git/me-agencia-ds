@@ -5,6 +5,15 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Corrigido
+- **HeroSection**: `@keyframes slide-up` passa a ser sempre emitido no CSS final (movido para fora de `@theme`) — CTAs e subheadline (que dependiam de `animation` inline com `opacity-0`) não ficam mais invisíveis no pacote publicado
+
+### Alterado
+- **HeroSection**: conteúdo empilhado em container `flex flex-col` com `gap` via `clamp(1.25rem, calc(3vh + 8px), 2.5rem)` (proporcional à altura da viewport); margens `mb-*` manuais removidas; scroll indicator (mouse) movido para filho direto da `<section>` (posição visual mantida) com `z-10`
+- **HeroSection**: `subheadline` e `ctaSecondary` agora são opcionais — não renderizam quando omitidos (hero com CTA único); previews da LP e docs (`HeroSectionDocs`, EXAMPLES.md) atualizados
+
 ## [1.0.11] - 2026-11-04
 
 ### Adicionado

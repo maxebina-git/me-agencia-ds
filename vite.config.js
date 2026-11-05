@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { resolve } from "path";
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   // Modo biblioteca
   if (mode === "lib") {
     return {
@@ -24,6 +24,10 @@ export default defineConfig(({ mode }) => {
               "react-dom": "ReactDOM",
               "react/jsx-runtime": "jsxRuntime",
             },
+            assetFileNames: (assetInfo) => {
+              if (assetInfo.name === "styles.css") return "max-ds.css";
+              return assetInfo.name;
+            },
           },
         },
         cssCodeSplit: false,
@@ -31,7 +35,7 @@ export default defineConfig(({ mode }) => {
     };
   }
 
-  // Modo aplicação (Storybook)
+  // Modo aplicação (Demo do DS) - usa source direto para HMR rápido
   return {
     plugins: [react(), tailwindcss()],
     server: {

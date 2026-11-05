@@ -1417,11 +1417,8 @@ function HeroSectionDocs() {
           <HeroSection
             headline={<>Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span></>}
             headlineText="Transforme Sua Empresa com Tecnologia"
-            subheadline="Sites, LPs e CRM que geram resultados reais. Escalabilidade com inteligência digital para o seu negócio crescer."
             ctaPrimary="Quero Escalar Meu Negócio"
-            ctaSecondary="Ver Cases"
             ctaPrimaryHref="#contato"
-            ctaSecondaryHref="#cases"
             logo={<svg width="60" height="29" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"></path><path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"></path></svg>}
             logoText="Marketing Digital"
           />
@@ -1433,9 +1430,9 @@ function HeroSectionDocs() {
         <PropsTable props={[
           { name: 'headline', type: 'string | ReactNode', default: '—', description: 'Título principal do hero (suporta <span> para destaque)' },
           { name: 'headlineText', type: 'string', default: 'undefined', description: 'Texto plano para as camadas RGB do glitch quando headline é JSX (sem ele, o glitch não aplica)' },
-          { name: 'subheadline', type: 'string', default: '—', description: 'Subtítulo descritivo' },
+          { name: 'subheadline', type: 'string | undefined', default: 'undefined', description: 'Subtítulo opcional — não renderiza se omitido' },
           { name: 'ctaPrimary', type: 'string', default: '—', description: 'Texto do botão CTA principal' },
-          { name: 'ctaSecondary', type: 'string', default: '—', description: 'Texto do botão CTA secundário' },
+          { name: 'ctaSecondary', type: 'string | undefined', default: 'undefined', description: 'Texto do CTA secundário (opcional — omita para hero com CTA único)' },
           { name: 'ctaPrimaryHref', type: 'string', default: "'#'", description: 'URL do CTA principal' },
           { name: 'ctaSecondaryHref', type: 'string', default: "'#'", description: 'URL do CTA secundário' },
         ]} />
@@ -1446,11 +1443,8 @@ function HeroSectionDocs() {
         <CodeBlock code={`<HeroSection
   headline={<>Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span></>}
   headlineText="Transforme Sua Empresa com Tecnologia"
-  subheadline="Sites, LPs e CRM que geram resultados reais. Escalabilidade com inteligência digital."
   ctaPrimary="Quero Escalar Meu Negócio"
-  ctaSecondary="Ver Cases"
   ctaPrimaryHref="#contato"
-  ctaSecondaryHref="#cases"
 />`} />
       </div>
 
@@ -1463,9 +1457,9 @@ function HeroSectionDocs() {
             'Badge (eyebrow) customizável via prop eyebrow',
             'Partículas tsParticles no background',
             'Gradientes radiais decorativos',
-            '2 CTAs com variantes diferentes',
+            'CTA único (CTA secundário opcional via prop ctaSecondary)',
             'Scroll indicator animado',
-            'Subheadline com fade-in + blur',
+            'Subheadline opcional (fade-in + blur)',
             '100% responsivo',
           ].map(f => (
             <div key={f} className="flex items-center gap-3 p-3 rounded-lg bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
@@ -3206,7 +3200,7 @@ function PreviewSection() {
           <div className="divide-y divide-[var(--surface-border)]">
             {[
               { name: 'Navbar', component: 'Navbar', desc: 'Fixa no topo, glassmorphism, scroll progress bar' },
-              { name: 'Hero Section', component: 'HeroSection', desc: 'Headline com stagger animation, partículas, 2 CTAs' },
+              { name: 'Hero Section', component: 'HeroSection', desc: 'Headline com stagger animation, partículas, CTA único' },
               { name: 'Serviços', component: 'ServiceCard x6', desc: 'Grid 3x2 com todos os serviços da agência' },
               { name: 'Prova Social', component: 'AnimatedCounter x4', desc: 'Números animados: +150 projetos, +40% leads, 98% satisfação' },
               { name: 'Depoimentos', component: 'TestimonialCard x3', desc: 'Cards com avatar, estrelas e texto do depoimento' },
@@ -3247,13 +3241,11 @@ function PreviewSection() {
 
           {/* 2. Hero Section */}
           <HeroSection
+            eyebrow=""
             headline={<>Transforme Sua Empresa com <span className="gradient-text-tech">Tecnologia</span></>}
             headlineText="Transforme Sua Empresa com Tecnologia"
-            subheadline="Sites, LPs e CRM que geram resultados reais. Escalabilidade com inteligência digital para o seu negócio crescer."
             ctaPrimary="Quero Escalar Meu Negócio"
-            ctaSecondary="Ver Cases"
             ctaPrimaryHref="#contato"
-            ctaSecondaryHref="#cases"
             logo={<svg width="60" height="29" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"></path><path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"></path></svg>}
             logoText="Marketing Digital"
           />
