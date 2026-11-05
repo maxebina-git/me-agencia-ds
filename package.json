@@ -22,7 +22,6 @@
     "build": "vite build",
     "build:lib": "vite build --mode lib && npm run build:types",
     "watch:lib": "vite build --mode lib --watch",
-    "watch:lib": "vite build --mode lib --watch",
     "build:types": "tsc -p tsconfig.lib.json",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run typecheck && npm run build:lib",
