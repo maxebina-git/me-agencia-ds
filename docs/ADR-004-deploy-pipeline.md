@@ -23,6 +23,16 @@ O DS segue um ciclo controlado de release:
 5. **Dependabot** abre PR de bump na LP imediatamente após a publicação de uma nova versão do pacote no npm (monitora alterações no registro npm em tempo real).
 6. **Merge da PR de bump na LP** → GitHub Actions `deploy.yml` → FTP → `maxebina.com.br` com o novo DS.
 
+#### 2.1 Checkpoint de aprovação humana (obrigatório)
+
+O assistente **não pode** concluir sozinho as etapas 5–6. Após o `npm publish` e a abertura da PR na LP, ele **para**, envia o link da PR (`https://github.com/maxebina-git/me-agencia-lp/pulls`) e aguarda o usuário:
+
+1.  Usuário clica no link da PR.
+2.  Usuário revisa, resolve conflitos (ex.: versão do pacote em `package.json`/`package-lock.json` — manter `1.0.15` novo, nunca `1.0.14` antigo), depois executa o merge (qualquer botão: *Commit merge*, *Squash and merge* ou *Rebase and merge*).
+3.  Só depois do merge o assistente monitora o `Deploy FTP` no GitHub Actions e valida o site em produção.
+
+Sem a ação humana no merge, nenhum deploy da LP acontece — automatizar o merge violaria o ADR-001 (aprovação visual antes de publicar).
+
 ### 3. Rollback
 Se um deploy na LP quebrar:
 1. `git revert <commit-do-deploy>` na `main` da LP.
