@@ -24,7 +24,7 @@ export function OceanBackground({ className = '' }: { className?: string }) {
 
     const camera = new THREE.PerspectiveCamera(55, width / height, 1, 20000);
     camera.position.set(30, 30, 100);
-    camera.lookAt(0, -1, 0);
+    camera.lookAt(0, 0, 0);
 
     // Sun position
     const sun = new THREE.Vector3();
@@ -84,9 +84,10 @@ export function OceanBackground({ className = '' }: { className?: string }) {
       const rect = container.getBoundingClientRect();
       const maxScroll = 800;
       const t = Math.min(Math.max(-rect.top / maxScroll, 0), 1);
-      camera.position.y = 30 - t * 28;   // 30 -> 2
-      camera.position.z = 100 - t * 80;  // 100 -> 20 (aproxima)
-      camera.lookAt(0, -3, 0);
+      const lookAtY = 0 - t * 2;   // 0 -> -2 ao descer
+      camera.position.y = 30 - t * 28;
+      camera.position.z = 100 - t * 80;
+      camera.lookAt(0, lookAtY, 0);
       dirLight.intensity = 0.8 - t * 0.7;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
