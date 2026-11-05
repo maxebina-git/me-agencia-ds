@@ -20,7 +20,7 @@ O DS segue um ciclo controlado de release:
 2. **Validar em dev** localmente (conforme ADR-003): `watch:lib` no DS + `dev` na LP, via alias condicional no `vite.config.ts`.
 3. **Validar visualmente** (ADR-001): aprovação explícita do usuário antes de qualquer `npm publish`. Nenhuma publicação automática.
 4. **Publicar no DS**: `npm version patch` (ou `:minor`/`:major`) → `npm run typecheck && npm run build:lib` → `npm publish`.
-5. **Dependabot** roda diário 08:00 America/Sao_Paulo e abre PR de bump na LP (`1.0.11 → 1.0.12`).
+5. **Dependabot** abre PR de bump na LP imediatamente após a publicação de uma nova versão do pacote no npm (monitora alterações no registro npm em tempo real).
 6. **Merge da PR de bump na LP** → GitHub Actions `deploy.yml` → FTP → `maxebina.com.br` com o novo DS.
 
 ### 3. Rollback
@@ -39,7 +39,7 @@ npm run sync   # git pull --ff-only && npm ci
 
 ## Consequências
 - **Prós:** Publish do DS é o primeiro passo explícito de todo deploy; aproveita PRs do Dependabot; o consumidor valida exatamente o `dist/` publicado; rollback rápido via `git revert`.
-- **Contras:** Patch releases frequentes durante desenvolvimento ativo do DS; depende do cooldown diário do Dependabot (24h mínimo) ou de PR manual de bump.
+- **Contras:** Patch releases frequentes durante desenvolvimento ativo do DS; depende do Dependabot detectar a publicação no npm (pode haver atraso de alguns minutos) ou de PR manual de bump.
 - **Risco:** publish manual depende da presença do mantenedor e do token `NPM_TOKEN` nas secrets do DS.
 
 ---
