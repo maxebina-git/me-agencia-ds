@@ -16,7 +16,7 @@ export function OceanBackground({ className = '' }: { className?: string }) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(width, height);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.1;
+    renderer.toneMappingExposure = 0.05;
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -24,7 +24,7 @@ export function OceanBackground({ className = '' }: { className?: string }) {
 
     const camera = new THREE.PerspectiveCamera(55, width / height, 1, 20000);
     camera.position.set(30, 30, 100);
-    camera.lookAt(0, 0, 0);
+    camera.lookAt(0, 30, 0);
 
     // Sun position
     const sun = new THREE.Vector3();
@@ -67,7 +67,7 @@ export function OceanBackground({ className = '' }: { className?: string }) {
 
     scene.add(water);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
     dirLight.position.set(5, 10, 5);
     scene.add(dirLight);
 
@@ -84,11 +84,11 @@ export function OceanBackground({ className = '' }: { className?: string }) {
       const rect = container.getBoundingClientRect();
       const maxScroll = 800;
       const t = Math.min(Math.max(-rect.top / maxScroll, 0), 1);
-      const lookAtY = 0 - t * 2;   // 0 -> -2 ao descer
+      const lookAtY = 30 - t * 28;   // 30 -> 2 ao descer
       camera.position.y = 30 - t * 28;
       camera.position.z = 100 - t * 80;
       camera.lookAt(0, lookAtY, 0);
-      dirLight.intensity = 0.8 - t * 0.7;
+      dirLight.intensity = 0.5 - t * 0.2; // 0.5 -> 0.3
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
 
