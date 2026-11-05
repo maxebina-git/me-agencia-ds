@@ -11,6 +11,8 @@ interface HeroSectionProps {
   ctaSecondaryHref?: string;
   eyebrow?: React.ReactNode;
   headlineText?: string;
+  logo?: React.ReactNode;
+  logoText?: string;
 }
 
 export function HeroSection({
@@ -22,6 +24,8 @@ export function HeroSection({
   ctaSecondaryHref = '#',
   eyebrow = 'Agência de Marketing Digital',
   headlineText,
+  logo,
+  logoText,
 }: HeroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -57,6 +61,16 @@ export function HeroSection({
 
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-32 text-center">
+        {logo && (
+          <div className="mb-4 flex items-center justify-center gap-3">
+            {logo}
+            {logoText && (
+              <div>
+                <p className="font-display font-bold text-2xl text-[var(--text-on-surface)]">{logoText}</p>
+              </div>
+            )}
+          </div>
+        )}
         <div className="mb-6">
           <Badge pulseDot>{eyebrow}</Badge>
         </div>
