@@ -1172,6 +1172,7 @@ interface FooterProps {
     icon: React.ReactNode;
   }[];
   copyright?: string;
+  onLinkClick?: (label: string, href: string) => void;
 }
 
 export function Footer({
@@ -1208,7 +1209,12 @@ export function Footer({
   ],
   social = [],
   copyright = '© 2026 Max Ebina. Todos os direitos reservados.',
-}: FooterProps) {
+  }: FooterProps) {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, label: string, href: string) => {
+    e.preventDefault();
+    onLinkClick?.(label, href);
+  };
+
   return (
     <footer className="bg-bg-dark border-t border-white/5 py-16 px-6">
       <div className="max-w-6xl mx-auto">
@@ -1251,6 +1257,7 @@ export function Footer({
                   <li key={j}>
                     <a
                       href={item.href}
+                      onClick={(e) => handleLinkClick(e, item.label, item.href)}
                       className="text-sm text-white/60 hover:text-tech transition-colors"
                     >
                       {item.label}
@@ -1266,13 +1273,25 @@ export function Footer({
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-white/40">{copyright}</p>
           <div className="flex items-center gap-6">
-            <a href="#privacidade" className="text-sm text-white/40 hover:text-tech transition-colors">
+            <a
+              href="#privacidade"
+              onClick={(e) => handleLinkClick(e, 'Privacidade', '#privacidade')}
+              className="text-sm text-white/40 hover:text-tech transition-colors"
+            >
               Privacidade
             </a>
-            <a href="#termos" className="text-sm text-white/40 hover:text-tech transition-colors">
+            <a
+              href="#termos"
+              onClick={(e) => handleLinkClick(e, 'Termos de Uso', '#termos')}
+              className="text-sm text-white/40 hover:text-tech transition-colors"
+            >
               Termos
             </a>
-            <a href="#cookies" className="text-sm text-white/40 hover:text-tech transition-colors">
+            <a
+              href="#cookies"
+              onClick={(e) => handleLinkClick(e, 'Cookies', '#cookies')}
+              className="text-sm text-white/40 hover:text-tech transition-colors"
+            >
               Cookies
             </a>
           </div>
