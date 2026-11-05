@@ -22,7 +22,7 @@ export function HeroSection({
   ctaSecondary,
   ctaPrimaryHref = '#',
   ctaSecondaryHref = '#',
-  eyebrow = 'Agência de Marketing Digital',
+  eyebrow = 'Tecnologia que gera resultado',
   headlineText,
   logo,
   logoText,
