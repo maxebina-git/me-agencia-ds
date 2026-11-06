@@ -855,10 +855,10 @@ function SocialMotionTextosSection() {
             <button onClick={trigger} className="w-full text-left">
               <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[#0a0a0f] to-[#1a1a2e] border border-[var(--surface-border)]">
                 <div className="absolute inset-0 flex items-center justify-center" style={{ opacity: active ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-                <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', opacity: active ? 1 : 0, transform: active ? 'translateX(3px)' : 'translateX(0)', transition: `all 600ms ${smooth}` }}>
-                  <span className="absolute font-display font-bold" style={{ color: '#06B6D4', opacity: active ? 0.7 : 0, transform: active ? 'translateX(-4px)' : 'translateX(0)', transition: `all 300ms ${smooth}` }}>CTA →</span>
-                  <span className="absolute font-display font-bold" style={{ color: '#fbbf24', opacity: active ? 0.7 : 0, transform: active ? 'translateX(4px)' : 'translateX(0)', transition: `all 300ms ${smooth} 50ms` }}>CTA →</span>
-                  <span className="font-display font-bold text-white relative" style={{ textShadow: active ? '2px 0 #06B6D4, -2px 0 #fbbf24' : 'none' }}>CTA →</span>
+                <div className="absolute inset-0 flex items-center justify-center" style={{ opacity: active ? 1 : 0, transform: active ? 'translateX(3px)' : 'translateX(0)', transition: `all 600ms ${smooth}` }}>
+                  <span className="absolute font-display font-bold text-4xl" style={{ color: '#06B6D4', opacity: active ? 0.7 : 0, transform: active ? 'translateX(-4px)' : 'translateX(0)', transition: `all 300ms ${smooth}` }}>CTA →</span>
+                  <span className="absolute font-display font-bold text-4xl" style={{ color: '#fbbf24', opacity: active ? 0.7 : 0, transform: active ? 'translateX(4px)' : 'translateX(0)', transition: `all 300ms ${smooth} 50ms` }}>CTA →</span>
+                  <span className="font-display font-bold text-4xl text-white relative" style={{ textShadow: active ? '2px 0 #06B6D4, -2px 0 #fbbf24' : 'none' }}>CTA →</span>
                 </div>
                 {showSafeZone && (
                   <>
