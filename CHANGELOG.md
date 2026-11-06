@@ -7,6 +7,13 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [1.0.16] - 2026-11-06
+
+### Adicionado
+- **Social Motion (Fase 0 — Preview/Docs)**: sidebar `🎬 Social Studio → Social Motion` com seções `Princípios` (safe zone IG 4:5, timeline fixa vs Site/LP, timing, regras técnicas, brand) e `Transições de Tela` (14 presets clicáveis: Fade, Slide, Zoom, Wipe, BlurIn, Push/Cover, Cortina Faixas, Grid 4x3, Flip 3D, Diagonal, Iris, Venetian, Diamond, Checkerboard); seções `Textos Animados`, `Cards & Boxes`, `Path Motion`, `Numbers & Data` como stubs; `PROXIMOS-PASSOS.md` com plano maduro (arquitetura, formato IG 4:5, catálogo OpenMoléculas, estrutura alvo, roadmap Fase 0-5). Escopo: somente preview/docs — sem alteração nos componentes exportados do pacote.
+
+## [1.0.15] - 2026-11-06
+
 ### Corrigido
 - **HeroSection**: `@keyframes slide-up` passa a ser sempre emitido no CSS final (movido para fora de `@theme`) — CTAs e subheadline (que dependiam de `animation` inline com `opacity-0`) não ficam mais invisíveis no pacote publicado
 - **Live Preview**: badge (`eyebrow`) alinhado entre docs e Live Preview — ambos exibem "Tecnologia que gera resultado" (removido `eyebrow=""` que escondia a badge na LP)

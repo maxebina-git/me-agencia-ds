@@ -13,7 +13,7 @@ import { PhoneMockup } from './components/PhoneMockup';
 import { CodeBlock, PropsTable } from './components/DocsComponents';
 import { HeroSection } from './components/HeroSection';
 
-type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'glitch-text' | 'buttons' | 'badge' | 'cards' | 'forms' | 'table' | 'section-header' | 'animated-counter' | 'whatsapp-float' | 'scroll-to-top' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'instagram' | 'brand-voice' | 'preview' | 'accessibility' | 'responsiveness' | 'icons' | 'borders' | 'grid' | 'drawer' | 'modal';
+type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'glitch-text' | 'buttons' | 'badge' | 'cards' | 'forms' | 'table' | 'section-header' | 'animated-counter' | 'whatsapp-float' | 'scroll-to-top' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'social-motion' | 'social-motion-principios' | 'social-motion-transicoes' | 'social-motion-textos' | 'social-motion-cards' | 'social-motion-path' | 'social-motion-numbers' | 'instagram' | 'brand-voice' | 'preview' | 'accessibility' | 'responsiveness' | 'icons' | 'borders' | 'grid' | 'drawer' | 'modal';
 
 interface NavItem {
   id: Section;
@@ -50,7 +50,14 @@ const navItems: NavItem[] = [
   { id: 'footer', label: 'Footer', group: '🧩 Componentes', icon: <Layout className="w-4 h-4" /> },
   { id: 'drawer', label: 'Drawer', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
   { id: 'modal', label: 'Modal', group: '🧩 Componentes', icon: <Box className="w-4 h-4" /> },
-  { id: 'instagram', label: 'Instagram', group: '📱 Templates', icon: <Image className="w-4 h-4" /> },
+  { id: 'social-motion', label: 'Social Motion', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-principios', label: 'Princípios', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-transicoes', label: 'Transições de Tela', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-textos', label: 'Textos Animados', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-cards', label: 'Cards & Boxes', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-path', label: 'Path Motion', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-numbers', label: 'Numbers & Data', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'instagram', label: 'Instagram', group: '🎬 Social Studio', icon: <Image className="w-4 h-4" /> },
   { id: 'brand-voice', label: 'Brand Voice', group: '📝 Conteúdo', icon: <BookOpen className="w-4 h-4" /> },
   { id: 'preview', label: 'LP Preview', group: '🚀 Preview', icon: <Eye className="w-4 h-4" /> },
 ];
@@ -59,6 +66,7 @@ export default function App() {
   const [activeSection, setActiveSection] = useState<Section>('colors');
   const [darkMode, setDarkMode] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [socialMotionOpen, setSocialMotionOpen] = useState(true);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedColor, setCopiedColor] = useState<string | null>(null);
@@ -155,7 +163,7 @@ export default function App() {
                 <button
                   key={item.id}
                   className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-[var(--text-on-surface-muted)] hover:bg-tech/5 hover:text-tech transition-colors"
-                  onClick={() => { setActiveSection(item.id); setSearchOpen(false); setSearchQuery(''); }}
+                  onClick={() => { setActiveSection(item.id); if (item.id === 'social-motion' || item.id.startsWith('social-motion-')) setSocialMotionOpen(true); setSearchOpen(false); setSearchQuery(''); }}
                 >
                   {item.icon}
                   <span>{item.label}</span>
@@ -176,23 +184,84 @@ export default function App() {
           {groups.map(group => (
             <div key={group}>
               <p className="text-xs font-semibold text-[var(--text-on-surface-subtle)] uppercase tracking-wider mb-2 px-3">{group}</p>
-              <div className="space-y-1">
-                {navItems.filter(i => i.group === group).map(item => (
-                  <button
-                    key={item.id}
-                    onClick={() => { setActiveSection(item.id); setSidebarOpen(false); }}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 ${
-                      activeSection === item.id
+              {group === '🎬 Social Studio' ? (
+                <div className="space-y-1">
+                  <div className={`flex items-center rounded-xl text-sm transition-all duration-200 ${
+                      activeSection === 'social-motion' || activeSection.startsWith('social-motion-')
                         ? 'bg-tech/10 text-tech border border-tech/20'
                         : 'text-[var(--text-on-surface-muted)] hover:text-[var(--text-on-surface)] hover:bg-black/5 dark:hover:bg-white/5'
-                    }`}
-                  >
-                    {item.icon}
-                    <span>{item.label}</span>
-                    {activeSection === item.id && <ChevronRight className="w-3 h-3 ml-auto" />}
-                  </button>
-                ))}
-              </div>
+                    }`}>
+                    <button
+                      onClick={() => { setActiveSection('social-motion'); setSocialMotionOpen(true); setSidebarOpen(false); }}
+                      className="flex-1 flex items-center gap-3 px-3 py-2.5 text-left"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      <span>Social Motion</span>
+                      <span className="px-2 py-0.5 text-[10px] leading-4 font-semibold rounded-full bg-tech/20 text-tech border border-tech/30">novo</span>
+                    </button>
+                    <button
+                      onClick={() => setSocialMotionOpen(!socialMotionOpen)}
+                      aria-expanded={socialMotionOpen}
+                      aria-label={socialMotionOpen ? 'Fechar Social Motion' : 'Abrir Social Motion'}
+                      className="p-2.5 shrink-0"
+                    >
+                      <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${socialMotionOpen ? 'rotate-90' : ''}`} />
+                    </button>
+                  </div>
+                  {socialMotionOpen && (
+                    <div className="ml-4 space-y-1">
+                      {navItems.filter(i => i.group === group && i.id.startsWith('social-motion-')).map(item => (
+                        <button
+                          key={item.id}
+                          onClick={() => { setActiveSection(item.id); setSidebarOpen(false); }}
+                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 ${
+                            activeSection === item.id
+                              ? 'bg-tech/10 text-tech border border-tech/20'
+                              : 'text-[var(--text-on-surface-muted)] hover:text-[var(--text-on-surface)] hover:bg-black/5 dark:hover:bg-white/5'
+                          }`}
+                        >
+                          {item.icon}
+                          <span>{item.label}</span>
+                          {activeSection === item.id && <ChevronRight className="w-3 h-3 ml-auto" />}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {navItems.filter(i => i.group === group && !i.id.startsWith('social-motion') ).map(item => (
+                    <button
+                      key={item.id}
+                      onClick={() => { setActiveSection(item.id); setSidebarOpen(false); }}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 ${
+                        activeSection === item.id
+                          ? 'bg-tech/10 text-tech border border-tech/20'
+                          : 'text-[var(--text-on-surface-muted)] hover:text-[var(--text-on-surface)] hover:bg-black/5 dark:hover:bg-white/5'
+                      }`}
+                    >
+                      {item.icon}
+                      <span>{item.label}</span>
+                      {activeSection === item.id && <ChevronRight className="w-3 h-3 ml-auto" />}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  {navItems.filter(i => i.group === group).map(item => (
+                    <button
+                      key={item.id}
+                      onClick={() => { setActiveSection(item.id); setSidebarOpen(false); }}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 ${
+                        activeSection === item.id
+                          ? 'bg-tech/10 text-tech border border-tech/20'
+                          : 'text-[var(--text-on-surface-muted)] hover:text-[var(--text-on-surface)] hover:bg-black/5 dark:hover:bg-white/5'
+                      }`}
+                    >
+                      {item.icon}
+                      <span>{item.label}</span>
+                      {activeSection === item.id && <ChevronRight className="w-3 h-3 ml-auto" />}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </nav>
@@ -237,6 +306,13 @@ export default function App() {
           {activeSection === 'footer' && <FooterSection />}
           {activeSection === 'drawer' && <DrawerSection />}
           {activeSection === 'modal' && <ModalSection />}
+          {activeSection === 'social-motion' && <SocialMotionOverviewSection onNavigate={(id) => { setActiveSection(id); setSocialMotionOpen(true); }} />}
+          {activeSection === 'social-motion-principios' && <SocialMotionPrincipiosSection />}
+          {activeSection === 'social-motion-transicoes' && <SocialMotionTransicoesSection />}
+          {activeSection === 'social-motion-textos' && <SocialMotionTextosSection />}
+          {activeSection === 'social-motion-cards' && <SocialMotionCardsSection />}
+          {activeSection === 'social-motion-path' && <SocialMotionPathSection />}
+          {activeSection === 'social-motion-numbers' && <SocialMotionNumbersSection />}
           {activeSection === 'instagram' && <InstagramSection />}
           {activeSection === 'brand-voice' && <BrandVoiceSection />}
           {activeSection === 'preview' && <PreviewSection />}
@@ -253,6 +329,445 @@ export default function App() {
 /* ═══════════════════════════════════════════════════════════
    SECTION COMPONENTS
    ═══════════════════════════════════════════════════════════ */
+
+function SocialMotionOverviewSection({ onNavigate }: { onNavigate: (id: Section) => void }) {
+  const subpages: { id: Section; label: string; desc: string }[] = [
+    { id: 'social-motion-principios', label: 'Princípios', desc: 'Safe zone, timeline fixa e regras do vídeo social.' },
+    { id: 'social-motion-transicoes', label: 'Transições de Tela', desc: 'Fade, slide, zoom e wipe entre cenas.' },
+    { id: 'social-motion-textos', label: 'Textos Animados', desc: 'Letras, palavras e linhas com stagger.' },
+    { id: 'social-motion-cards', label: 'Cards & Boxes', desc: 'Cards com entrada escalonada e pop.' },
+    { id: 'social-motion-path', label: 'Path Motion', desc: 'Setas e elementos seguindo um caminho.' },
+    { id: 'social-motion-numbers', label: 'Numbers & Data', desc: 'Big numbers, barras e contadores.' },
+  ];
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-sm text-[var(--text-on-surface-muted)]">
+          Biblioteca de animações para vídeos sociais — timeline determinística, resolução fixa e safe zone. Diferente do Motion de Site/LP (scroll/hover, responsivo).
+        </p>
+      </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        {subpages.map(item => (
+          <button
+            key={item.id}
+            onClick={() => onNavigate(item.id)}
+            className="text-left rounded-xl border border-[var(--surface-border)] p-5 bg-[var(--surface-card-secondary)] hover:border-tech/40 transition-colors"
+          >
+            <p className="font-display font-bold text-tech mb-1">{item.label}</p>
+            <p className="text-sm text-[var(--text-on-surface-muted)]">{item.desc}</p>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SocialMotionPrincipiosSection() {
+  const [showSafeZone, setShowSafeZone] = useState(false);
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">🎬 Contrato do Social Motion</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">
+          Timeline determinística, resolução fixa e safe zone obrigatória. Diferente do Motion de Site/LP (scroll/hover, responsivo) — aqui nada depende de hover, scroll ou viewport.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Site/LP vs Social</h3>
+        <Table
+          columns={[
+            { key: 'aspect', label: 'Aspecto' },
+            { key: 'web', label: 'Site/LP (Fundações → Motion)' },
+            { key: 'social', label: 'Social Motion' },
+          ]}
+          data={[
+            { aspect: 'Disparo', web: 'Scroll / hover', social: 'Timeline fixa' },
+            { aspect: 'Layout', web: 'Responsivo', social: 'Resolução fixa (1080x1350)' },
+            { aspect: 'Performance', web: 'Web / mobile', social: 'Export MP4/Lottie (Remotion)' },
+            { aspect: 'Safe zone', web: 'Irrelevante', social: 'Crítica — texto dentro' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Formato IG 4:5 + Safe Zone</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)] mb-4">
+          <div className="grid md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Canvas</p>
+              <p className="text-[var(--text-on-surface)] font-mono">1080x1350px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Base no DS</p>
+              <p className="text-[var(--text-on-surface)] font-mono">340x425px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Safe Zone</p>
+              <p className="text-[var(--text-on-surface)] font-mono">800x970px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Margens</p>
+              <p className="text-[var(--text-on-surface)] font-mono">140px / 180px / 200px</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] mb-6">
+          <label className="flex items-center gap-3 cursor-pointer flex-1">
+            <input
+              type="checkbox"
+              checked={showSafeZone}
+              onChange={(e) => setShowSafeZone(e.target.checked)}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tech relative"></div>
+            <span className="text-sm font-medium text-[var(--text-on-surface)] flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              Mostrar área de segurança
+            </span>
+          </label>
+        </div>
+        <div className="flex justify-center" data-theme="midnight">
+          <InstagramSlide type="capa" title="5 Automações" subtitle="Max Ebina — Marketing Digital" showSafeZone={showSafeZone} />
+        </div>
+        <p className="text-sm text-[var(--text-on-surface-muted)] mt-4">
+          Texto crítico (`title`, `metric`, `body`) vive **dentro** da linha tracejada (`13.3%` topo, `13%` laterais, `74%` × `71.9%`). Fora é só decorativo (blur + logo).
+        </p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Timing (reuso dos tokens)</h3>
+        <div className="grid md:grid-cols-3 gap-4 mb-4">
+          {[
+            { name: 'Smooth', value: 'cubic-bezier(0.16, 1, 0.3, 1)', desc: 'Reveals e entradas' },
+            { name: 'Elastic', value: 'cubic-bezier(0.34, 1.56, 0.64, 1)', desc: 'CTA, pop e cards' },
+            { name: 'Spring', value: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)', desc: 'Micro-interações' },
+          ].map(e => (
+            <div key={e.name} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)] text-center">
+              <p className="font-display font-bold text-[var(--text-on-surface)] mb-1">{e.name}</p>
+              <p className="text-xs font-mono text-tech mb-1">{e.value}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{e.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { value: '300ms', name: 'padrão', use: 'Transições' },
+            { value: '600ms', name: 'reveals', use: 'Entradas' },
+            { value: '900ms', name: 'dramático', use: 'Lançamento' },
+            { value: '60-80ms', name: 'stagger', use: 'Listas/cards' },
+          ].map(d => (
+            <div key={d.name} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)] text-center">
+              <p className="text-2xl font-display font-bold gradient-text-tech">{d.value}</p>
+              <p className="text-sm text-tech font-mono mt-1">{d.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)] mt-2">{d.use}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Regras técnicas</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            { title: 'Performance', desc: 'Só transform + opacity. Nada de width/height/position.' },
+            { title: 'Tema', desc: 'Sempre via data-theme + var(--slide-*). Nunca hard-code hex.' },
+            { title: 'Tipografia', desc: 'Space Grotesk (headline/números), Inter (body). Radius 8/12/16/24px.' },
+            { title: 'Acessibilidade', desc: 'Respeitar prefers-reduced-motion. Sem hover/scroll.' },
+          ].map(r => (
+            <div key={r.title} className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+              <p className="text-tech font-semibold mb-2">{r.title}</p>
+              <p className="text-sm text-[var(--text-on-surface-muted)]">{r.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Brand</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech font-semibold mb-2">Logo</p>
+            <p className="text-sm text-[var(--text-on-surface-muted)]">60x29px, 85%, bottom 16% / right 14% (dentro da safe zone), cor `var(--slide-accent)`. Ausente em `dica` para não poluir.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+            <p className="text-tech font-semibold mb-2">Voz: Confiante · Visionário · Acessível</p>
+            <p className="text-sm text-[var(--text-on-surface-muted)]">Mago + Sábio: traduz técnico em resultado. Evite jargão e promessa vaga.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SocialMotionTransicoesSection() {
+  const [active, setActive] = useState<string | null>(null);
+
+  const trigger = (id: string) => {
+    setActive(id);
+    const long = id === 'grid' || id === 'flip' || id === 'curtain' || id === 'diagonal' || id === 'iris' || id === 'venetian' || id === 'diamond' || id === 'checkerboard';
+    setTimeout(() => setActive(null), long ? 1400 : 800);
+  };
+
+  const transitions = [
+    { id: 'fade', name: 'Fade', dur: '300ms', ease: 'Smooth', desc: 'Só opacity. Corte suave Dica → Dica.' },
+    { id: 'slide', name: 'Slide', dur: '600ms', ease: 'Smooth', desc: 'translateX + opacity. Mudança de ideia.' },
+    { id: 'zoom', name: 'Zoom', dur: '600ms', ease: 'Elastic', desc: 'scale 1.05 → 1. Highlight de CTA/big number.' },
+    { id: 'wipe', name: 'Wipe', dur: '600ms', ease: 'Smooth', desc: 'clip-path com gradiente. Troca de tema.' },
+    { id: 'blur', name: 'BlurIn', dur: '600ms', ease: 'Smooth', desc: 'blur 8px → 0. Entrada dramática de título.' },
+    { id: 'push', name: 'Push/Cover', dur: '600ms', ease: 'Smooth (travado)', desc: 'Nova cena empurra/cobre. Seção nova ou CTA.' },
+    { id: 'curtain', name: 'Cortina Faixas', dur: '600ms', ease: 'Smooth (travado)', desc: '4 faixas verticais com stagger 60ms. Cortina ilustrada.' },
+    { id: 'grid', name: 'Grid 4x3', dur: '600ms', ease: 'Smooth (travado)', desc: '12 fragmentos com flip rotateX/Y. Insp. CodePen.' },
+    { id: 'flip', name: 'Flip 3D', dur: '600ms', ease: 'Smooth (travado)', desc: '4 quadrantes alternando rotateX/Y. Reveal de CTA.' },
+    { id: 'diagonal', name: 'Diagonal', dur: '600ms', ease: 'Smooth (travado)', desc: '2 painéis clip-path skew, stagger 80ms. Editorial.' },
+    { id: 'iris', name: 'Círculo Iris', dur: '600ms', ease: 'Smooth (travado)', desc: 'clip-path circle 0% → 100% no centro. Capa → CTA.' },
+    { id: 'venetian', name: 'Venetian', dur: '600ms', ease: 'Smooth (travado)', desc: '6 faixas horizontais scaleY, stagger 50ms. Variação 9:16.' },
+    { id: 'diamond', name: 'Diamond', dur: '600ms', ease: 'Smooth (travado)', desc: 'Grid 4x3 delay centro → fora. Mais dinâmico.' },
+    { id: 'checkerboard', name: 'Checkerboard', dur: '600ms', ease: 'Smooth (travado)', desc: 'Grid 4x3 só pares com rotateY. Efeito xadrez.' },
+  ];
+
+  const getPreview = (id: string, isActive: boolean) => {
+    const base = 'absolute inset-0 flex items-center justify-center';
+    const smooth = 'cubic-bezier(0.16, 1, 0.3, 1)';
+    const elastic = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+    if (id === 'curtain') {
+      return (
+        <>
+          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
+          <div className="absolute inset-0 grid grid-cols-4">
+            {[0, 1, 2, 3].map(i => (
+              <div key={i} className="h-full origin-left" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 100%', backgroundPosition: `${i * 33.33}% 0%`, transform: isActive ? 'scaleX(1)' : 'scaleX(0)', transition: `transform 600ms ${smooth} ${i * 60}ms` }} />
+            ))}
+          </div>
+          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 400ms`, pointerEvents: 'none' }}>Tema novo</span>
+        </>
+      );
+    }
+    if (id === 'grid') {
+      const items = Array.from({ length: 12 });
+      return (
+        <>
+          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
+          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>
+            {items.map((_, idx) => {
+              const row = Math.floor(idx / 4);
+              const col = idx % 4;
+              const odd = (row + col) % 2 === 0;
+              return (
+                <div key={idx} className="w-full h-full" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: isActive ? 'rotateX(0deg) rotateY(0deg) scale(1)' : `rotateX(${odd ? '-180deg' : '0deg'}) rotateY(${odd ? '0deg' : '-180deg'}) scale(0.8)`, opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${(row + col) * 50}ms`, backfaceVisibility: 'hidden' }} />
+              );
+            })}
+          </div>
+          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 500ms`, pointerEvents: 'none' }}>Grid 4x3</span>
+        </>
+      );
+    }
+    if (id === 'flip') {
+      return (
+        <>
+          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
+          <div className="absolute inset-0 grid grid-cols-2 grid-rows-2" style={{ perspective: '600px' }}>
+            {[0, 1, 2, 3].map(i => {
+              const odd = i % 2 === 0;
+              return (
+                <div key={i} className="w-full h-full" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #0EA5E9 100%)', backgroundSize: '200% 200%', backgroundPosition: `${(i % 2) * 100}% ${Math.floor(i / 2) * 100}%`, transform: isActive ? 'rotateX(0deg) rotateY(0deg)' : `rotateX(${odd ? '-180deg' : '0deg'}) rotateY(${odd ? '0deg' : '-180deg'})`, opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${i * 70}ms`, backfaceVisibility: 'hidden' }} />
+              );
+            })}
+          </div>
+          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 400ms`, pointerEvents: 'none' }}>CTA →</span>
+        </>
+      );
+    }
+    if (id === 'diagonal') {
+      return (
+        <>
+          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
+          <div className="absolute inset-0" style={{ perspective: '600px' }}>
+            {[0, 1].map(i => (
+              <div key={i} className="absolute top-0 h-full" style={{ left: i === 0 ? '0%' : '50%', width: '50%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', clipPath: i === 0 ? 'polygon(0 0, 100% 0, 85% 100%, 0 100%)' : 'polygon(15% 0, 100% 0, 100% 100%, 0 100%)', transform: isActive ? 'translateX(0)' : i === 0 ? 'translateX(-110%)' : 'translateX(110%)', transition: `transform 600ms ${smooth} ${i * 80}ms` }} />
+            ))}
+          </div>
+          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 400ms`, pointerEvents: 'none' }}>Diagonal</span>
+        </>
+      );
+    }
+    if (id === 'iris') {
+      return (
+        <>
+          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', clipPath: isActive ? 'circle(100% at 50% 50%)' : 'circle(0% at 50% 50%)', transition: `clip-path 600ms ${smooth}` }} />
+          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 400ms`, pointerEvents: 'none' }}>CTA →</span>
+        </>
+      );
+    }
+    if (id === 'venetian') {
+      return (
+        <>
+          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
+          <div className="absolute inset-0 grid grid-rows-6">
+            {[0, 1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="w-full origin-top" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '100% 600%', backgroundPosition: `0% ${i * 20}%`, transform: isActive ? 'scaleY(1)' : 'scaleY(0)', transition: `transform 600ms ${smooth} ${i * 50}ms` }} />
+            ))}
+          </div>
+          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 450ms`, pointerEvents: 'none' }}>Venetian</span>
+        </>
+      );
+    }
+    if (id === 'diamond') {
+      const items = Array.from({ length: 12 });
+      return (
+        <>
+          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
+          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>
+            {items.map((_, idx) => {
+              const row = Math.floor(idx / 4);
+              const col = idx % 4;
+              const odd = (row + col) % 2 === 0;
+              const delay = (Math.abs(col - 1.5) + Math.abs(row - 1)) * 70;
+              return (
+                <div key={idx} className="w-full h-full" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: isActive ? 'rotateX(0deg) rotateY(0deg) scale(1)' : `rotateX(${odd ? '-180deg' : '0deg'}) rotateY(${odd ? '0deg' : '-180deg'}) scale(0.8)`, opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${delay}ms`, backfaceVisibility: 'hidden' }} />
+              );
+            })}
+          </div>
+          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 500ms`, pointerEvents: 'none' }}>Diamond</span>
+        </>
+      );
+    }
+    if (id === 'checkerboard') {
+      const items = Array.from({ length: 12 });
+      return (
+        <>
+          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
+          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>
+            {items.map((_, idx) => {
+              const row = Math.floor(idx / 4);
+              const col = idx % 4;
+              const even = (row + col) % 2 === 0;
+              return (
+                <div key={idx} className="w-full h-full" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: even ? (isActive ? 'rotateY(0deg)' : 'rotateY(-180deg)') : (isActive ? 'translateX(0)' : 'translateX(12px)'), opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${(row + col) * 40}ms`, backfaceVisibility: 'hidden' }} />
+              );
+            })}
+          </div>
+          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 500ms`, pointerEvents: 'none' }}>Checkerboard</span>
+        </>
+      );
+    }
+    if (id === 'push') {
+      return (
+        <>
+          <div className={base} style={{ transform: isActive ? 'translateX(-100%)' : 'translateX(0)', transition: `transform 600ms ${smooth}` }}>
+            <span className="font-display font-bold text-white/70">Dica #1</span>
+          </div>
+          <div className={base} style={{ transform: isActive ? 'translateX(0)' : 'translateX(100%)', transition: `transform 600ms ${smooth}` }}>
+            <span className="font-display font-bold text-white">CTA →</span>
+          </div>
+        </>
+      );
+    }
+    if (id === 'fade') {
+      return (
+        <>
+          <div className={base}><span className="font-display font-bold text-white/70">Dica #1</span></div>
+          <div className={base} style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white">Dica #2 → fade-in</span></div>
+        </>
+      );
+    }
+    if (id === 'slide') return <div className={base} style={{ transform: isActive ? 'translateX(0)' : 'translateX(100%)', transition: `transform 600ms ${smooth}`, opacity: isActive ? 1 : 0 }}><span className="font-display font-bold text-white">Dica #2 → slide</span></div>;
+    if (id === 'zoom') return <div className={base} style={{ transform: isActive ? 'scale(1)' : 'scale(1.08)', opacity: isActive ? 1 : 0, transition: `all 600ms ${elastic}` }}><span className="font-display font-bold text-white">Big number +150</span></div>;
+    if (id === 'wipe') return <div className={base} style={{ clipPath: isActive ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)', transition: `clip-path 600ms ${smooth}` }}><span className="font-display font-bold text-white">Tema novo → wipe</span></div>;
+    return <div className={base} style={{ opacity: isActive ? 1 : 0, filter: isActive ? 'blur(0px)' : 'blur(8px)', transition: `all 600ms ${smooth}` }}><span className="font-display font-bold text-white">Título → blur in</span></div>;
+  };
+
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">🎬 Troca de cena sem quebrar a timeline</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Toque no preview para ver a animação. Texto crítico mantém legível durante a transição — nada sai da Safe Zone. Push/Cover e Fragment travados em 600ms Smooth.</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Previews (clique para testar)</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          {transitions.map(t => (
+            <div key={t.id} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+              <button onClick={() => trigger(t.id)} className="w-full text-left">
+                <div className="relative h-32 rounded-lg overflow-hidden bg-gradient-to-r from-[#0a0a0f] to-[#1a1a2e] border border-[var(--surface-border)]">
+                  {getPreview(t.id, active === t.id)}
+                </div>
+              </button>
+              <div className="flex items-center gap-2 mt-3">
+                <p className="font-display font-bold text-[var(--text-on-surface)]">{t.name}</p>
+                <span className="text-xs font-mono text-tech">{t.dur} · {t.ease}</span>
+              </div>
+              <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">{t.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Quando usar</h3>
+        <Table
+          columns={[
+            { key: 'name', label: 'Transição' },
+            { key: 'when', label: 'Quando usar' },
+            { key: 'dur', label: 'Duração' },
+          ]}
+          data={[
+            { name: 'Fade', when: 'Sequência longa, mesma ideia', dur: '300ms Smooth' },
+            { name: 'Slide', when: 'Mudança de seção, direção = avançar', dur: '600ms Smooth' },
+            { name: 'Zoom', when: 'Highlight, CTA, big number', dur: '600ms Elastic' },
+            { name: 'Wipe', when: 'Troca de tema / cor', dur: '600ms Smooth' },
+            { name: 'BlurIn', when: 'Entrada de título/logo', dur: '600ms Smooth' },
+            { name: 'Push/Cover', when: 'Seção nova (push) ou reveal de CTA (cover)', dur: '600ms Smooth (travado)' },
+            { name: 'Cortina Faixas', when: 'Troca de tema com cortina ilustrada', dur: '600ms Smooth + stagger 60ms' },
+            { name: 'Grid 4x3', when: 'Troca de cena com grid fragmentado (insp. CodePen)', dur: '600ms Smooth + delay (i+j)*50ms' },
+            { name: 'Flip 3D', when: 'Reveal de CTA/big number com quadrantes', dur: '600ms Smooth + delay 70ms' },
+            { name: 'Diagonal', when: 'Troca editorial, 2 painéis skew', dur: '600ms Smooth + stagger 80ms' },
+            { name: 'Círculo Iris', when: 'Reveal central Capa → CTA', dur: '600ms Smooth' },
+            { name: 'Venetian', when: 'Variação horizontal pra 9:16', dur: '600ms Smooth + stagger 50ms' },
+            { name: 'Diamond', when: 'Grid centro → fora, mais dinâmico', dur: '600ms Smooth + delay centro' },
+            { name: 'Checkerboard', when: 'Metade dos fragmentos (xadrez) volteia', dur: '600ms Smooth + delay (i+j)*40ms' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'duration', type: "300 | 600 | 900", default: "600", description: 'Push/Cover e Fragment sempre 600' },
+          { name: 'easing', type: "'Smooth' | 'Elastic' | 'Spring'", default: "'Smooth'", description: 'Curva — Push/Cover e Fragment sempre Smooth' },
+          { name: 'direction', type: "'left' | 'right' | 'up'", default: "'left'", description: 'Direção da entrada' },
+          { name: 'mode', type: "'push' | 'cover'", default: "'push'", description: 'Push empurra cena antiga; Cover cobre por cima' },
+          { name: 'grid', type: "'4x3' | '4x2'", default: "'4x3'", description: 'Grid do Fragment (12 fragmentos, otimizado vs 13x9 do CodePen)' },
+          { name: 'stagger', type: 'number (ms)', default: "60", description: 'Delay entre fragmentos/faixas' },
+          { name: 'variant', type: "'curtain' | 'grid' | 'flip' | 'diagonal' | 'iris' | 'venetian' | 'diamond' | 'checkerboard'", default: "'grid'", description: 'Variante Fragment/Curtina (9 presets de cortina)' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
+        <CodeBlock code={'<FragmentReveal variant="grid" grid="4x3" stagger={60} duration={600} easing="Smooth">\n  <SceneCTA />\n</FragmentReveal>'} />
+      </div>
+    </div>
+  );
+}
+
+function SocialMotionTextosSection() {
+  return null;
+}
+
+function SocialMotionCardsSection() {
+  return null;
+}
+
+function SocialMotionPathSection() {
+  return null;
+}
+
+function SocialMotionNumbersSection() {
+  return null;
+}
 
 function LogoSection() {
   const [copiedSvg, setCopiedSvg] = useState(false);
