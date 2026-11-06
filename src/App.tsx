@@ -502,6 +502,7 @@ function SocialMotionPrincipiosSection() {
 
 function SocialMotionTransicoesSection() {
   const [active, setActive] = useState<string | null>(null);
+  const [showSafeZone, setShowSafeZone] = useState(false);
 
   const trigger = (id: string) => {
     setActive(id);
@@ -517,13 +518,13 @@ function SocialMotionTransicoesSection() {
     { id: 'blur', name: 'BlurIn', dur: '600ms', ease: 'Smooth', desc: 'blur 8px → 0. Entrada dramática de título.' },
     { id: 'push', name: 'Push/Cover', dur: '600ms', ease: 'Smooth (travado)', desc: 'Nova cena empurra/cobre. Seção nova ou CTA.' },
     { id: 'curtain', name: 'Cortina Faixas', dur: '600ms', ease: 'Smooth (travado)', desc: '4 faixas verticais com stagger 60ms. Cortina ilustrada.' },
-    { id: 'grid', name: 'Grid 4x3', dur: '600ms', ease: 'Smooth (travado)', desc: '12 fragmentos com flip rotateX/Y. Insp. CodePen.' },
+    { id: 'grid', name: 'Grid 4x3', dur: '600ms', ease: 'Smooth (travado)', desc: '12 fragmentos com flip rotateX/Y. Insp. CodePen. Em 4:5 os fragmentos ficam retrato — manter 4x3 fiel ao original.' },
     { id: 'flip', name: 'Flip 3D', dur: '600ms', ease: 'Smooth (travado)', desc: '4 quadrantes alternando rotateX/Y. Reveal de CTA.' },
     { id: 'diagonal', name: 'Diagonal', dur: '600ms', ease: 'Smooth (travado)', desc: '2 painéis clip-path skew, stagger 80ms. Editorial.' },
     { id: 'iris', name: 'Círculo Iris', dur: '600ms', ease: 'Smooth (travado)', desc: 'clip-path circle 0% → 100% no centro. Capa → CTA.' },
     { id: 'venetian', name: 'Venetian', dur: '600ms', ease: 'Smooth (travado)', desc: '6 faixas horizontais scaleY, stagger 50ms. Variação 9:16.' },
-    { id: 'diamond', name: 'Diamond', dur: '600ms', ease: 'Smooth (travado)', desc: 'Grid 4x3 delay centro → fora. Mais dinâmico.' },
-    { id: 'checkerboard', name: 'Checkerboard', dur: '600ms', ease: 'Smooth (travado)', desc: 'Grid 4x3 só pares com rotateY. Efeito xadrez.' },
+    { id: 'diamond', name: 'Diamond', dur: '600ms', ease: 'Smooth (travado)', desc: 'Grid 4x3 delay centro → fora. Mais dinâmico. Em 4:5 os fragmentos ficam retrato.' },
+    { id: 'checkerboard', name: 'Checkerboard', dur: '600ms', ease: 'Smooth (travado)', desc: 'Grid 4x3 só pares com rotateY. Efeito xadrez. Em 4:5 os fragmentos ficam retrato.' },
   ];
 
   const getPreview = (id: string, isActive: boolean) => {
@@ -686,13 +687,35 @@ function SocialMotionTransicoesSection() {
       </div>
 
       <div>
-        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Previews (clique para testar)</h3>
-        <div className="grid md:grid-cols-2 gap-4">
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Previews (clique para testar) — IG 4:5 · 340×425</h3>
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] mb-6">
+          <label className="flex items-center gap-3 cursor-pointer flex-1">
+            <input
+              type="checkbox"
+              checked={showSafeZone}
+              onChange={(e) => setShowSafeZone(e.target.checked)}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tech relative"></div>
+            <span className="text-sm font-medium text-[var(--text-on-surface)] flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              Mostrar área de segurança (13.3% topo · 13% laterais · 74% × 71.9%)
+            </span>
+          </label>
+          <span className="text-xs font-mono text-tech hidden sm:block">1080×1350 · safe 800×970</span>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4">
           {transitions.map(t => (
             <div key={t.id} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
               <button onClick={() => trigger(t.id)} className="w-full text-left">
-                <div className="relative h-32 rounded-lg overflow-hidden bg-gradient-to-r from-[#0a0a0f] to-[#1a1a2e] border border-[var(--surface-border)]">
+                <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[#0a0a0f] to-[#1a1a2e] border border-[var(--surface-border)]">
                   {getPreview(t.id, active === t.id)}
+                  {showSafeZone && (
+                    <>
+                      <div className="absolute pointer-events-none border-2 border-dashed border-[rgba(6,182,212,0.6)] bg-[rgba(6,182,212,0.03)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                      <div className="absolute pointer-events-none bg-[rgba(6,182,212,0.9)] text-white px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                    </>
+                  )}
                 </div>
               </button>
               <div className="flex items-center gap-2 mt-3">
