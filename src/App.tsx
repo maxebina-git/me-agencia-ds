@@ -659,7 +659,7 @@ function SocialMotionTransicoesSection() {
           <div className={base} style={{ transform: isActive ? 'translateX(-100%)' : 'translateX(0)', transition: `transform 600ms ${smooth}` }}>
             <span className="font-display font-bold text-white/70">Dica #1</span>
           </div>
-          <div className={base} style={{ transform: isActive ? 'translateX(0)' : 'translateX(100%)', transition: `transform 600ms ${smooth}` }}>
+          <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', transform: isActive ? 'translateX(0)' : 'translateX(100%)', transition: `transform 600ms ${smooth}` }}>
             <span className="font-display font-bold text-white">CTA →</span>
           </div>
         </>
@@ -669,32 +669,32 @@ function SocialMotionTransicoesSection() {
       return (
         <>
           <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-          <div className={base} style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} ${isActive ? '150ms' : '0ms'}` }}><span className="font-display font-bold text-white">Dica #2 → fade-in</span></div>
+          <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} ${isActive ? '150ms' : '0ms'}` }}><span className="font-display font-bold text-white">Dica #2 → fade-in</span></div>
         </>
       );
     }
     if (id === 'slide') return (
       <>
         <div className={base}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-        <div className={base} style={{ transform: isActive ? 'translateX(0)' : 'translateX(100%)', transition: `transform 600ms ${smooth}`, opacity: isActive ? 1 : 0 }}><span className="font-display font-bold text-white">Dica #2 → slide</span></div>
+        <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', transform: isActive ? 'translateX(0)' : 'translateX(100%)', transition: `transform 600ms ${smooth}`, opacity: isActive ? 1 : 0 }}><span className="font-display font-bold text-white">Dica #2 → slide</span></div>
       </>
     );
     if (id === 'zoom') return (
       <>
         <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-        <div className={base} style={{ transform: isActive ? 'scale(1)' : 'scale(1.08)', opacity: isActive ? 1 : 0, transition: `all 600ms ${elastic}` }}><span className="font-display font-bold text-white">Big number +150</span></div>
+        <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', transform: isActive ? 'scale(1)' : 'scale(1.08)', opacity: isActive ? 1 : 0, transition: `all 600ms ${elastic}` }}><span className="font-display font-bold text-white">Big number +150</span></div>
       </>
     );
     if (id === 'wipe') return (
       <>
         <div className={base}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-        <div className={base} style={{ clipPath: isActive ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)', transition: `clip-path 600ms ${smooth}` }}><span className="font-display font-bold text-white">Tema novo → wipe</span></div>
+        <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', clipPath: isActive ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)', transition: `clip-path 600ms ${smooth}` }}><span className="font-display font-bold text-white">Tema novo → wipe</span></div>
       </>
     );
     return (
       <>
         <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-        <div className={base} style={{ opacity: isActive ? 1 : 0, filter: isActive ? 'blur(0px)' : 'blur(8px)', transition: `all 600ms ${smooth}` }}><span className="font-display font-bold text-white">Título → blur in</span></div>
+        <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', opacity: isActive ? 1 : 0, filter: isActive ? 'blur(0px)' : 'blur(8px)', transition: `all 600ms ${smooth}` }}><span className="font-display font-bold text-white">Título → blur in</span></div>
       </>
     );
   };
