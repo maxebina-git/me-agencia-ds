@@ -645,7 +645,7 @@ function SocialMotionTransicoesSection() {
               const col = idx % 4;
               const even = (row + col) % 2 === 0;
               return (
-                <div key={idx} className="w-full h-full" style={{ width: '101%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: even ? (isActive ? 'rotateY(0deg)' : 'rotateY(-180deg)') : (isActive ? 'translateX(0)' : 'translateX(8px)'), opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${(row + col) * 40}ms`, backfaceVisibility: 'hidden' }} />
+                <div key={idx} className="w-full h-full" style={{ width: '101%', height: '102%', marginTop: '-1%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: even ? (isActive ? 'rotateY(0deg)' : 'rotateY(-180deg)') : (isActive ? 'translateX(0)' : 'translateX(8px)'), opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${(row + col) * 40}ms`, backfaceVisibility: 'hidden' }} />
               );
             })}
           </div>
