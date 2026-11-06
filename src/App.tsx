@@ -585,7 +585,7 @@ function SocialMotionTransicoesSection() {
           <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
           <div className="absolute inset-0" style={{ perspective: '600px' }}>
             {[0, 1].map(i => (
-              <div key={i} className="absolute top-0 h-full" style={{ left: i === 0 ? '0%' : '50%', width: '50%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', clipPath: i === 0 ? 'polygon(0 0, 100% 0, 85% 100%, 0 100%)' : 'polygon(15% 0, 100% 0, 100% 100%, 0 100%)', transform: isActive ? 'translateX(0)' : i === 0 ? 'translateX(-110%)' : 'translateX(110%)', transition: `transform 600ms ${smooth} ${i * 80}ms` }} />
+              <div key={i} className="absolute top-0 h-full" style={{ left: i === 0 ? '0%' : '45%', width: '55%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', clipPath: i === 0 ? 'polygon(0 0, 100% 0, 85% 100%, 0 100%)' : 'polygon(15% 0, 100% 0, 100% 100%, 0 100%)', transform: isActive ? 'translateX(0)' : i === 0 ? 'translateX(-120%)' : 'translateX(120%)', transition: `transform 600ms ${smooth} ${i * 80}ms` }} />
             ))}
           </div>
           <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 400ms`, pointerEvents: 'none' }}>Diagonal</span>
@@ -619,14 +619,14 @@ function SocialMotionTransicoesSection() {
       return (
         <>
           <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
-          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>
+          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)' }}>
             {items.map((_, idx) => {
               const row = Math.floor(idx / 4);
               const col = idx % 4;
               const odd = (row + col) % 2 === 0;
               const delay = (Math.abs(col - 1.5) + Math.abs(row - 1)) * 70;
               return (
-                <div key={idx} className="w-full h-full" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: isActive ? 'rotateX(0deg) rotateY(0deg) scale(1)' : `rotateX(${odd ? '-180deg' : '0deg'}) rotateY(${odd ? '0deg' : '-180deg'}) scale(0.8)`, opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${delay}ms`, backfaceVisibility: 'hidden' }} />
+                <div key={idx} className="w-full h-full" style={{ width: '105%', height: '104%', marginLeft: '-2.5%', marginTop: '-2%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: isActive ? 'rotateX(0deg) rotateY(0deg) scale(1)' : `rotateX(${odd ? '-180deg' : '0deg'}) rotateY(${odd ? '0deg' : '-180deg'}) scale(1)`, opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${delay}ms`, backfaceVisibility: 'hidden' }} />
               );
             })}
           </div>
@@ -639,13 +639,13 @@ function SocialMotionTransicoesSection() {
       return (
         <>
           <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
-          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>
+          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)' }}>
             {items.map((_, idx) => {
               const row = Math.floor(idx / 4);
               const col = idx % 4;
               const even = (row + col) % 2 === 0;
               return (
-                <div key={idx} className="w-full h-full" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: even ? (isActive ? 'rotateY(0deg)' : 'rotateY(-180deg)') : (isActive ? 'translateX(0)' : 'translateX(12px)'), opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${(row + col) * 40}ms`, backfaceVisibility: 'hidden' }} />
+                <div key={idx} className="w-full h-full" style={{ width: '105%', height: '104%', marginLeft: '-2.5%', marginTop: '-2%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: isActive ? 'rotateY(0deg)' : 'rotateY(-180deg)', opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${(row + col) * 40}ms`, backfaceVisibility: 'hidden' }} />
               );
             })}
           </div>
@@ -668,8 +668,8 @@ function SocialMotionTransicoesSection() {
     if (id === 'fade') {
       return (
         <>
-          <div className={base}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-          <div className={base} style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white">Dica #2 → fade-in</span></div>
+          <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
+          <div className={base} style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} ${isActive ? '150ms' : '0ms'}` }}><span className="font-display font-bold text-white">Dica #2 → fade-in</span></div>
         </>
       );
     }
