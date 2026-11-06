@@ -626,7 +626,7 @@ function SocialMotionTransicoesSection() {
               const odd = (row + col) % 2 === 0;
               const delay = (Math.abs(col - 1.5) + Math.abs(row - 1)) * 70;
               return (
-                <div key={idx} className="w-full h-full" style={{ width: '105%', height: '104%', marginLeft: '-2.5%', marginTop: '-2%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: isActive ? 'rotateX(0deg) rotateY(0deg) scale(1)' : `rotateX(${odd ? '-180deg' : '0deg'}) rotateY(${odd ? '0deg' : '-180deg'}) scale(1)`, opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${delay}ms`, backfaceVisibility: 'hidden' }} />
+                <div key={idx} className="w-full h-full" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: isActive ? 'rotateX(0deg) rotateY(0deg) scale(1)' : `rotateX(${odd ? '-180deg' : '0deg'}) rotateY(${odd ? '0deg' : '-180deg'}) scale(0.8)`, opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${delay}ms`, backfaceVisibility: 'hidden' }} />
               );
             })}
           </div>
@@ -645,7 +645,7 @@ function SocialMotionTransicoesSection() {
               const col = idx % 4;
               const even = (row + col) % 2 === 0;
               return (
-                <div key={idx} className="w-full h-full" style={{ width: '105%', height: '104%', marginLeft: '-2.5%', marginTop: '-2%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: isActive ? 'rotateY(0deg)' : 'rotateY(-180deg)', opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${(row + col) * 40}ms`, backfaceVisibility: 'hidden' }} />
+                <div key={idx} className="w-full h-full" style={{ width: '102%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: even ? (isActive ? 'rotateY(0deg)' : 'rotateY(-180deg)') : (isActive ? 'translateX(0)' : 'translateX(8px)'), opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${(row + col) * 40}ms`, backfaceVisibility: 'hidden' }} />
               );
             })}
           </div>
