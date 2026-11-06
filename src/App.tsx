@@ -506,7 +506,7 @@ function SocialMotionTransicoesSection() {
 
   const trigger = (id: string) => {
     setActive(id);
-    const long = id === 'grid' || id === 'flip' || id === 'curtain' || id === 'diagonal' || id === 'iris' || id === 'venetian' || id === 'diamond' || id === 'checkerboard' || id === 'glitch' || id === 'datagrid';
+    const long = id === 'grid' || id === 'flip' || id === 'curtain' || id === 'diagonal' || id === 'iris' || id === 'venetian' || id === 'diamond' || id === 'checkerboard';
     setTimeout(() => setActive(null), long ? 1400 : 800);
   };
 
@@ -525,8 +525,6 @@ function SocialMotionTransicoesSection() {
     { id: 'venetian', name: 'Venetian', dur: '600ms', ease: 'Smooth (travado)', desc: '6 faixas horizontais scaleY, stagger 50ms. Variação 9:16.' },
     { id: 'diamond', name: 'Diamond', dur: '600ms', ease: 'Smooth (travado)', desc: 'Grid 4x3 delay centro → fora. Mais dinâmico. Em 4:5 os fragmentos ficam retrato.' },
     { id: 'checkerboard', name: 'Checkerboard', dur: '600ms', ease: 'Smooth (travado)', desc: 'Grid 4x3 só pares com rotateY. Efeito xadrez. Em 4:5 os fragmentos ficam retrato.' },
-    { id: 'glitch', name: 'Glitch Cut', dur: '600ms', ease: 'Smooth (travado)', desc: 'RGB split + jitter, corte trocado. Tech/Digital.' },
-    { id: 'datagrid', name: 'Data Grid', dur: '600ms', ease: 'Smooth (travado)', desc: '6 barras + counter +150. Prova-social com dados.' },
   ];
 
   const getPreview = (id: string, isActive: boolean) => {
@@ -693,34 +691,6 @@ function SocialMotionTransicoesSection() {
         <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', clipPath: isActive ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)', transition: `clip-path 600ms ${smooth}` }}><span className="font-display font-bold text-white">Tema novo → wipe</span></div>
       </>
     );
-    if (id === 'glitch') {
-      return (
-        <>
-          <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-          <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', opacity: isActive ? 1 : 0, transform: isActive ? 'translateX(3px)' : 'translateX(0)', transition: `all 600ms ${smooth}` }}>
-            <span className="absolute font-display font-bold" style={{ color: '#06B6D4', opacity: isActive ? 0.7 : 0, transform: isActive ? 'translateX(-4px)' : 'translateX(0)', transition: `all 300ms ${smooth}` }}>CTA →</span>
-            <span className="absolute font-display font-bold" style={{ color: '#fbbf24', opacity: isActive ? 0.7 : 0, transform: isActive ? 'translateX(4px)' : 'translateX(0)', transition: `all 300ms ${smooth} 50ms` }}>CTA →</span>
-            <span className="font-display font-bold text-white relative" style={{ textShadow: isActive ? '2px 0 #06B6D4, -2px 0 #fbbf24' : 'none' }}>CTA →</span>
-          </div>
-        </>
-      );
-    }
-    if (id === 'datagrid') {
-      const bars = [35, 60, 45, 80, 55, 95];
-      return (
-        <>
-          <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', opacity: isActive ? 1 : 0, transition: `opacity 600ms ${smooth}` }}>
-            <div className="flex items-end gap-2 h-24">
-              {bars.map((h, i) => (
-                <div key={i} style={{ width: 12, height: isActive ? `${h}%` : '8%', background: 'rgba(255,255,255,0.9)', borderRadius: 2, transition: `height 600ms ${smooth} ${i * 60}ms`, opacity: isActive ? 1 : 0.2 }} />
-              ))}
-            </div>
-            <span className="font-display font-bold text-2xl text-white" style={{ transform: isActive ? 'scale(1)' : 'scale(0.8)', opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} 300ms` }}>+150 projetos</span>
-          </div>
-        </>
-      );
-    }
     return (
       <>
         <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
@@ -801,8 +771,6 @@ function SocialMotionTransicoesSection() {
             { name: 'Venetian', when: 'Variação horizontal pra 9:16', dur: '600ms Smooth + stagger 50ms' },
             { name: 'Diamond', when: 'Grid centro → fora, mais dinâmico', dur: '600ms Smooth + delay centro' },
             { name: 'Checkerboard', when: 'Metade dos fragmentos (xadrez) volteia', dur: '600ms Smooth + delay (i+j)*40ms' },
-            { name: 'Glitch Cut', when: 'Troca tech com RGB split + jitter', dur: '600ms Smooth + jitter' },
-            { name: 'Data Grid', when: 'Reveal de prova-social/big number com barras', dur: '600ms Smooth + stagger 60ms' },
           ]}
         />
       </div>
@@ -829,7 +797,116 @@ function SocialMotionTransicoesSection() {
 }
 
 function SocialMotionTextosSection() {
-  return null;
+  const [active, setActive] = useState(false);
+  const [showSafeZone, setShowSafeZone] = useState(false);
+  const smooth = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+  const trigger = () => {
+    setActive(true);
+    setTimeout(() => setActive(false), 1400);
+  };
+
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">🎬 Textos que viram cena</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Timeline determinística, resolução fixa (1080×1350) e safe zone obrigatória. Aqui a tipografia é a cena — RGB split e jitter acontecem dentro da área segura, sem hover/scroll.</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Formato IG 4:5 + Safe Zone</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)] mb-4">
+          <div className="grid md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Canvas</p>
+              <p className="text-[var(--text-on-surface)] font-mono">1080x1350px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Base no DS</p>
+              <p className="text-[var(--text-on-surface)] font-mono">340x425px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Safe Zone</p>
+              <p className="text-[var(--text-on-surface)] font-mono">800x970px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Margens</p>
+              <p className="text-[var(--text-on-surface)] font-mono">140px / 180px / 200px</p>
+            </div>
+          </div>
+        </div>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Texto crítico (`title`, `headline`) vive **dentro** da linha tracejada (`13.3%` topo, `13%` laterais, `74%` × `71.9%`).</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview (clique para testar) — IG 4:5 · 340×425</h3>
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] mb-6">
+          <label className="flex items-center gap-3 cursor-pointer flex-1">
+            <input type="checkbox" checked={showSafeZone} onChange={(e) => setShowSafeZone(e.target.checked)} className="sr-only peer" />
+            <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tech relative"></div>
+            <span className="text-sm font-medium text-[var(--text-on-surface)] flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              Mostrar área de segurança
+            </span>
+          </label>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4">
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <button onClick={trigger} className="w-full text-left">
+              <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[#0a0a0f] to-[#1a1a2e] border border-[var(--surface-border)]">
+                <div className="absolute inset-0 flex items-center justify-center" style={{ opacity: active ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
+                <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', opacity: active ? 1 : 0, transform: active ? 'translateX(3px)' : 'translateX(0)', transition: `all 600ms ${smooth}` }}>
+                  <span className="absolute font-display font-bold" style={{ color: '#06B6D4', opacity: active ? 0.7 : 0, transform: active ? 'translateX(-4px)' : 'translateX(0)', transition: `all 300ms ${smooth}` }}>CTA →</span>
+                  <span className="absolute font-display font-bold" style={{ color: '#fbbf24', opacity: active ? 0.7 : 0, transform: active ? 'translateX(4px)' : 'translateX(0)', transition: `all 300ms ${smooth} 50ms` }}>CTA →</span>
+                  <span className="font-display font-bold text-white relative" style={{ textShadow: active ? '2px 0 #06B6D4, -2px 0 #fbbf24' : 'none' }}>CTA →</span>
+                </div>
+                {showSafeZone && (
+                  <>
+                    <div className="absolute pointer-events-none border-2 border-dashed border-[rgba(6,182,212,0.6)] bg-[rgba(6,182,212,0.03)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                    <div className="absolute pointer-events-none bg-[rgba(6,182,212,0.9)] text-white px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                  </>
+                )}
+              </div>
+            </button>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Glitch Cut</p>
+              <span className="text-xs font-mono text-tech">600ms · Smooth</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">RGB split + jitter, corte trocado. Tech/Digital.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Quando usar</h3>
+        <Table
+          columns={[
+            { key: 'name', label: 'Texto' },
+            { key: 'when', label: 'Quando usar' },
+            { key: 'dur', label: 'Duração' },
+          ]}
+          data={[
+            { name: 'Glitch Cut', when: 'Troca tech com RGB split + jitter (Capa → CTA)', dur: '600ms Smooth + jitter' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'duration', type: '600', default: '600', description: 'Sempre 600ms (Smooth travado)' },
+          { name: 'easing', type: "'Smooth'", default: "'Smooth'", description: 'Curva Smooth para o split RGB' },
+          { name: 'jitter', type: 'number (px)', default: '3', description: 'Deslocamento horizontal do split (translateX)' },
+          { name: 'offset', type: 'number (px)', default: '4', description: 'Separação das camadas cyan/gold' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
+        <CodeBlock code={'<GlitchCut jitter={3} offset={4} duration={600} easing="Smooth">\n  CTA →\n</GlitchCut>'} />
+      </div>
+    </div>
+  );
 }
 
 function SocialMotionCardsSection() {
@@ -841,7 +918,121 @@ function SocialMotionPathSection() {
 }
 
 function SocialMotionNumbersSection() {
-  return null;
+  const [active, setActive] = useState(false);
+  const [showSafeZone, setShowSafeZone] = useState(false);
+  const smooth = 'cubic-bezier(0.16, 1, 0.3, 1)';
+  const bars = [35, 60, 45, 80, 55, 95];
+
+  const trigger = () => {
+    setActive(true);
+    setTimeout(() => setActive(false), 1400);
+  };
+
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">🎬 Dados que viram cena</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Timeline determinística, resolução fixa (1080×1350) e safe zone obrigatória. Barras e contadores animam dentro da área segura — prova social como cena, não como rodapé.</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Formato IG 4:5 + Safe Zone</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)] mb-4">
+          <div className="grid md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Canvas</p>
+              <p className="text-[var(--text-on-surface)] font-mono">1080x1350px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Base no DS</p>
+              <p className="text-[var(--text-on-surface)] font-mono">340x425px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Safe Zone</p>
+              <p className="text-[var(--text-on-surface)] font-mono">800x970px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Margens</p>
+              <p className="text-[var(--text-on-surface)] font-mono">140px / 180px / 200px</p>
+            </div>
+          </div>
+        </div>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Números críticos (`metric`, `value`) vivem **dentro** da linha tracejada (`13.3%` topo, `13%` laterais, `74%` × `71.9%`).</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview (clique para testar) — IG 4:5 · 340×425</h3>
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] mb-6">
+          <label className="flex items-center gap-3 cursor-pointer flex-1">
+            <input type="checkbox" checked={showSafeZone} onChange={(e) => setShowSafeZone(e.target.checked)} className="sr-only peer" />
+            <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tech relative"></div>
+            <span className="text-sm font-medium text-[var(--text-on-surface)] flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              Mostrar área de segurança
+            </span>
+          </label>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4">
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <button onClick={trigger} className="w-full text-left">
+              <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[#0a0a0f] to-[#1a1a2e] border border-[var(--surface-border)]">
+                <div className="absolute inset-0 flex items-center justify-center" style={{ opacity: active ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', opacity: active ? 1 : 0, transition: `opacity 600ms ${smooth}` }}>
+                  <div className="flex items-end gap-2 h-24">
+                    {bars.map((h, i) => (
+                      <div key={i} style={{ width: 12, height: active ? `${h}%` : '8%', background: 'rgba(255,255,255,0.9)', borderRadius: 2, transition: `height 600ms ${smooth} ${i * 60}ms`, opacity: active ? 1 : 0.2 }} />
+                    ))}
+                  </div>
+                  <span className="font-display font-bold text-2xl text-white" style={{ transform: active ? 'scale(1)' : 'scale(0.8)', opacity: active ? 1 : 0, transition: `all 600ms ${smooth} 300ms` }}>+150 projetos</span>
+                </div>
+                {showSafeZone && (
+                  <>
+                    <div className="absolute pointer-events-none border-2 border-dashed border-[rgba(6,182,212,0.6)] bg-[rgba(6,182,212,0.03)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                    <div className="absolute pointer-events-none bg-[rgba(6,182,212,0.9)] text-white px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                  </>
+                )}
+              </div>
+            </button>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Data Grid</p>
+              <span className="text-xs font-mono text-tech">600ms · Smooth</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">6 barras + counter +150. Prova-social com dados.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Quando usar</h3>
+        <Table
+          columns={[
+            { key: 'name', label: 'Dados' },
+            { key: 'when', label: 'Quando usar' },
+            { key: 'dur', label: 'Duração' },
+          ]}
+          data={[
+            { name: 'Data Grid', when: 'Reveal de prova-social/big number com barras (Dica → Prova)', dur: '600ms Smooth + stagger 60ms' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'duration', type: '600', default: '600', description: 'Sempre 600ms (Smooth travado)' },
+          { name: 'easing', type: "'Smooth'", default: "'Smooth'", description: 'Curva Smooth para barras e counter' },
+          { name: 'stagger', type: 'number (ms)', default: '60', description: 'Delay entre barras (i * stagger)' },
+          { name: 'bars', type: 'number[]', default: '[35,60,45,80,55,95]', description: 'Alturas (%) das 6 barras' },
+          { name: 'counter', type: 'number', default: '150', description: 'Valor final do big number (+150 projetos)' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
+        <CodeBlock code={'<DataGrid bars={[35,60,45,80,55,95]} counter={150} suffix="+" stagger={60} duration={600} easing="Smooth">\n  +150 projetos\n</DataGrid>'} />
+      </div>
+    </div>
+  );
 }
 
 function LogoSection() {
