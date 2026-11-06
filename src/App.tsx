@@ -619,14 +619,14 @@ function SocialMotionTransicoesSection() {
       return (
         <>
           <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
-          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)' }}>
+          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>
             {items.map((_, idx) => {
               const row = Math.floor(idx / 4);
               const col = idx % 4;
               const odd = (row + col) % 2 === 0;
               const delay = (Math.abs(col - 1.5) + Math.abs(row - 1)) * 70;
               return (
-                <div key={idx} className="w-full h-full" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: isActive ? 'rotateX(0deg) rotateY(0deg) scale(1)' : `rotateX(${odd ? '-180deg' : '0deg'}) rotateY(${odd ? '0deg' : '-180deg'}) scale(0.8)`, opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${delay}ms`, backfaceVisibility: 'hidden' }} />
+                <div key={idx} className="w-full h-full" style={{ width: '103%', height: '102%', marginLeft: '-1.5%', marginTop: '-1%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: isActive ? 'rotateX(0deg) rotateY(0deg) scale(1)' : `rotateX(${odd ? '-180deg' : '0deg'}) rotateY(${odd ? '0deg' : '-180deg'}) scale(0.8)`, opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${delay}ms`, backfaceVisibility: 'hidden' }} />
               );
             })}
           </div>
@@ -639,13 +639,13 @@ function SocialMotionTransicoesSection() {
       return (
         <>
           <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
-          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)' }}>
+          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>
             {items.map((_, idx) => {
               const row = Math.floor(idx / 4);
               const col = idx % 4;
               const even = (row + col) % 2 === 0;
               return (
-                <div key={idx} className="w-full h-full" style={{ width: '102%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: even ? (isActive ? 'rotateY(0deg)' : 'rotateY(-180deg)') : (isActive ? 'translateX(0)' : 'translateX(8px)'), opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${(row + col) * 40}ms`, backfaceVisibility: 'hidden' }} />
+                <div key={idx} className="w-full h-full" style={{ width: '101%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: even ? (isActive ? 'rotateY(0deg)' : 'rotateY(-180deg)') : (isActive ? 'translateX(0)' : 'translateX(8px)'), opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${(row + col) * 40}ms`, backfaceVisibility: 'hidden' }} />
               );
             })}
           </div>
