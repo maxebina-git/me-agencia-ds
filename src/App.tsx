@@ -506,7 +506,7 @@ function SocialMotionTransicoesSection() {
 
   const trigger = (id: string) => {
     setActive(id);
-    const long = id === 'grid' || id === 'flip' || id === 'curtain' || id === 'diagonal' || id === 'iris' || id === 'venetian' || id === 'diamond' || id === 'checkerboard';
+    const long = id === 'grid' || id === 'flip' || id === 'curtain' || id === 'diagonal' || id === 'iris' || id === 'venetian' || id === 'diamond' || id === 'checkerboard' || id === 'glitch' || id === 'datagrid';
     setTimeout(() => setActive(null), long ? 1400 : 800);
   };
 
@@ -525,6 +525,8 @@ function SocialMotionTransicoesSection() {
     { id: 'venetian', name: 'Venetian', dur: '600ms', ease: 'Smooth (travado)', desc: '6 faixas horizontais scaleY, stagger 50ms. Variação 9:16.' },
     { id: 'diamond', name: 'Diamond', dur: '600ms', ease: 'Smooth (travado)', desc: 'Grid 4x3 delay centro → fora. Mais dinâmico. Em 4:5 os fragmentos ficam retrato.' },
     { id: 'checkerboard', name: 'Checkerboard', dur: '600ms', ease: 'Smooth (travado)', desc: 'Grid 4x3 só pares com rotateY. Efeito xadrez. Em 4:5 os fragmentos ficam retrato.' },
+    { id: 'glitch', name: 'Glitch Cut', dur: '600ms', ease: 'Smooth (travado)', desc: 'RGB split + jitter, corte trocado. Tech/Digital.' },
+    { id: 'datagrid', name: 'Data Grid', dur: '600ms', ease: 'Smooth (travado)', desc: '6 barras + counter +150. Prova-social com dados.' },
   ];
 
   const getPreview = (id: string, isActive: boolean) => {
@@ -691,6 +693,34 @@ function SocialMotionTransicoesSection() {
         <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', clipPath: isActive ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)', transition: `clip-path 600ms ${smooth}` }}><span className="font-display font-bold text-white">Tema novo → wipe</span></div>
       </>
     );
+    if (id === 'glitch') {
+      return (
+        <>
+          <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
+          <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', opacity: isActive ? 1 : 0, transform: isActive ? 'translateX(3px)' : 'translateX(0)', transition: `all 600ms ${smooth}` }}>
+            <span className="absolute font-display font-bold" style={{ color: '#06B6D4', opacity: isActive ? 0.7 : 0, transform: isActive ? 'translateX(-4px)' : 'translateX(0)', transition: `all 300ms ${smooth}` }}>CTA →</span>
+            <span className="absolute font-display font-bold" style={{ color: '#fbbf24', opacity: isActive ? 0.7 : 0, transform: isActive ? 'translateX(4px)' : 'translateX(0)', transition: `all 300ms ${smooth} 50ms` }}>CTA →</span>
+            <span className="font-display font-bold text-white relative" style={{ textShadow: isActive ? '2px 0 #06B6D4, -2px 0 #fbbf24' : 'none' }}>CTA →</span>
+          </div>
+        </>
+      );
+    }
+    if (id === 'datagrid') {
+      const bars = [35, 60, 45, 80, 55, 95];
+      return (
+        <>
+          <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', opacity: isActive ? 1 : 0, transition: `opacity 600ms ${smooth}` }}>
+            <div className="flex items-end gap-2 h-24">
+              {bars.map((h, i) => (
+                <div key={i} style={{ width: 12, height: isActive ? `${h}%` : '8%', background: 'rgba(255,255,255,0.9)', borderRadius: 2, transition: `height 600ms ${smooth} ${i * 60}ms`, opacity: isActive ? 1 : 0.2 }} />
+              ))}
+            </div>
+            <span className="font-display font-bold text-2xl text-white" style={{ transform: isActive ? 'scale(1)' : 'scale(0.8)', opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} 300ms` }}>+150 projetos</span>
+          </div>
+        </>
+      );
+    }
     return (
       <>
         <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
@@ -771,6 +801,8 @@ function SocialMotionTransicoesSection() {
             { name: 'Venetian', when: 'Variação horizontal pra 9:16', dur: '600ms Smooth + stagger 50ms' },
             { name: 'Diamond', when: 'Grid centro → fora, mais dinâmico', dur: '600ms Smooth + delay centro' },
             { name: 'Checkerboard', when: 'Metade dos fragmentos (xadrez) volteia', dur: '600ms Smooth + delay (i+j)*40ms' },
+            { name: 'Glitch Cut', when: 'Troca tech com RGB split + jitter', dur: '600ms Smooth + jitter' },
+            { name: 'Data Grid', when: 'Reveal de prova-social/big number com barras', dur: '600ms Smooth + stagger 60ms' },
           ]}
         />
       </div>
