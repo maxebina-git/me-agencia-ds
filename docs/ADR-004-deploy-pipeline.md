@@ -20,8 +20,17 @@ O DS segue um ciclo controlado de release:
 2. **Validar em dev** localmente (conforme ADR-003): `watch:lib` no DS + `dev` na LP, via alias condicional no `vite.config.ts`.
 3. **Validar visualmente** (ADR-001): aprovação explícita do usuário antes de qualquer `npm publish`. Nenhuma publicação automática.
 4. **Publicar no DS**: `npm version patch` (ou `:minor`/`:major`) → `npm run typecheck && npm run build:lib` → `npm publish`.
-5. **Dependabot** abre PR de bump na LP imediatamente após a publicação de uma nova versão do pacote no npm (monitora alterações no registro npm em tempo real).
+5. **PR manual de bump**: o agente cria a PR de bump na LP (`https://github.com/maxebina-git/me-agencia-lp/pulls`) logo após a publicação, sem esperar detecção automática. Branch `chore/bump-max-ds-<versao>` com `package.json`/`package-lock.json` atualizados para a nova versão. Sem Dependabot — `.github/dependabot.yml` removido (a regra `interval: daily` causava espera de até 24h; bumps agora são manuais e imediatos).
 6. **Merge da PR de bump na LP** → GitHub Actions `deploy.yml` → FTP → `maxebina.com.br` com o novo DS.
+
+#### Comando contingente (dor de barriga)
+
+Se o agente travar, cola este comando (troca a versão):
+
+```
+/ds-bump 1.0.17
+Publica o DS 1.0.17 no npm e cria a PR manual de bump na LP (branch chore/bump-max-ds-1.0.17, sem Dependabot). Para antes do merge (ADR-004).
+```
 
 #### 2.1 Checkpoint de aprovação humana (obrigatório)
 
@@ -48,9 +57,14 @@ npm run sync   # git pull --ff-only && npm ci
 ---
 
 ## Consequências
-- **Prós:** Publish do DS é o primeiro passo explícito de todo deploy; aproveita PRs do Dependabot; o consumidor valida exatamente o `dist/` publicado; rollback rápido via `git revert`.
-- **Contras:** Patch releases frequentes durante desenvolvimento ativo do DS; depende do Dependabot detectar a publicação no npm (pode haver atraso de alguns minutos) ou de PR manual de bump.
+- **Prós:** Publish do DS é o primeiro passo explícito de todo deploy; PRs manuais são imediatas (sem espera do Dependabot diário); o consumidor valida exatamente o `dist/` publicado; rollback rápido via `git revert`.
+- **Contras:** Patch releases frequentes durante desenvolvimento ativo do DS; o bump exige ação do agente (sem automação de detecção no npm).
 - **Risco:** publish manual depende da presença do mantenedor e do token `NPM_TOKEN` nas secrets do DS.
+
+### Links de referência
+- Repo DS: https://github.com/maxebina-git/me-agencia-ds
+- npm público: https://www.npmjs.com/package/@maxebina/max-ds
+- Produção: https://maxebina.com.br/
 
 ---
 

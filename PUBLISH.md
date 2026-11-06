@@ -61,6 +61,25 @@ Acesse: https://www.npmjs.com/package/@maxebina/max-ds
 
 Seu pacote deve estar disponível!
 
+### 6. Pós-publish — PR manual na LP (sem Dependabot)
+
+Após o `npm publish`, o agente cria a PR de bump na LP (fluxo definido no ADR-004 §2). Sem Dependabot — `.github/dependabot.yml` removido (a regra `interval: daily` causava espera de até 24h).
+
+Checklist:
+
+- [ ] `npm view @maxebina/max-ds version` mostra a nova versão
+- [ ] Criar branch `chore/bump-max-ds-<versao>` na LP e atualizar `package.json` + `package-lock.json`
+- [ ] `npm run lint && npm run build` OK na LP
+- [ ] Abrir PR → enviar link para aprovação humana (checkpoint ADR-004 §2.1)
+- [ ] Após merge, monitorar `deploy.yml` e validar https://maxebina.com.br/
+
+Comando contingente (se o agente travar):
+
+```
+/ds-bump 1.0.17
+Publica o DS 1.0.17 no npm e cria a PR manual de bump na LP (branch chore/bump-max-ds-1.0.17, sem Dependabot). Para antes do merge (ADR-004).
+```
+
 ## 🔄 Próximas Versões
 
 ### Patch (correção de bugs)
