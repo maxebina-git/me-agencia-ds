@@ -1379,7 +1379,7 @@ export function Footer({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           {/* Logo and description */}
           <div className="lg:col-span-2">
-            <a href="#" className="inline-block mb-4">
+            <a href="#" className="hidden md:inline-block mb-4">
               <svg width="91" height="43" viewBox="0 0 182 87" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M182 19.333H116V33.833H182V53.167H116V67.667H182V87H111.837L95 70.7246V16.2754L111.837 0H182V19.333Z" fill="#8f6424"/>
                 <path d="M67.667 87V21H53.167L53.167 87H33.833L33.833 21H19.333L19.333 87H0L3.06693e-06 16.8369L16.2754 0L70.7246 2.38005e-06L87 16.8369V87H67.667Z" fill="#8f6424"/>
@@ -1407,30 +1407,38 @@ export function Footer({
           </div>
 
           {/* Links */}
-          {links.map((section, i) => (
+          {links.map((section, i) => {
+            const isServices = section.title === 'Serviços';
+            return (
             <div key={i} className={linksClassName}>
-              <h4 className="font-display font-semibold text-white mb-4">{section.title}</h4>
-              <ul className="space-y-3">
+              <h4 className={`font-display font-semibold text-white mb-4 ${isServices ? 'text-center md:text-left' : ''}`}>{section.title}</h4>
+              <ul className={isServices ? 'flex flex-wrap justify-center gap-x-3 gap-y-2 md:flex-col md:flex-nowrap md:items-start md:gap-0 md:space-y-3' : 'space-y-3'}>
                 {section.items.map((item, j) => (
-                  <li key={j}>
-                    <a
-                      href={item.href}
-                      onClick={(e) => handleLinkClick(e, item.label, item.href)}
-                      className="text-sm text-white/60 hover:text-tech transition-colors"
-                    >
-                      {item.label}
-                    </a>
-                  </li>
+                  <React.Fragment key={j}>
+                    <li>
+                      <a
+                        href={item.href}
+                        onClick={(e) => handleLinkClick(e, item.label, item.href)}
+                        className="text-sm text-white/60 hover:text-tech transition-colors"
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                    {isServices && j < section.items.length - 1 && (
+                      <span aria-hidden="true" className="text-sm text-white/40 select-none md:hidden">|</span>
+                    )}
+                  </React.Fragment>
                 ))}
               </ul>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-white/40">{copyright}</p>
-          <div className="flex items-center gap-6">
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-center md:justify-between gap-4 text-center md:text-left">
+          <p className="text-sm text-white/40 text-center">{copyright}</p>
+          <div className="flex flex-wrap items-center justify-center gap-6">
             <a
               href="#privacidade"
               onClick={(e) => handleLinkClick(e, 'Privacidade', '#privacidade')}
