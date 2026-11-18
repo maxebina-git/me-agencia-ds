@@ -62,6 +62,7 @@ export function AppleTitle({
   const bottomSizeRef = useRef(bottomFontSize);
   const firstSizeRef = useRef(firstLineFontSize ?? topFontSize);
   const secondSizeRef = useRef(secondLineFontSize ?? topFontSize);
+  const fitKeyRef = useRef('');
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
@@ -122,23 +123,28 @@ export function AppleTitle({
       const availWidth = el.clientWidth - fitPadding;
       if (!availWidth || availWidth <= 0) return;
       const availHeight = el.clientHeight > 0 ? el.clientHeight / 2 : 0;
+      const fitKey = `${availWidth}x${availHeight}|${firstLineFontSize}|${secondLineFontSize}`;
+      const resetToTarget = fitKey !== fitKeyRef.current;
+      fitKeyRef.current = fitKey;
 
       // Linhas com tamanho proprio (1a/2a): quebra na mesma tag (wrap normal).
       const fitOwnLine = (idx: number, target: number | undefined, sizeRef: React.MutableRefObject<number>, setSize: (v: number) => void) => {
         const lineEl = lineRefs.current[idx];
         const lineHeightPx = lineEl ? lineEl.getBoundingClientRect().height : 0;
         if (target !== undefined && lineEl && lineHeightPx > 0) {
-          let scale = 1;
-          if (availHeight > 0 && lineHeightPx > availHeight) scale = Math.min(scale, availHeight / lineHeightPx);
-          if (scale < 1) {
-            const next = Math.max(8, Math.floor(Math.min(target, sizeRef.current * scale) * 10) / 10);
-            if (Math.abs(sizeRef.current - next) > 0.1) {
-              sizeRef.current = next;
-              setSize(next);
-            }
-          } else if (Math.abs(sizeRef.current - target) > 0.1) {
-            sizeRef.current = target;
-            setSize(target);
+          const current = sizeRef.current;
+          let next = current;
+          if (availHeight > 0 && lineHeightPx > availHeight) {
+            // Nao cabe: encolhe proporcionalmente.
+            next = Math.max(8, Math.floor(Math.min(target, current * (availHeight / lineHeightPx)) * 10) / 10);
+          } else if (resetToTarget && Math.abs(current - target) > 0.1) {
+            // So volta ao alvo quando o container/alvo mudou. Voltar a cada medicao fazia
+            // encolher -> caber -> voltar ao alvo -> nao caber em loop infinito de setState.
+            next = target;
+          }
+          if (Math.abs(current - next) > 0.1) {
+            sizeRef.current = next;
+            setSize(next);
           }
         }
         return lineHeightPx;
