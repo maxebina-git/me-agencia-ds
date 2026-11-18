@@ -889,6 +889,8 @@ const totalMs = getReelTotalDurationMs(scenes, 800); // usar no export
         <p className="font-semibold text-[var(--text-on-surface)] mb-2">Próximas moléculas (backlog do DS)</p>
         <p className="text-sm text-[var(--text-on-surface-muted)]">Primitivas de cena reutilizáveis (headline+mark, lista de pilares/cards, CTA animado com URL) e presets de transição compostos — para o app apenas compor conteúdo.</p>
       </div>
+
+      <ExtrasPrimitivesBlock only={['reel-progress', 'scene-overlay']} title="Camadas da cena: ReelProgress · SceneOverlay" />
     </div>
   );
 }
@@ -1352,6 +1354,8 @@ function SocialMotionTextosSection() {
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
         <CodeBlock code={'<GlitchText as="span" text="CTA →">CTA →</GlitchText>\n\n<TextScramble text="Scramble" charset="ABCDEFGHIJKLMNOPQRSTUVWXYZ" tick={30} stagger={90} delay={300} />\n\n<TipsyFrame text="LANDING" duration={6000} easing="Smooth" />\n\n<AppleTitle top={["Tecnologia que gera resultado", "Transforme Sua Empresa com Tecnologia"]} bottom="Quero saber +" topFontSize={48} bottomFontSize={24} firstLineFontSize={16} secondLineFontSize={16} />\n\n<StrokeText text="ABCDEFGHIJKLMNOPQRSTUVWXYZ" fontSize={45} duration={6000} />\n\n<div class="fx-stamp">CARIMBADO</div>\n\n<div class="fx-voltage" role="img" aria-label="TRTRÁFEGO PAGO"><b aria-hidden="true" style="--i:0">T</b>...</div>\n\n<div class="fx-equalizer" role="img" aria-label="GRÁFICOS"><b aria-hidden="true" style="--i:0">G</b>...</div>\n\n<div class="fx-pewpew" role="img" aria-label="MARKETING">...</div>\n<div class="fx-pewpew" role="img" aria-label="DIGITAL">...</div>\n\n<div class="fx-loud">MAX</div>\n\n<div class="fx-rotator">ME</div>\n\n<div class="fx-annotate" role="img" aria-label="SaaS">SaaS<svg>...</svg></div>\n\n<div class="fx-synthwave">UAU</div>\n\n<div class="fx-stretch" role="img" aria-label="Automação WhatsApp">...</div>'} />
       </div>
+
+      <ExtrasPrimitivesBlock only={['marquee-tape']} title="MarqueeTape — fita de texto em loop" />
     </div>
   );
 }
@@ -2439,6 +2443,8 @@ function SocialMotionNumbersSection() {
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
         <CodeBlock code={'<DataGrid bars={[35,60,45,80,55,95]} counter={150} suffix="+" stagger={60} duration={600} easing="Smooth">\n  +150 projetos\n</DataGrid>\n\n<Comparison rows={[{ label: "Antes", value: 25 }, { label: "Depois", value: 92 }]} loop />\n\n<GrowthLine points={[0,20,35,30,55,80,100]} loop />\n\n<BigCounter value={150} prefix="+" loop />\n\n<Donut percent={87} loop />\n\n<ProgressBar percent={78} loop />\n\n<Pizza slices={[45,35,20]} loop />\n\n<Funnel stages={[{ label: "Visitantes", value: "10.000" }, { label: "Leads", value: "2.500" }, { label: "Clientes", value: "800" }]} loop />'} />
       </div>
+
+      <ExtrasPrimitivesBlock only={['deco-counter-odometer', 'deco-progress-ring']} title="Primitivos: DecoCounter odometer · DecoProgressRing" />
     </div>
   );
 }
@@ -2648,6 +2654,8 @@ function SocialMotionCtaSection() {
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
         <CodeBlock code={'<SocialCta label="Salva o post" variant="primary" loop />\n\n<SocialCta label="Link na bio" variant="ghost" loop />\n\n<SocialCta label="Salva o post" variant="loud" loop />\n\n<SocialCta label="SALVAR" variant="scramble" loop />'} />
       </div>
+
+      <ExtrasPrimitivesBlock only={['cta-button']} title="Primitivo: CtaButton" />
     </div>
   );
 }
@@ -2792,6 +2800,8 @@ function SocialMotionPassosSection() {
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
         <CodeBlock code={'<Steps steps={[{ n: 1, title: "Diagnóstico", desc: "Entendemos onde você está" }, { n: 2, title: "Estratégia", desc: "Plano sob medida" }, { n: 3, title: "Escala", desc: "Resultado que cresce" }]} stagger={500} loop />\n\n<StepsCheck check glitch border />'} />
       </div>
+
+      <ExtrasPrimitivesBlock only={['steps-list']} title="Primitivo: StepsList" />
     </div>
   );
 }
@@ -6233,7 +6243,11 @@ const EXTRAS_LOTTIE_DATA = {
   }],
 };
 
-function SocialMotionExtrasSection() {
+type ExtraId = 'cta-button' | 'steps-list' | 'sticker-pop' | 'reel-progress' | 'marquee-tape' | 'scene-overlay' | 'confetti-burst' | 'deco-progress-ring' | 'deco-counter-odometer' | 'lottie-deco';
+
+/** Bloco de demo dos primitivos do lote 2026-11-17 (ADR-005): tema + Animar + cards + uso + contrato,
+ *  filtrado por `only` para cada seção do Social Studio mostrar só os seus. */
+function ExtrasPrimitivesBlock({ only, title, intro }: { only: ExtraId[]; title: string; intro?: string }) {
   const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
   const [settled, setSettled] = useState(true);
   const [run, setRun] = useState(0);
@@ -6273,11 +6287,31 @@ function SocialMotionExtrasSection() {
       <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">{desc}</p>
     </div>
   );
+  type ContractRow = { name: string; type: string; default: string; description: string };
+  const items: Record<ExtraId, { name: string; card: () => React.ReactNode; code: string; contract?: ContractRow }> = {
+    'cta-button': { name: 'CtaButton', card: () => card('CtaButton', 'Pílula de CTA com pop + anel pulsante + flutuação. settled = parado.', <CtaButton key={run} label="Segue pra mais" settled={settled} />), code: '<CtaButton label="Segue pra mais" settled={modoEstatico} />' },
+    'steps-list': { name: 'StepsList', card: () => card('StepsList', 'Passos em cascata (stagger). settled = todos no lugar.', <div className="p-4 w-full"><StepsList key={run} steps={steps} settled={settled} /></div>), code: '<StepsList steps={passos} settled={modoEstatico} />' },
+    'sticker-pop': { name: 'StickerPop', card: () => card('StickerPop', 'Sticker/emoji com spring + wiggle. settled = parado.', <StickerPop key={run} text="🔥" settled={settled} />), code: '<StickerPop text="🔥" settled={modoEstatico} />' },
+    'reel-progress': { name: 'ReelProgress', card: () => card('ReelProgress', 'Barra de progresso do reel (progress-driven, liga no onProgress).', <ReelProgress progress={prog} />), code: '<ReelProgress progress={p} />', contract: { name: 'progress (ReelProgress)', type: '0..1', default: '-', description: 'Progress-driven: vem do onProgress da ReelTimeline; não precisa de settled.' } },
+    'marquee-tape': { name: 'MarqueeTape', card: () => card('MarqueeTape', 'Fita marquee em loop (2 cópias, translateX -50%). settled = parada.', <MarqueeTape key={run} items={tape} settled={settled} />), code: "<MarqueeTape items={['Marketing', 'Sites', 'Automação']} settled={modoEstatico} />" },
+    'scene-overlay': { name: 'SceneOverlay', card: () => card('SceneOverlay', 'Vinheta + grão de filme (SVG feTurbulence). Estático — seguro p/ export.', <SceneOverlay preset="grain-vignette" />), code: '<SceneOverlay preset="grain-vignette" />', contract: { name: 'cores (SceneOverlay)', type: 'tema', default: '--slide-*', description: 'Exceção documentada: grão monocromático, não usa cor do tema.' } },
+    'confetti-burst': { name: 'ConfettiBurst', card: () => card('ConfettiBurst', 'Confete com seed fixa (determinístico). settled = frame final vazio.', <ConfettiBurst key={run} settled={settled} />), code: '<ConfettiBurst settled={modoEstatico} />', contract: { name: 'seed (ConfettiBurst)', type: 'number', default: '7', description: 'RNG com seed fixa (mulberry32) → partículas determinísticas; count limitado a 8..80.' } },
+    'deco-progress-ring': { name: 'DecoProgressRing', card: () => card('DecoProgressRing', 'Anel que se desenha até value/max (pathLength 100).', <DecoProgressRing key={run} value={Math.round(72 * prog)} label={Math.round(72 * prog) + '%'} settled={settled} />), code: '<DecoProgressRing value={72} settled={modoEstatico} />' },
+    'deco-counter-odometer': { name: 'DecoCounter', card: () => card('DecoCounter odometer', "variant='odometer': dígitos em colunas (progress-driven).", <DecoCounter variant="odometer" value={Math.round(150 * prog)} suffix=" projetos" progress={prog} durationMs={1600} fontSize={40} />), code: '<DecoCounter variant="odometer" value={150} progress={p} durationMs={2000} />', contract: { name: 'variant / progress (DecoCounter)', type: "'count' | 'odometer' · 0..1", default: "'count'", description: "'count' = comportamento atual preservado; 'odometer' = colunas de dígitos, progress-driven." } },
+    'lottie-deco': { name: 'LottieDeco', card: () => card('LottieDeco', 'Lottie via import dinâmico (peer opcional lottie-web). settled = último frame.', <LottieDeco key={run} data={EXTRAS_LOTTIE_DATA} settled={settled} loop style={{ width: 120, height: 120 }} />), code: '<LottieDeco src="https://.../anim.json" settled={modoEstatico} />', contract: { name: 'src/data (LottieDeco)', type: 'string | object', default: '-', description: 'Lottie via import dinâmico: lottie-web é peer opcional e vira chunk separado. Exceção de cor: usa a cor do .json.' } },
+  };
+  const sel = only.map(id => items[id]);
+  const usage = 'import { ' + sel.map(s => s.name).join(', ') + " } from 'me-agencia-ds';\n\n<div className=\"instagram-slide\" data-theme=\"neon\">\n" + sel.map(s => '  ' + s.code).join('\n') + '\n</div>';
+  const contract: ContractRow[] = [
+    { name: 'delayMs / durationMs', type: 'number', default: '0 / por primitivo', description: 'Entrada por keyframes via CSS vars; determinístico no export.' },
+    { name: 'settled', type: 'boolean', default: 'false', description: 'Frame final sem animação de entrada — o mesmo das telas estáticas (ADR-005).' },
+    ...sel.flatMap(s => (s.contract ? [s.contract] : [])),
+  ];
   return (
-    <div className="space-y-12">
-      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
-        <p className="text-tech font-semibold mb-2">Lote "Extras" — primitivos novos do DS (2026-11-17)</p>
-        <p className="text-sm text-[var(--text-on-surface-muted)]">Todos nascem em <code className="text-tech">social-motion/</code> e seguem o contrato ADR-005: cor só do tema (<code className="text-tech">--slide-*</code>), entrada por <code className="text-tech">delayMs</code>/<code className="text-tech">durationMs</code>, <code className="text-tech">settled</code> = frame final (igual à tela estática). Parado = <strong>settled</strong>; clique em <strong>Animar</strong> para ver a entrada do zero. Progress-driven (ReelProgress, DecoCounter, DecoProgressRing aqui) segue o progresso da cena — determinístico no export.</p>
+    <div className="space-y-8 pt-8 border-t border-[var(--surface-border)]">
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-2">{title}</h3>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">{intro ?? 'Primitivos do DS em social-motion/ (contrato ADR-005): cor só do tema (--slide-*), entrada por delayMs/durationMs, settled = frame final (igual à tela estática). Parado = settled; clique em Animar para ver a entrada do zero.'}</p>
       </div>
 
       <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
@@ -6297,35 +6331,30 @@ function SocialMotionExtrasSection() {
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4" data-theme={theme}>
-        {card('CtaButton', 'Pílula de CTA com pop + anel pulsante + flutuação. settled = parado.', <CtaButton key={run} label="Segue pra mais" settled={settled} />)}
-        {card('StepsList', 'Passos em cascata (stagger). settled = todos no lugar.', <div className="p-4 w-full"><StepsList key={run} steps={steps} settled={settled} /></div>)}
-        {card('StickerPop', 'Sticker/emoji com spring + wiggle. settled = parado.', <StickerPop key={run} text="🔥" settled={settled} />)}
-        {card('ReelProgress', 'Barra de progresso do reel (progress-driven, liga no onProgress).', <ReelProgress progress={prog} />)}
-        {card('MarqueeTape', 'Fita marquee em loop (2 cópias, translateX -50%). settled = parada.', <MarqueeTape key={run} items={tape} settled={settled} />)}
-        {card('SceneOverlay', 'Vinheta + grão de filme (SVG feTurbulence). Estático — seguro p/ export.', <SceneOverlay preset="grain-vignette" />)}
-        {card('ConfettiBurst', 'Confete com seed fixa (determinístico). settled = frame final vazio.', <ConfettiBurst key={run} settled={settled} />)}
-        {card('DecoProgressRing', 'Anel que se desenha até value/max (pathLength 100).', <DecoProgressRing key={run} value={Math.round(72 * prog)} label={Math.round(72 * prog) + '%'} settled={settled} />)}
-        {card('DecoCounter odometer', "variant='odometer': dígitos em colunas (progress-driven).", <DecoCounter variant="odometer" value={Math.round(150 * prog)} suffix=" projetos" progress={prog} durationMs={1600} fontSize={40} />)}
-        {card('LottieDeco', 'Lottie via import dinâmico (peer opcional lottie-web). settled = último frame.', <LottieDeco key={run} data={EXTRAS_LOTTIE_DATA} settled={settled} loop style={{ width: 120, height: 120 }} />)}
+        {sel.map(s => s.card())}
       </div>
 
       <div>
-        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Uso (o app social consome o DS)</h3>
-        <CodeBlock code={"import { CtaButton, StepsList, StickerPop, ConfettiBurst, DecoProgressRing, DecoCounter, LottieDeco, ReelProgress, MarqueeTape, SceneOverlay } from 'me-agencia-ds';\\n\\n<div className=\"instagram-slide\" data-theme=\"neon\">\\n  <SceneOverlay preset=\"grain-vignette\" />\\n  <ReelProgress progress={p} />\\n  <StepsList steps={passos} settled={modoEstatico} />\\n  <StickerPop text=\"🔥\" settled={modoEstatico} />\\n  <ConfettiBurst settled={modoEstatico} />\\n  <DecoProgressRing value={72} settled={modoEstatico} />\\n  <DecoCounter variant=\"odometer\" value={150} progress={p} durationMs={2000} />\\n  <LottieDeco src=\"https://.../anim.json\" settled={modoEstatico} />\\n  <MarqueeTape items={['Marketing', 'Sites', 'Automação']} settled={modoEstatico} />\\n  <CtaButton label=\"Segue pra mais\" settled={modoEstatico} />\\n</div>"} />
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Uso</h3>
+        <CodeBlock code={usage} />
       </div>
 
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Contrato</h3>
-        <PropsTable props={[
-          { name: 'delayMs / durationMs', type: 'number', default: '0 / por primitivo', description: 'Entrada por keyframes via CSS vars; determinístico no export.' },
-          { name: 'settled', type: 'boolean', default: 'false', description: 'Frame final sem animação de entrada — o mesmo das telas estáticas (ADR-005).' },
-          { name: 'progress (ReelProgress/DecoCounter)', type: '0..1', default: '-', description: 'Progress-driven: vem do onProgress da ReelTimeline; não precisa de settled.' },
-          { name: 'variant (DecoCounter)', type: "'count' | 'odometer'", default: "'count'", description: "'count' = comportamento atual preservado; 'odometer' = colunas de dígitos." },
-          { name: 'seed (ConfettiBurst)', type: 'number', default: '7', description: 'RNG com seed fixa (mulberry32) → partículas determinísticas; count limitado a 8..80.' },
-          { name: 'src/data (LottieDeco)', type: 'string | object', default: '-', description: 'Lottie via import dinâmico: lottie-web é peer opcional e vira chunk separado.' },
-          { name: 'cores', type: 'tema', default: '--slide-*', description: 'Nenhum primitivo aceita cor fixa por prop; SceneOverlay/LottieDeco são excessões documentadas (grão monocromático / cor do .json).' },
-        ]} />
+        <PropsTable props={contract} />
       </div>
+    </div>
+  );
+}
+
+function SocialMotionExtrasSection() {
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">Extras — efeitos decorativos soltos</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Sticker, confete e Lottie, que não pertencem a uma cena específica. Os demais primitivos do lote 2026-11-17 estão nas suas seções: CtaButton → CTA Animado, StepsList → Passos, DecoCounter odometer e DecoProgressRing → Numbers &amp; Data, ReelProgress e SceneOverlay → Cena &amp; Timeline, MarqueeTape → Textos Animados.</p>
+      </div>
+      <ExtrasPrimitivesBlock only={['sticker-pop', 'confetti-burst', 'lottie-deco']} title="StickerPop · ConfettiBurst · LottieDeco" />
     </div>
   );
 }
