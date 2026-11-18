@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { Water } from 'three/examples/jsm/objects/Water.js';
 import { Sky } from 'three/examples/jsm/objects/Sky.js';
 
-export function OceanBackground({ className = '' }: { className?: string }) {
+export function OceanBackground({ className = '', horizonTiltY = 30, sunElevationDeg = 2, sunAzimuthDeg = 180, exposure = 0.05, lookAtX = 0 }: { className?: string; horizonTiltY?: number; sunElevationDeg?: number; sunAzimuthDeg?: number; exposure?: number; lookAtX?: number }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -12,11 +12,11 @@ export function OceanBackground({ className = '' }: { className?: string }) {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, preserveDrawingBuffer: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(width, height);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.05;
+    renderer.toneMappingExposure = exposure;
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -24,12 +24,12 @@ export function OceanBackground({ className = '' }: { className?: string }) {
 
     const camera = new THREE.PerspectiveCamera(55, width / height, 1, 20000);
     camera.position.set(30, 30, 100);
-    camera.lookAt(0, 30, 0);
+    camera.lookAt(lookAtX, horizonTiltY, 0);
 
     // Sun position
     const sun = new THREE.Vector3();
-    const phi = THREE.MathUtils.degToRad(90 - 2);
-    const theta = THREE.MathUtils.degToRad(180);
+    const phi = THREE.MathUtils.degToRad(90 - sunElevationDeg);
+    const theta = THREE.MathUtils.degToRad(sunAzimuthDeg);
     sun.setFromSphericalCoords(1, phi, theta);
 
     // Water
@@ -84,10 +84,10 @@ export function OceanBackground({ className = '' }: { className?: string }) {
       const rect = container.getBoundingClientRect();
       const maxScroll = 800;
       const t = Math.min(Math.max(-rect.top / maxScroll, 0), 1);
-      const lookAtY = 30 - t * 28;   // 30 -> 2 ao descer
-      camera.position.y = 30 - t * 28;
+      const lookAtY = horizonTiltY - t * 28;   // base -> base-28 ao descer
+      camera.position.y = horizonTiltY - t * 28;
       camera.position.z = 100 - t * 80;
-      camera.lookAt(0, lookAtY, 0);
+      camera.lookAt(lookAtX, lookAtY, 0);
       dirLight.intensity = 0.5 - t * 0.2; // 0.5 -> 0.3
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -128,7 +128,7 @@ export function OceanBackground({ className = '' }: { className?: string }) {
       water.geometry.dispose();
       water.material.dispose();
     };
-  }, []);
+  }, [horizonTiltY, sunElevationDeg, sunAzimuthDeg, exposure, lookAtX]);
 
   return <div ref={containerRef} className={`absolute inset-0 w-full h-full pointer-events-none ${className}`} style={{ zIndex: 0 }} />;
 }

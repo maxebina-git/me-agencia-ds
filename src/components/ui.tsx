@@ -1022,21 +1022,10 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
         </>
       )}
 
-      {/* Elementos decorativos com cores do tema */}
-      <div 
-        className="absolute top-[5%] right-[5%] w-20 h-20 rounded-full blur-xl" 
-        style={{ 
-          background: 'var(--slide-accent)',
-          opacity: 0.1
-        }}
-      />
-      <div 
-        className="absolute bottom-[8%] left-[5%] w-16 h-16 rounded-full blur-xl" 
-        style={{ 
-          background: 'var(--slide-primary)',
-          opacity: 0.1
-        }}
-      />
+      {/* BG Shapes / blur — formas desfocadas do tema (parado p/ PNG) */}
+      <div className="absolute rounded-full" style={{ width: 160, height: 160, right: '0%', top: '4%', background: 'color-mix(in srgb, var(--slide-accent) 85%, transparent)', opacity: 0.38, filter: 'blur(28px)' }} />
+      <div className="absolute rounded-full" style={{ width: 130, height: 130, left: '-4%', bottom: '8%', background: 'color-mix(in srgb, var(--slide-primary, var(--slide-accent)) 80%, transparent)', opacity: 0.34, filter: 'blur(24px)' }} />
+      <div className="absolute rounded-full" style={{ width: 95, height: 95, right: '16%', bottom: '26%', background: 'color-mix(in srgb, var(--slide-accent) 70%, var(--slide-bg))', opacity: 0.28, filter: 'blur(18px)' }} />
 
       {/* Logo Max Ebina - posicionado no canto inferior direito */}
       {/* Não aparece em slides de "dica" para evitar poluição visual */}
@@ -1096,8 +1085,8 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
             </h2>
             {subtitle && (
               <p 
-                className={subtitleSize}
-                style={{ color: 'var(--slide-text-muted)' }}
+                className={`${subtitleSize} font-medium`}
+                style={{ color: 'var(--slide-text-muted)', fontFamily: 'var(--font-body)' }}
               >
                 {subtitle}
               </p>
@@ -1125,8 +1114,8 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
             </h2>
             {body && (
               <p 
-                className={`${bodySize} leading-relaxed`}
-                style={{ color: 'var(--slide-text-muted)' }}
+                className={`${bodySize} font-medium leading-relaxed`}
+                style={{ color: 'var(--slide-text-muted)', fontFamily: 'var(--font-body)' }}
               >
                 {body}
               </p>
@@ -1150,8 +1139,8 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
                     style={{ color: 'var(--slide-accent)' }}
                   />
                   <span 
-                    className={bodySize}
-                    style={{ color: 'var(--slide-text-muted)' }}
+                    className={`${bodySize} font-medium`}
+                    style={{ color: 'var(--slide-text-muted)', fontFamily: 'var(--font-body)' }}
                   >
                     {item}
                   </span>
@@ -1183,8 +1172,8 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
               {metric || '+150'}
             </div>
             <p 
-              className={`${subtitleSize} mb-${isMockup ? '4' : '8'}`}
-              style={{ color: 'var(--slide-text-muted)' }}
+              className={`${subtitleSize} font-medium mb-${isMockup ? '4' : '8'}`}
+              style={{ color: 'var(--slide-text-muted)', fontFamily: 'var(--font-body)' }}
             >
               {metricLabel || 'Projetos entregues'}
             </p>
@@ -1205,11 +1194,7 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
         )}
 
         {type === 'cta' && (
-          <div className="text-center flex flex-col h-full justify-center">
-            <Sparkles 
-              className={`${isMockup ? 'w-6 h-6' : 'w-10 h-10'} mx-auto mb-${isMockup ? '3' : '6'}`}
-              style={{ color: 'var(--slide-accent)' }}
-            />
+          <div className="text-center flex flex-col h-full justify-start">
             <h2 
               className={`${isMockup ? 'text-base' : 'text-2xl'} font-bold leading-tight mb-${isMockup ? '2' : '4'}`}
               style={{ color: 'var(--slide-text)' }}
@@ -1218,8 +1203,8 @@ export function InstagramSlide({ type, title, subtitle, body, number, metric, me
             </h2>
             {subtitle && (
               <p 
-                className={`${subtitleSize} mb-${isMockup ? '4' : '8'}`}
-                style={{ color: 'var(--slide-text-muted)' }}
+                className={`${subtitleSize} font-medium mb-${isMockup ? '4' : '8'}`}
+                style={{ color: 'var(--slide-text-muted)', fontFamily: 'var(--font-body)' }}
               >
                 {subtitle}
               </p>

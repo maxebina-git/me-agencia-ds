@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Palette, Type, Ruler, Sparkles, Box, Layout, Image,
   BookOpen, Moon, Sun, Search, X, Menu, ChevronRight,
-  Copy, Check, Eye, TrendingUp, Star, Clock
+  Copy, Check, Eye, TrendingUp, Star, Clock, ArrowRight
 } from 'lucide-react';
 import {
   Badge, Button, ServiceCard, SectionHeader, TestimonialCard, GlitchText,
@@ -12,8 +12,28 @@ import {
 import { PhoneMockup } from './components/PhoneMockup';
 import { CodeBlock, PropsTable } from './components/DocsComponents';
 import { HeroSection } from './components/HeroSection';
+import { OceanBackground } from './components/OceanBackground';
+import { TextScramble, getScrambleFrame, getScrambleTotalTicks } from './components/social-motion/Text/TextScramble';
+import { TipsyFrame } from './components/social-motion/Text/TipsyFrame';
+import { AppleTitle } from './components/social-motion/Text/AppleTitle';
+import { StrokeText } from './components/social-motion/Text/StrokeText';
+import { PathRun, PATH_LOGO_M_D, PATH_LOGO_E_D } from './components/social-motion/Path/PathRun';
+import { PathPointer } from './components/social-motion/Path/PathPointer';
+import { PathPulse } from './components/social-motion/Path/PathPulse';
+import { DecoBox } from './components/social-motion/Deco/DecoBox';
+import type { DecoBoxVariant } from './components/social-motion/Deco/DecoBox';
+import { SocialServiceCard, SERVICE_FAMILIES } from './components/social-motion/Services';
+import type { ServiceCardAspect } from './components/social-motion/Services';
+import { SceneBackdrop, BG_PRESETS, StepsList, ReelProgress, MarqueeTape, SceneOverlay } from './components/social-motion/Scene';
+import type { SceneBackdropPreset } from './components/social-motion/Scene';
+import { CtaButton } from './components/social-motion/Deco/CtaButton';
+import { StickerPop } from './components/social-motion/Deco/StickerPop';
+import { ConfettiBurst } from './components/social-motion/Deco/ConfettiBurst';
+import { DecoProgressRing } from './components/social-motion/Deco/DecoProgressRing';
+import { DecoCounter } from './components/social-motion/Deco/DecoCounter';
+import { LottieDeco } from './components/social-motion/Deco/LottieDeco';
 
-type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'glitch-text' | 'buttons' | 'badge' | 'cards' | 'forms' | 'table' | 'section-header' | 'animated-counter' | 'whatsapp-float' | 'scroll-to-top' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'social-motion' | 'social-motion-principios' | 'social-motion-transicoes' | 'social-motion-textos' | 'social-motion-cards' | 'social-motion-path' | 'social-motion-numbers' | 'instagram' | 'brand-voice' | 'preview' | 'accessibility' | 'responsiveness' | 'icons' | 'borders' | 'grid' | 'drawer' | 'modal';
+type Section = 'logo' | 'colors' | 'typography' | 'spacing' | 'motion' | 'glitch-text' | 'buttons' | 'badge' | 'cards' | 'forms' | 'table' | 'section-header' | 'animated-counter' | 'whatsapp-float' | 'scroll-to-top' | 'navbar' | 'hero' | 'faq' | 'testimonials' | 'footer' | 'social-motion' | 'social-motion-principios' | 'social-motion-transicoes' | 'social-motion-cena-timeline' | 'social-motion-fundos' | 'social-motion-textos' | 'social-motion-cards' | 'social-motion-path' | 'social-motion-servicos' | 'social-motion-numbers' | 'social-motion-cta' | 'social-motion-passos' | 'social-motion-endcard' | 'social-motion-extras' | 'instagram' | 'brand-voice' | 'preview' | 'accessibility' | 'responsiveness' | 'icons' | 'borders' | 'grid' | 'drawer' | 'modal';
 
 interface NavItem {
   id: Section;
@@ -53,10 +73,17 @@ const navItems: NavItem[] = [
   { id: 'social-motion', label: 'Social Motion', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
   { id: 'social-motion-principios', label: 'Princípios', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
   { id: 'social-motion-transicoes', label: 'Transições de Tela', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-cena-timeline', label: 'Cena & Timeline', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-fundos', label: 'Fundos em Motion', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
   { id: 'social-motion-textos', label: 'Textos Animados', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
   { id: 'social-motion-cards', label: 'Cards & Boxes', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
   { id: 'social-motion-path', label: 'Path Motion', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-servicos', label: 'Serviços', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
   { id: 'social-motion-numbers', label: 'Numbers & Data', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-cta', label: 'CTA Animado', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-passos', label: 'Passos', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-endcard', label: 'End Card', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'social-motion-extras', label: 'Extras', group: '🎬 Social Studio', icon: <Sparkles className="w-4 h-4" /> },
   { id: 'instagram', label: 'Instagram', group: '🎬 Social Studio', icon: <Image className="w-4 h-4" /> },
   { id: 'brand-voice', label: 'Brand Voice', group: '📝 Conteúdo', icon: <BookOpen className="w-4 h-4" /> },
   { id: 'preview', label: 'LP Preview', group: '🚀 Preview', icon: <Eye className="w-4 h-4" /> },
@@ -309,10 +336,17 @@ export default function App() {
           {activeSection === 'social-motion' && <SocialMotionOverviewSection onNavigate={(id) => { setActiveSection(id); setSocialMotionOpen(true); }} />}
           {activeSection === 'social-motion-principios' && <SocialMotionPrincipiosSection />}
           {activeSection === 'social-motion-transicoes' && <SocialMotionTransicoesSection />}
+          {activeSection === 'social-motion-cena-timeline' && <SocialMotionCenaTimelineSection />}
+          {activeSection === 'social-motion-fundos' && <SocialMotionFundosSection />}
           {activeSection === 'social-motion-textos' && <SocialMotionTextosSection />}
           {activeSection === 'social-motion-cards' && <SocialMotionCardsSection />}
           {activeSection === 'social-motion-path' && <SocialMotionPathSection />}
+          {activeSection === 'social-motion-servicos' && <SocialMotionServicosSection />}
           {activeSection === 'social-motion-numbers' && <SocialMotionNumbersSection />}
+          {activeSection === 'social-motion-cta' && <SocialMotionCtaSection />}
+          {activeSection === 'social-motion-passos' && <SocialMotionPassosSection />}
+          {activeSection === 'social-motion-endcard' && <SocialMotionEndCardSection />}
+          {activeSection === 'social-motion-extras' && <SocialMotionExtrasSection />}
           {activeSection === 'instagram' && <InstagramSection />}
           {activeSection === 'brand-voice' && <BrandVoiceSection />}
           {activeSection === 'preview' && <PreviewSection />}
@@ -334,10 +368,15 @@ function SocialMotionOverviewSection({ onNavigate }: { onNavigate: (id: Section)
   const subpages: { id: Section; label: string; desc: string }[] = [
     { id: 'social-motion-principios', label: 'Princípios', desc: 'Safe zone, timeline fixa e regras do vídeo social.' },
     { id: 'social-motion-transicoes', label: 'Transições de Tela', desc: 'Fade, slide, zoom e wipe entre cenas.' },
+    { id: 'social-motion-cena-timeline', label: 'Cena & Timeline', desc: 'Composição multi-cena, timeline determinística e export.' },
+    { id: 'social-motion-fundos', label: 'Fundos em Motion', desc: 'Motion da camada de fundo por cena/tema (transiciona o BG, depois entram os elementos).' },
     { id: 'social-motion-textos', label: 'Textos Animados', desc: 'Letras, palavras e linhas com stagger.' },
     { id: 'social-motion-cards', label: 'Cards & Boxes', desc: 'Cards com entrada escalonada e pop.' },
     { id: 'social-motion-path', label: 'Path Motion', desc: 'Setas e elementos seguindo um caminho.' },
     { id: 'social-motion-numbers', label: 'Numbers & Data', desc: 'Big numbers, barras e contadores.' },
+    { id: 'social-motion-cta', label: 'CTA Animado', desc: 'Botão com pulso e flutuação em loop.' },
+    { id: 'social-motion-passos', label: 'Passos', desc: 'Passos numerados com stagger.' },
+    { id: 'social-motion-endcard', label: 'End Card', desc: 'Frame final com logo, CTA e handle.' },
   ];
   return (
     <div className="space-y-12">
@@ -500,248 +539,158 @@ function SocialMotionPrincipiosSection() {
   );
 }
 
+const SOCIAL_MOTION_SMOOTH = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+function TransitionCurrentScene({ style = {} as React.CSSProperties }) {
+  return (
+    <div className="absolute inset-0" style={{ background: 'var(--slide-bg)', ...style }}>
+      <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
+        <p className="text-[10px] font-semibold tracking-[0.2em] uppercase mb-2" style={{ color: 'var(--slide-text-muted)' }}>SLIDE ATUAL</p>
+        <p className="font-display font-bold" style={{ color: 'var(--slide-text)', fontSize: 22 }}>Conteúdo atual</p>
+      </div>
+    </div>
+  );
+}
+
+function TransitionNextScene({ show, mode = 'fade' }: { show: boolean; mode?: 'fade' | 'up' | 'pop' }) {
+  const tr = 'opacity 420ms ' + SOCIAL_MOTION_SMOOTH + ' 140ms, transform 420ms ' + SOCIAL_MOTION_SMOOTH + ' 140ms';
+  const hidden = mode === 'up' ? 'translateY(10px)' : mode === 'pop' ? 'scale(0.96)' : 'translateY(6px)';
+  return (
+    <div className="absolute inset-0" style={{ background: 'linear-gradient(145deg, color-mix(in srgb, var(--slide-accent) 22%, var(--slide-bg)) 0%, var(--slide-bg) 55%, color-mix(in srgb, var(--slide-primary, var(--slide-accent)) 18%, var(--slide-bg)) 100%)' }}>
+      <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center" style={{ opacity: show ? 1 : 0, transform: show ? 'none' : hidden, transition: tr }}>
+        <p className="text-[10px] font-semibold tracking-[0.2em] uppercase mb-2" style={{ color: 'var(--slide-accent)' }}>PRÓXIMO SLIDE</p>
+        <p className="font-display font-bold" style={{ color: 'var(--slide-text)', fontSize: 22 }}>Novo conteúdo</p>
+        <span className="mt-3 px-3 py-1 rounded-full text-[10px] font-semibold" style={{ color: 'var(--slide-accent)', border: '1px solid color-mix(in srgb, var(--slide-accent) 45%, transparent)' }}>BG + elementos</span>
+      </div>
+    </div>
+  );
+}
+
+function TransitionSliceOfCurrent({ rows, cols, row, col, cellStyle, overlapX = 1, overlapY = 1 }: { rows: number; cols: number; row: number; col: number; cellStyle: React.CSSProperties; overlapX?: number; overlapY?: number }) {
+  return (
+    <div
+      style={{
+        position: 'relative',
+        overflow: 'hidden',
+        width: `${overlapX * 100}%`,
+        height: `${overlapY * 100}%`,
+        marginLeft: `${-(overlapX - 1) * 50}%`,
+        marginTop: `${-(overlapY - 1) * 50}%`,
+        zIndex: 2,
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          width: `${(cols / overlapX) * 100}%`,
+          height: `${(rows / overlapY) * 100}%`,
+          left: `${(-col / overlapX) * 100}%`,
+          top: `${(-row / overlapY) * 100}%`,
+          ...cellStyle,
+        }}
+      >
+        <TransitionCurrentScene />
+      </div>
+    </div>
+  );
+}
+
 function SocialMotionTransicoesSection() {
   const [active, setActive] = useState<string | null>(null);
   const [showSafeZone, setShowSafeZone] = useState(false);
-
-  const trigger = (id: string) => {
-    setActive(id);
-    const long = id === 'grid' || id === 'flip' || id === 'curtain' || id === 'diagonal' || id === 'iris' || id === 'venetian' || id === 'diamond' || id === 'checkerboard';
-    setTimeout(() => setActive(null), long ? 1400 : 800);
-  };
-
-  const transitions = [
-    { id: 'fade', name: 'Fade', dur: '300ms', ease: 'Smooth', desc: 'Só opacity. Corte suave Dica → Dica.' },
-    { id: 'slide', name: 'Slide', dur: '600ms', ease: 'Smooth', desc: 'translateX + opacity. Mudança de ideia.' },
-    { id: 'zoom', name: 'Zoom', dur: '600ms', ease: 'Elastic', desc: 'scale 1.05 → 1. Highlight de CTA/big number.' },
-    { id: 'wipe', name: 'Wipe', dur: '600ms', ease: 'Smooth', desc: 'clip-path com gradiente. Troca de tema.' },
-    { id: 'blur', name: 'BlurIn', dur: '600ms', ease: 'Smooth', desc: 'blur 8px → 0. Entrada dramática de título.' },
-    { id: 'push', name: 'Push/Cover', dur: '600ms', ease: 'Smooth (travado)', desc: 'Nova cena empurra/cobre. Seção nova ou CTA.' },
-    { id: 'curtain', name: 'Cortina Faixas', dur: '600ms', ease: 'Smooth (travado)', desc: '4 faixas verticais com stagger 60ms. Cortina ilustrada.' },
-    { id: 'grid', name: 'Grid 4x3', dur: '600ms', ease: 'Smooth (travado)', desc: '12 fragmentos com flip rotateX/Y. Insp. CodePen. Em 4:5 os fragmentos ficam retrato — manter 4x3 fiel ao original.' },
-    { id: 'flip', name: 'Flip 3D', dur: '600ms', ease: 'Smooth (travado)', desc: '4 quadrantes alternando rotateX/Y. Reveal de CTA.' },
-    { id: 'diagonal', name: 'Diagonal', dur: '600ms', ease: 'Smooth (travado)', desc: '2 painéis clip-path skew, stagger 80ms. Editorial.' },
-    { id: 'iris', name: 'Círculo Iris', dur: '600ms', ease: 'Smooth (travado)', desc: 'clip-path circle 0% → 100% no centro. Capa → CTA.' },
-    { id: 'venetian', name: 'Venetian', dur: '600ms', ease: 'Smooth (travado)', desc: '6 faixas horizontais scaleY, stagger 50ms. Variação 9:16.' },
-    { id: 'diamond', name: 'Diamond', dur: '600ms', ease: 'Smooth (travado)', desc: 'Grid 4x3 delay centro → fora. Mais dinâmico. Em 4:5 os fragmentos ficam retrato.' },
-    { id: 'checkerboard', name: 'Checkerboard', dur: '600ms', ease: 'Smooth (travado)', desc: 'Grid 4x3 só pares com rotateY. Efeito xadrez. Em 4:5 os fragmentos ficam retrato.' },
+  const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
+  const themes = [
+    { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#FFF5E6', border: '#FF6B35', desc: 'Dicas, conteúdo educativo' },
+    { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#FAFAFA', border: '#1A1A1A', desc: 'Depoimentos, elegância' },
   ];
+  const smooth = 'cubic-bezier(0.16, 1, 0.3, 1)';
+  const elastic = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+  const trigger = (id: string) => { setActive(id); setTimeout(() => setActive(null), 1600); };
+  const transitions = [
+    { id: 'fade', name: 'Fade', dur: '300ms', ease: 'Smooth', desc: 'Atual (BG+conteúdo) permanece visível; próximo entra por opacity revelando seu BG e elementos.' },
+    { id: 'slide', name: 'Slide', dur: '600ms', ease: 'Smooth', desc: 'Atual sai e próximo entra com seu BG+elementos (ambos visíveis na troca).' },
+    { id: 'zoom', name: 'Zoom', dur: '600ms', ease: 'Elastic', desc: 'Próximo (BG+elementos) revela por scale/opacity sobre o atual.' },
+    { id: 'wipe', name: 'Wipe', dur: '600ms', ease: 'Smooth', desc: 'Recorte do próximo revela seu BG+elementos sobre o BG atual.' },
+    { id: 'blur', name: 'BlurIn', dur: '600ms', ease: 'Smooth', desc: 'Próximo entra com blur→foco sobre o atual visível.' },
+    { id: 'push', name: 'Push/Cover', dur: '600ms', ease: 'Smooth', desc: 'Próximo (BG+elementos) empurra/cobre; atual permanece visível durante a troca.' },
+    { id: 'curtain', name: 'Cortina Faixas', dur: '600ms', ease: 'Smooth', desc: 'Faixas (fatias) do BG atual saem em stagger, revelando BG+elementos do próximo.' },
+    { id: 'grid', name: 'Grid 4×3', dur: '600ms', ease: 'Smooth', desc: '12 retângulos (fatias) do BG atual animam e revelam o próximo.' },
+    { id: 'flip', name: 'Flip 3D', dur: '600ms', ease: 'Smooth', desc: 'Quadrantes (fatias) do BG atual viram, revelando BG+elementos do próximo.' },
+    { id: 'diagonal', name: 'Diagonal', dur: '600ms', ease: 'Smooth', desc: 'Painéis (fatias) do BG atual deslizam na diagonal, revelando o próximo.' },
+    { id: 'iris', name: 'Círculo Iris', dur: '600ms', ease: 'Smooth', desc: 'Círculo central revela BG+elementos do próximo sobre o atual.' },
+    { id: 'venetian', name: 'Venetian', dur: '600ms', ease: 'Smooth', desc: 'Faixas horizontais (fatias) do BG atual abrem em stagger, revelando o próximo.' },
+    { id: 'diamond', name: 'Diamond', dur: '600ms', ease: 'Smooth', desc: 'Retângulos 4×3 (fatias) do BG atual saem do centro→fora, revelando o próximo.' },
+    { id: 'checkerboard', name: 'Checkerboard', dur: '600ms', ease: 'Smooth', desc: '12 retângulos (fatias) do BG atual em xadrez saem em stagger, revelando o próximo.' },
+    { id: 'glitch', name: 'Glitch', dur: '600ms', ease: 'Smooth', desc: 'Fatias 6×4 do BG atual deslizam com jitter (delay determinístico por célula), revelando o próximo.' },
+    { id: 'rgb-split', name: 'RGB Split', dur: '600ms', ease: 'Smooth', desc: 'Próximo entra com aberração cromática (drop-shadow accent/primary) e translateX que se anulam no fim.' },
+  ];
+  const ease = (id: string) => (id === 'zoom' ? elastic : smooth);
+
+
 
   const getPreview = (id: string, isActive: boolean) => {
-    const base = 'absolute inset-0 flex items-center justify-center';
-    const smooth = 'cubic-bezier(0.16, 1, 0.3, 1)';
-    const elastic = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
-    if (id === 'curtain') {
-      return (
-        <>
-          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
-          <div className="absolute inset-0 grid grid-cols-4">
-            {[0, 1, 2, 3].map(i => (
-              <div key={i} className="h-full origin-left" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 100%', backgroundPosition: `${i * 33.33}% 0%`, transform: isActive ? 'scaleX(1)' : 'scaleX(0)', transition: `transform 600ms ${smooth} ${i * 60}ms` }} />
-            ))}
-          </div>
-          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 400ms`, pointerEvents: 'none' }}>Tema novo</span>
-        </>
-      );
-    }
-    if (id === 'grid') {
-      const items = Array.from({ length: 12 });
-      return (
-        <>
-          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
-          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>
-            {items.map((_, idx) => {
-              const row = Math.floor(idx / 4);
-              const col = idx % 4;
-              const odd = (row + col) % 2 === 0;
-              return (
-                <div key={idx} className="w-full h-full" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: isActive ? 'rotateX(0deg) rotateY(0deg) scale(1)' : `rotateX(${odd ? '-180deg' : '0deg'}) rotateY(${odd ? '0deg' : '-180deg'}) scale(0.8)`, opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${(row + col) * 50}ms`, backfaceVisibility: 'hidden' }} />
-              );
-            })}
-          </div>
-          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 500ms`, pointerEvents: 'none' }}>Grid 4x3</span>
-        </>
-      );
-    }
-    if (id === 'flip') {
-      return (
-        <>
-          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
-          <div className="absolute inset-0 grid grid-cols-2 grid-rows-2" style={{ perspective: '600px' }}>
-            {[0, 1, 2, 3].map(i => {
-              const odd = i % 2 === 0;
-              return (
-                <div key={i} className="w-full h-full" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #0EA5E9 100%)', backgroundSize: '200% 200%', backgroundPosition: `${(i % 2) * 100}% ${Math.floor(i / 2) * 100}%`, transform: isActive ? 'rotateX(0deg) rotateY(0deg)' : `rotateX(${odd ? '-180deg' : '0deg'}) rotateY(${odd ? '0deg' : '-180deg'})`, opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${i * 70}ms`, backfaceVisibility: 'hidden' }} />
-              );
-            })}
-          </div>
-          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 400ms`, pointerEvents: 'none' }}>CTA →</span>
-        </>
-      );
-    }
-    if (id === 'diagonal') {
-      return (
-        <>
-          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
-          <div className="absolute inset-0" style={{ perspective: '600px' }}>
-            {[0, 1].map(i => (
-              <div key={i} className="absolute top-0 h-full" style={{ left: i === 0 ? '0%' : '45%', width: '55%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', clipPath: i === 0 ? 'polygon(0 0, 100% 0, 85% 100%, 0 100%)' : 'polygon(15% 0, 100% 0, 100% 100%, 0 100%)', transform: isActive ? 'translateX(0)' : i === 0 ? 'translateX(-120%)' : 'translateX(120%)', transition: `transform 600ms ${smooth} ${i * 80}ms` }} />
-            ))}
-          </div>
-          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 400ms`, pointerEvents: 'none' }}>Diagonal</span>
-        </>
-      );
-    }
-    if (id === 'iris') {
-      return (
-        <>
-          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', clipPath: isActive ? 'circle(100% at 50% 50%)' : 'circle(0% at 50% 50%)', transition: `clip-path 600ms ${smooth}` }} />
-          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 400ms`, pointerEvents: 'none' }}>CTA →</span>
-        </>
-      );
-    }
-    if (id === 'venetian') {
-      return (
-        <>
-          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
-          <div className="absolute inset-0 grid grid-rows-6">
-            {[0, 1, 2, 3, 4, 5].map(i => (
-              <div key={i} className="w-full origin-top" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '100% 600%', backgroundPosition: `0% ${i * 20}%`, transform: isActive ? 'scaleY(1)' : 'scaleY(0)', transition: `transform 600ms ${smooth} ${i * 50}ms` }} />
-            ))}
-          </div>
-          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 450ms`, pointerEvents: 'none' }}>Venetian</span>
-        </>
-      );
-    }
-    if (id === 'diamond') {
-      const items = Array.from({ length: 12 });
-      return (
-        <>
-          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
-          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>
-            {items.map((_, idx) => {
-              const row = Math.floor(idx / 4);
-              const col = idx % 4;
-              const odd = (row + col) % 2 === 0;
-              const delay = (Math.abs(col - 1.5) + Math.abs(row - 1)) * 70;
-              return (
-                <div key={idx} className="w-full h-full" style={{ width: '103%', height: '102%', marginLeft: '-1.5%', marginTop: '-1%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: isActive ? 'rotateX(0deg) rotateY(0deg) scale(1)' : `rotateX(${odd ? '-180deg' : '0deg'}) rotateY(${odd ? '0deg' : '-180deg'}) scale(0.8)`, opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${delay}ms`, backfaceVisibility: 'hidden' }} />
-              );
-            })}
-          </div>
-          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 500ms`, pointerEvents: 'none' }}>Diamond</span>
-        </>
-      );
-    }
-    if (id === 'checkerboard') {
-      const items = Array.from({ length: 12 });
-      return (
-        <>
-          <span className={base}><span className="font-display font-bold text-white/70">Dica #1</span></span>
-          <div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>
-            {items.map((_, idx) => {
-              const row = Math.floor(idx / 4);
-              const col = idx % 4;
-              const even = (row + col) % 2 === 0;
-              return (
-                <div key={idx} className="w-full h-full" style={{ width: '101%', height: '102%', marginTop: '-1%', background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', backgroundSize: '400% 300%', backgroundPosition: `${col * 33.33}% ${row * 50}%`, transform: even ? (isActive ? 'rotateY(0deg)' : 'rotateY(-180deg)') : (isActive ? 'translateX(0)' : 'translateX(8px)'), opacity: isActive ? 1 : 0, transition: `all 600ms ${smooth} ${(row + col) * 40}ms`, backfaceVisibility: 'hidden' }} />
-              );
-            })}
-          </div>
-          <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-white" style={{ opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} 500ms`, pointerEvents: 'none' }}>Checkerboard</span>
-        </>
-      );
-    }
-    if (id === 'push') {
-      return (
-        <>
-          <div className={base} style={{ transform: isActive ? 'translateX(-100%)' : 'translateX(0)', transition: `transform 600ms ${smooth}` }}>
-            <span className="font-display font-bold text-white/70">Dica #1</span>
-          </div>
-          <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', transform: isActive ? 'translateX(0)' : 'translateX(100%)', transition: `transform 600ms ${smooth}` }}>
-            <span className="font-display font-bold text-white">CTA →</span>
-          </div>
-        </>
-      );
-    }
-    if (id === 'fade') {
-      return (
-        <>
-          <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-          <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', opacity: isActive ? 1 : 0, transition: `opacity 300ms ${smooth} ${isActive ? '150ms' : '0ms'}` }}><span className="font-display font-bold text-white">Dica #2 → fade-in</span></div>
-        </>
-      );
-    }
-    if (id === 'slide') return (
-      <>
-        <div className={base}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-        <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', transform: isActive ? 'translateX(0)' : 'translateX(100%)', transition: `transform 600ms ${smooth}`, opacity: isActive ? 1 : 0 }}><span className="font-display font-bold text-white">Dica #2 → slide</span></div>
-      </>
-    );
-    if (id === 'zoom') return (
-      <>
-        <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-        <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', transform: isActive ? 'scale(1)' : 'scale(1.08)', opacity: isActive ? 1 : 0, transition: `all 600ms ${elastic}` }}><span className="font-display font-bold text-white">Big number +150</span></div>
-      </>
-    );
-    if (id === 'wipe') return (
-      <>
-        <div className={base}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-        <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', clipPath: isActive ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)', transition: `clip-path 600ms ${smooth}` }}><span className="font-display font-bold text-white">Tema novo → wipe</span></div>
-      </>
-    );
-    return (
-      <>
-        <div className={base} style={{ opacity: isActive ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-        <div className={base} style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', opacity: isActive ? 1 : 0, filter: isActive ? 'blur(0px)' : 'blur(8px)', transition: `all 600ms ${smooth}` }}><span className="font-display font-bold text-white">Título → blur in</span></div>
-      </>
-    );
+    const e = ease(id);
+    if (id === 'fade') return (<><TransitionCurrentScene /><div className="absolute inset-0" style={{ opacity: isActive ? 1 : 0, transition: 'opacity 300ms ' + smooth }}><TransitionNextScene show={isActive} /></div></>);
+    if (id === 'slide') return (<><div className="absolute inset-0" style={{ transform: isActive ? 'translateX(-100%)' : 'translateX(0)', transition: 'transform 600ms ' + e }}><TransitionCurrentScene /></div><div className="absolute inset-0" style={{ transform: isActive ? 'translateX(0)' : 'translateX(100%)', transition: 'transform 600ms ' + e }}><TransitionNextScene show={isActive} mode="up" /></div></>);
+    if (id === 'zoom') return (<><TransitionCurrentScene /><div className="absolute inset-0" style={{ opacity: isActive ? 1 : 0, transform: isActive ? 'scale(1)' : 'scale(1.06)', transition: 'all 600ms ' + e }}><TransitionNextScene show={isActive} mode="pop" /></div></>);
+    if (id === 'wipe') return (<><TransitionCurrentScene /><div className="absolute inset-0" style={{ clipPath: isActive ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)', transition: 'clip-path 600ms ' + e }}><TransitionNextScene show={isActive} /></div></>);
+    if (id === 'blur') return (<><TransitionCurrentScene /><div className="absolute inset-0" style={{ opacity: isActive ? 1 : 0, filter: isActive ? 'blur(0px)' : 'blur(8px)', transition: 'all 600ms ' + e }}><TransitionNextScene show={isActive} /></div></>);
+    if (id === 'push') return (<><div className="absolute inset-0" style={{ transform: isActive ? 'translateX(-100%)' : 'translateX(0)', transition: 'transform 600ms ' + e }}><TransitionCurrentScene /></div><div className="absolute inset-0" style={{ transform: isActive ? 'translateX(0)' : 'translateX(100%)', transition: 'transform 600ms ' + e }}><TransitionNextScene show={isActive} /></div></>);
+    if (id === 'iris') return (<><TransitionCurrentScene /><div className="absolute inset-0" style={{ clipPath: isActive ? 'circle(120% at 50% 50%)' : 'circle(0% at 50% 50%)', transition: 'clip-path 600ms ' + e }}><TransitionNextScene show={isActive} mode="pop" /></div></>);
+    if (id === 'curtain') return (<><TransitionNextScene show={isActive} /><div className="absolute inset-0 grid grid-cols-4 grid-rows-1">{[0,1,2,3].map(i => (<TransitionSliceOfCurrent key={i} rows={1} cols={4} row={0} col={i} cellStyle={{ transform: isActive ? 'scaleX(0)' : 'scaleX(1)', transformOrigin: 'left', transition: 'transform 600ms ' + e + ' ' + (i * 60) + 'ms' }} />))}</div></>);
+    if (id === 'venetian') return (<><TransitionNextScene show={isActive} /><div className="absolute inset-0 grid grid-rows-6">{[0,1,2,3,4,5].map(i => (<TransitionSliceOfCurrent key={i} rows={6} cols={1} row={i} col={0} cellStyle={{ transform: isActive ? 'scaleY(0)' : 'scaleY(1)', transformOrigin: 'top', transition: 'transform 600ms ' + e + ' ' + (i * 50) + 'ms' }} />))}</div></>);
+    if (id === 'diagonal') return (<><TransitionNextScene show={isActive} /><div className="absolute inset-0">{[0,1].map(i => (<div key={i} className="absolute inset-0" style={{ clipPath: i === 0 ? 'polygon(0 0,100% 0,85% 100%,0 100%)' : 'polygon(15% 0,100% 0,100% 100%,0 100%)', transform: isActive ? (i === 0 ? 'translateX(-120%)' : 'translateX(120%)') : 'translateX(0)', transition: 'transform 600ms ' + e + ' ' + (i * 80) + 'ms' }}><TransitionCurrentScene /></div>))}</div></>);
+    if (id === 'grid') { const items = Array.from({ length: 12 }); return (<><TransitionNextScene show={isActive} /><div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>{items.map((_, idx) => { const row = Math.floor(idx / 4), col = idx % 4, odd = (row + col) % 2 === 0, d = (row + col) * 50; return (<TransitionSliceOfCurrent key={idx} rows={3} cols={4} row={row} col={col} cellStyle={{ opacity: isActive ? 0 : 1, transform: isActive ? (odd ? 'rotateX(-180deg) scale(0.8)' : 'rotateY(-180deg) scale(0.8)') : 'rotateX(0) rotateY(0) scale(1)', transition: 'all 600ms ' + e + ' ' + d + 'ms', backfaceVisibility: 'hidden' }} />); })}</div></>); }
+    if (id === 'flip') return (<><TransitionNextScene show={isActive} /><div className="absolute inset-0 grid grid-cols-2 grid-rows-2" style={{ perspective: '600px' }}>{[0,1,2,3].map(i => { const row = Math.floor(i / 2), col = i % 2, odd = i % 2 === 0; return (<TransitionSliceOfCurrent key={i} rows={2} cols={2} row={row} col={col} cellStyle={{ opacity: isActive ? 0 : 1, transform: isActive ? (odd ? 'rotateX(-180deg)' : 'rotateY(-180deg)') : 'rotateX(0) rotateY(0)', transition: 'all 600ms ' + e + ' ' + (i * 70) + 'ms', backfaceVisibility: 'hidden' }} />); })}</div></>);
+    if (id === 'diamond') { const items = Array.from({ length: 12 }); return (<><TransitionNextScene show={isActive} /><div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>{items.map((_, idx) => { const row = Math.floor(idx / 4), col = idx % 4, odd = (row + col) % 2 === 0, d = (Math.abs(col - 1.5) + Math.abs(row - 1)) * 70; return (<TransitionSliceOfCurrent key={idx} rows={3} cols={4} row={row} col={col} overlapX={1.03} overlapY={1.02} cellStyle={{ opacity: isActive ? 0 : 1, transform: isActive ? (odd ? 'rotateX(-180deg) scale(0.8)' : 'rotateY(-180deg) scale(0.8)') : 'rotateX(0) rotateY(0) scale(1)', transition: 'all 600ms ' + e + ' ' + d + 'ms', backfaceVisibility: 'hidden' }} />); })}</div></>); }
+    if (id === 'checkerboard') { const items = Array.from({ length: 12 }); return (<><TransitionNextScene show={isActive} /><div className="absolute inset-0 grid grid-cols-4 grid-rows-3" style={{ perspective: '600px' }}>{items.map((_, idx) => { const row = Math.floor(idx / 4), col = idx % 4, even = (row + col) % 2 === 0, d = (row + col) * 40; return (<TransitionSliceOfCurrent key={idx} rows={3} cols={4} row={row} col={col} overlapX={1.01} overlapY={1.02} cellStyle={{ opacity: isActive ? 0 : 1, transform: isActive ? (even ? 'rotateY(-180deg)' : 'translateX(8px)') : (even ? 'rotateY(0)' : 'translateX(0)'), transition: 'all 600ms ' + e + ' ' + d + 'ms', backfaceVisibility: 'hidden' }} />); })}</div></>); }
+    if (id === 'glitch') { const items = Array.from({ length: 24 }); return (<><TransitionNextScene show={isActive} /><div className="absolute inset-0 grid grid-cols-6 grid-rows-4">{items.map((_, idx) => { const row = Math.floor(idx / 6), col = idx % 6, d = ((row * 7 + col * 13) % 5) * 50; const dx = col % 2 === 0 ? -16 : 16, dy = row % 2 === 0 ? -10 : 10; return (<TransitionSliceOfCurrent key={idx} rows={4} cols={6} row={row} col={col} cellStyle={{ opacity: isActive ? 0 : 1, transform: isActive ? ('translate(' + dx + 'px,' + dy + 'px) scale(0.88)') : 'translate(0,0) scale(1)', transition: 'all 600ms ' + e + ' ' + d + 'ms' }} />); })}</div></>); }
+    if (id === 'rgb-split') { const o = isActive ? 0 : 6; return (<><TransitionCurrentScene /><div className="absolute inset-0" style={{ opacity: isActive ? 1 : 0, transform: isActive ? 'translateX(0)' : 'translateX(10px)', filter: 'drop-shadow(' + o + 'px 0 0 var(--slide-accent)) drop-shadow(' + (-o) + 'px 0 0 var(--slide-primary, var(--slide-accent)))', transition: 'all 600ms ' + e }}><TransitionNextScene show={isActive} /></div></>); }
+    return (<><TransitionCurrentScene /><TransitionNextScene show={isActive} /></>);
   };
 
   return (
     <div className="space-y-12">
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-4">Selecione o tema</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {themes.map((t) => (
+            <button key={t.id} onClick={() => setTheme(t.id)} className={'relative p-4 rounded-xl border-2 transition-all ' + (theme === t.id ? 'border-tech scale-105 shadow-lg' : 'border-[var(--surface-border)] hover:border-tech/50')} aria-label={'Tema ' + t.name} aria-pressed={theme === t.id}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 border-4" style={{ backgroundColor: t.bg, borderColor: t.border }} />
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{t.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{t.desc}</p>
+              {theme === t.id && (<div className="absolute top-2 right-2"><Check className="w-4 h-4 text-tech" /></div>)}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
-        <p className="text-tech font-semibold mb-2">🎬 Troca de cena sem quebrar a timeline</p>
-        <p className="text-sm text-[var(--text-on-surface-muted)]">Toque no preview para ver a animação. Texto crítico mantém legível durante a transição — nada sai da Safe Zone. Push/Cover e Fragment travados em 600ms Smooth.</p>
+        <p className="text-tech font-semibold mb-2">Regra (todas as transições)</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]"><strong>BG/slide atual</strong> sai com o efeito escolhido enquanto o <strong>próximo slide/BG</strong> já está por baixo e é revelado. Fragmentos = <strong>fatias do BG atual</strong> saindo. Reduced-motion = fade/corte; determinístico para export.</p>
       </div>
 
       <div>
-        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Previews (clique para testar) — IG 4:5 · 340×425</h3>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Previews (clique): atual → próximo</h3>
         <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] mb-6">
           <label className="flex items-center gap-3 cursor-pointer flex-1">
-            <input
-              type="checkbox"
-              checked={showSafeZone}
-              onChange={(e) => setShowSafeZone(e.target.checked)}
-              className="sr-only peer"
-            />
+            <input type="checkbox" checked={showSafeZone} onChange={(e) => setShowSafeZone(e.target.checked)} className="sr-only peer" />
             <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tech relative"></div>
-            <span className="text-sm font-medium text-[var(--text-on-surface)] flex items-center gap-2">
-              <Eye className="w-4 h-4" />
-              Mostrar área de segurança (13.3% topo · 13% laterais · 74% × 71.9%)
-            </span>
+            <span className="text-sm font-medium text-[var(--text-on-surface)] flex items-center gap-2"><Eye className="w-4 h-4" />Mostrar área de segurança</span>
           </label>
-          <span className="text-xs font-mono text-tech hidden sm:block">1080×1350 · safe 800×970</span>
         </div>
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-3 gap-4" data-theme={theme}>
           {transitions.map(t => (
             <div key={t.id} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
               <button onClick={() => trigger(t.id)} className="w-full text-left">
-                <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[#0a0a0f] to-[#1a1a2e] border border-[var(--surface-border)]">
+                <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden border border-[var(--surface-border)]">
                   {getPreview(t.id, active === t.id)}
-                  {showSafeZone && (
-                    <>
-                      <div className="absolute pointer-events-none border-2 border-dashed border-[rgba(6,182,212,0.6)] bg-[rgba(6,182,212,0.03)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
-                      <div className="absolute pointer-events-none bg-[rgba(6,182,212,0.9)] text-white px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
-                    </>
-                  )}
+                  {showSafeZone && (<><div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} /><div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div></>)}
                 </div>
               </button>
-              <div className="flex items-center gap-2 mt-3">
-                <p className="font-display font-bold text-[var(--text-on-surface)]">{t.name}</p>
-                <span className="text-xs font-mono text-tech">{t.dur} · {t.ease}</span>
-              </div>
+              <div className="flex items-center gap-2 mt-3"><p className="font-display font-bold text-[var(--text-on-surface)]">{t.name}</p><span className="text-xs font-mono text-tech">{t.dur} · {t.ease}</span></div>
               <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">{t.desc}</p>
             </div>
           ))}
@@ -750,67 +699,248 @@ function SocialMotionTransicoesSection() {
 
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Quando usar</h3>
-        <Table
-          columns={[
-            { key: 'name', label: 'Transição' },
-            { key: 'when', label: 'Quando usar' },
-            { key: 'dur', label: 'Duração' },
-          ]}
-          data={[
-            { name: 'Fade', when: 'Sequência longa, mesma ideia', dur: '300ms Smooth' },
-            { name: 'Slide', when: 'Mudança de seção, direção = avançar', dur: '600ms Smooth' },
-            { name: 'Zoom', when: 'Highlight, CTA, big number', dur: '600ms Elastic' },
-            { name: 'Wipe', when: 'Troca de tema / cor', dur: '600ms Smooth' },
-            { name: 'BlurIn', when: 'Entrada de título/logo', dur: '600ms Smooth' },
-            { name: 'Push/Cover', when: 'Seção nova (push) ou reveal de CTA (cover)', dur: '600ms Smooth (travado)' },
-            { name: 'Cortina Faixas', when: 'Troca de tema com cortina ilustrada', dur: '600ms Smooth + stagger 60ms' },
-            { name: 'Grid 4x3', when: 'Troca de cena com grid fragmentado (insp. CodePen)', dur: '600ms Smooth + delay (i+j)*50ms' },
-            { name: 'Flip 3D', when: 'Reveal de CTA/big number com quadrantes', dur: '600ms Smooth + delay 70ms' },
-            { name: 'Diagonal', when: 'Troca editorial, 2 painéis skew', dur: '600ms Smooth + stagger 80ms' },
-            { name: 'Círculo Iris', when: 'Reveal central Capa → CTA', dur: '600ms Smooth' },
-            { name: 'Venetian', when: 'Variação horizontal pra 9:16', dur: '600ms Smooth + stagger 50ms' },
-            { name: 'Diamond', when: 'Grid centro → fora, mais dinâmico', dur: '600ms Smooth + delay centro' },
-            { name: 'Checkerboard', when: 'Metade dos fragmentos (xadrez) volteia', dur: '600ms Smooth + delay (i+j)*40ms' },
-          ]}
-        />
+        <Table columns={[{ key: 'name', label: 'Transição' }, { key: 'when', label: 'Quando usar' }, { key: 'dur', label: 'Duração' }]} data={transitions.map(t => ({ name: t.name, when: t.desc, dur: t.dur + ' ' + t.ease }))} />
       </div>
 
       <div>
-        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Contrato</h3>
         <PropsTable props={[
-          { name: 'duration', type: "300 | 600 | 900", default: "600", description: 'Push/Cover e Fragment sempre 600' },
-          { name: 'easing', type: "'Smooth' | 'Elastic' | 'Spring'", default: "'Smooth'", description: 'Curva — Push/Cover e Fragment sempre Smooth' },
-          { name: 'direction', type: "'left' | 'right' | 'up'", default: "'left'", description: 'Direção da entrada' },
-          { name: 'mode', type: "'push' | 'cover'", default: "'push'", description: 'Push empurra cena antiga; Cover cobre por cima' },
-          { name: 'grid', type: "'4x3' | '4x2'", default: "'4x3'", description: 'Grid do Fragment (12 fragmentos, otimizado vs 13x9 do CodePen)' },
-          { name: 'stagger', type: 'number (ms)', default: "60", description: 'Delay entre fragmentos/faixas' },
-          { name: 'variant', type: "'curtain' | 'grid' | 'flip' | 'diagonal' | 'iris' | 'venetian' | 'diamond' | 'checkerboard'", default: "'grid'", description: 'Variante Fragment/Curtina (9 presets de cortina)' },
+          { name: 'regra', type: 'composição', default: '-', description: 'Outgoing (BG atual) visível → incoming (próximo BG+elementos) revelado. Fragmentos = fatias do BG atual.' },
+          { name: 'duration', type: '300|600', default: '600', description: 'Determinístico (export/capture); fade curto, demais 600ms + stagger.' },
+          { name: 'easing', type: 'Smooth|Elastic', default: 'Smooth', description: 'Smooth padrão; Elastic em zoom.' },
+          { name: 'reduced-motion', type: 'a11y', default: 'fade/cut', description: 'Respeitar prefers-reduced-motion.' },
+          { name: 'engine', type: 'SceneTransitionType', default: 'fade', description: 'ReelTimeline (export): fade|slide-up|slide-left|wipe-up|wipe|zoom|blur|iris|checkerboard|curtain|venetian|diagonal|grid|flip|diamond|glitch|rgb-split — paridade total com o preview.' },
+        ]} />
+      </div>
+    </div>
+  );
+}
+
+const APPLE_TOP = ['Tecnologia que gera resultado', 'Transforme Sua Empresa com Tecnologia'];
+
+function SocialMotionFundosSection() {
+  const [active, setActive] = useState<string | null>(null);
+  const [run, setRun] = useState(0);
+  const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
+  const themes = [
+    { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#FFF5E6', border: '#FF6B35', desc: 'Dicas, conteúdo educativo' },
+    { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#FAFAFA', border: '#1A1A1A', desc: 'Depoimentos, elegância' },
+  ];
+  const trigger = (id: string) => {
+    setActive(id);
+    setRun((r) => r + 1); // remonta o card ativo → a entrada do SceneBackdrop roda do zero
+  };
+  const presets = BG_PRESETS;
+  const smooth = SOCIAL_MOTION_SMOOTH;
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">Camada de fundo (motion) por cena</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">
+          Orquestração em camadas: <strong>1) BG transiciona/entra</strong> → <strong>2) elementos entram</strong> (texto, cards, CTA) com stagger.
+          Mantém consistência de tema/tokens e dá contraste para transições como <em>wipe</em>. Use com <strong>Cena &amp; Timeline</strong> para duração determinística e export.
+        </p>
+      </div>
+
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-4">Selecione o tema</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {themes.map((t) => (
+            <button key={t.id} onClick={() => setTheme(t.id)} className={`relative p-4 rounded-xl border-2 transition-all ${theme === t.id ? 'border-tech scale-105 shadow-lg' : 'border-[var(--surface-border)] hover:border-tech/50'}`} aria-label={`Tema ${t.name}`} aria-pressed={theme === t.id}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 border-4" style={{ backgroundColor: t.bg, borderColor: t.border }} />
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{t.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{t.desc}</p>
+              {theme === t.id && (<div className="absolute top-2 right-2"><Check className="w-4 h-4 text-tech" /></div>)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-2">Exemplos de BG (clique para animar)</h3>
+        <p className="text-sm text-[var(--text-on-surface-muted)] mb-6">Previews 9:16 usando tokens do tema — o conteúdo entra depois do fundo (camadas).</p>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4" data-theme={theme}>
+          {presets.map((p) => {
+            const isActive = active === p.id;
+            return (
+              <div key={p.id} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+                <button onClick={() => trigger(p.id)} className="w-full text-left">
+                  <div className="relative aspect-[9/16] w-full max-w-[220px] mx-auto rounded-lg overflow-hidden border border-[var(--surface-border)]">
+                    {/* O demo consome o próprio primitivo: parado = settled (frame final),
+                        clicado = remonta sem settled e a entrada anima do zero. */}
+                    <SceneBackdrop
+                      key={isActive ? `${p.id}-${run}` : p.id}
+                      preset={p.id as SceneBackdropPreset}
+                      settled={!isActive}
+                    />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center" style={{ zIndex: 2, opacity: isActive ? 1 : 0, transform: isActive ? 'translateY(0)' : 'translateY(8px)', transition: `opacity 420ms ${smooth} 180ms, transform 420ms ${smooth} 180ms` }}>
+                      <p className="font-display font-bold text-[var(--slide-text)]" style={{ fontSize: 18 }}>Elementos entram</p>
+                      <p className="text-[11px] mt-1" style={{ color: 'var(--slide-text-muted)' }}>após o BG</p>
+                    </div>
+                  </div>
+                </button>
+                <div className="flex items-center gap-2 mt-3">
+                  <p className="font-display font-bold text-[var(--text-on-surface)]">{p.name}</p>
+                  <span className="text-xs font-mono text-tech">{p.id === 'shape-float' ? `${p.durationMs}ms + loop` : p.durationMs === 0 ? 'base' : `${p.durationMs}ms`}</span>
+                </div>
+                <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">{p.desc}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Contrato & boas práticas</h3>
+        <ul className="space-y-2 text-sm text-[var(--text-on-surface-muted)] list-disc list-inside">
+          <li><strong className="text-[var(--text-on-surface)]">Camadas separadas:</strong> BG abaixo do conteúdo; conteúdo respeita safe zone e legibilidade (contraste).</li>
+          <li><strong className="text-[var(--text-on-surface)]">Tokens de tema:</strong> variações via <code>--slide-bg</code>/accent/gradientes do tema, sem quebrar identidade.</li>
+          <li><strong className="text-[var(--text-on-surface)]">Determinístico:</strong> tempos definidos por cena; integrar ao <code>durationMs</code> total (Cena &amp; Timeline) para export.</li>
+          <li><strong className="text-[var(--text-on-surface)]">Acessibilidade:</strong> respeitar <code>prefers-reduced-motion</code> (reduzir movimento/pulso; manter corte/fade simples).</li>
+        </ul>
+      </div>
+
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="font-semibold text-[var(--text-on-surface)] mb-2">✅ Primitivo exportado: <code>SceneBackdrop</code> + <code>BG_PRESETS</code></p>
+        <p className="text-sm text-[var(--text-on-surface-muted)] mb-4">Os presets acima são o próprio componente do DS — o demo consome <code>SceneBackdrop</code> (parado = <code>settled</code>, clicado = entrada anima). O app social só declara o preset por cena:</p>
+        <CodeBlock code={"import { SceneBackdrop, BG_PRESETS } from '@maxebina/max-ds';\n\n<div className=\"instagram-slide\" data-theme={tema}>\n  <SceneBackdrop preset={cena.bg} delayMs={0} durationMs={600} settled={modoEstatico} />\n  {/* conteúdo por cima */}\n</div>"} />
+        <div className="mt-4">
+          <PropsTable props={[
+            { name: 'preset', type: 'SceneBackdropPreset', default: "'solid'", description: "'solid' | 'gradient-shift' | 'accent-glow' | 'shape-float' | 'wipe-reveal' | 'zoom-bg' (BG_PRESETS traz o catálogo)." },
+            { name: 'delayMs', type: 'number', default: '0', description: 'Atraso da entrada, em ms (determinístico p/ export).' },
+            { name: 'durationMs', type: 'number', default: 'do preset', description: 'Duração da entrada; sobrepõe o durationMs do preset.' },
+            { name: 'settled', type: 'boolean', default: 'false', description: 'Frame final sem animação = tela estática aprovada.' },
+          ]} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SocialMotionCenaTimelineSection() {
+  const transitions = [
+    { key: 'none', label: 'none', dur: '0', when: 'Corte seco (usar com cuidado)' },
+    { key: 'fade', label: 'fade', dur: '300–450ms', when: 'Troca suave padrão' },
+    { key: 'slide-up', label: 'slide-up', dur: '450ms', when: 'Progressão/continuidade' },
+    { key: 'slide-left', label: 'slide-left', dur: '450ms', when: 'Mudança de cena lateral' },
+    { key: 'wipe-up', label: 'wipe-up', dur: '450ms', when: 'Revelação/virada de assunto' },
+    { key: 'zoom', label: 'zoom', dur: '400–600ms', when: 'Ênfase/CTA (usar pouco)' },
+  ];
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">Composição molecular para reels/vídeo</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">
+          Organismo que orquestra <strong>cenas</strong> (conteúdo) + <strong>transições</strong> + <strong>timeline determinística</strong>.
+          Reutilizável entre publicações: o app de montagem (ex.: me-agencia-social) só define cenas/copy e consome a duração total para export.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Contrato da timeline (export-safe)</h3>
+        <ul className="space-y-2 text-sm text-[var(--text-on-surface-muted)] list-disc list-inside">
+          <li><strong className="text-[var(--text-on-surface)]">Duração determinística:</strong> <code>getReelTotalDurationMs(scenes, holdMs)</code> = soma de <code>durationMs</code> das cenas + hold final.</li>
+          <li><strong className="text-[var(--text-on-surface)]">Sem interação:</strong> animação roda por tempo (autoPlay/capture), sem hover/scroll.</li>
+          <li><strong className="text-[var(--text-on-surface)]">Reduced motion:</strong> respeitar <code>prefers-reduced-motion</code> (reduzir para fades/corte) para acessibilidade e previsibilidade.</li>
+          <li><strong className="text-[var(--text-on-surface)]">Safe zone:</strong> conteúdo crítico dentro da área segura do formato (4:5 / 9:16).</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Transições de cena (primitivas)</h3>
+        <Table columns={[{ key: 'label', label: 'Tipo' }, { key: 'dur', label: 'Duração' }, { key: 'when', label: 'Quando usar' }]} data={transitions} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Componentes / API</h3>
+        <PropsTable props={[
+          { name: 'ReelTimeline', type: 'component', default: '-', description: 'Player multi-cena: renderiza cena ativa, aplica transição e avança por tempo. Props: scenes, holdMs, autoPlay, loop, startAtMs, renderScene, onProgress, onComplete.' },
+          { name: 'ReelSceneDef', type: 'type', default: '-', description: '{ id?, durationMs, transition?: { type, durationMs?, easing? } }' },
+          { name: 'SceneTransitionType', type: 'union', default: 'fade', description: "none | fade | slide-up | slide-left | wipe-up | zoom" },
+          { name: 'getReelTotalDurationMs(scenes, holdMs)', type: 'fn', default: '-', description: 'Duração total determinística para preview/export.' },
+          { name: 'getSceneTransition(scene)', type: 'fn', default: '-', description: 'Resolve defaults (type/duração/easing) da transição.' },
+          { name: 'SCENE_EASING / DEFAULT_TRANSITION_MS', type: 'const', default: '-', description: 'Curvas e duração padrão (450ms, smooth).' },
         ]} />
       </div>
 
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
-        <CodeBlock code={'<FragmentReveal variant="grid" grid="4x3" stagger={60} duration={600} easing="Smooth">\n  <SceneCTA />\n</FragmentReveal>'} />
+        <CodeBlock code={`import { ReelTimeline, getReelTotalDurationMs, type ReelSceneDef } from '@maxebina/max-ds';
+
+const scenes: ReelSceneDef[] = [
+  { id: 'hook', durationMs: 3000, transition: { type: 'wipe-up', durationMs: 450 } },
+  { id: 'oferta', durationMs: 4000, transition: { type: 'fade' } },
+  { id: 'cta', durationMs: 3500, transition: { type: 'none' } },
+];
+
+const totalMs = getReelTotalDurationMs(scenes, 800); // usar no export
+
+<ReelTimeline
+  scenes={scenes}
+  holdMs={800}
+  autoPlay
+  renderScene={({ index, scene }) => <MinhaCena id={scene.id} index={index} />}
+/>`} />
+      </div>
+
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="font-semibold text-[var(--text-on-surface)] mb-2">Próximas moléculas (backlog do DS)</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Primitivas de cena reutilizáveis (headline+mark, lista de pilares/cards, CTA animado com URL) e presets de transição compostos — para o app apenas compor conteúdo.</p>
       </div>
     </div>
   );
 }
 
 function SocialMotionTextosSection() {
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
+  const [appleRun, setAppleRun] = useState(0);
   const [showSafeZone, setShowSafeZone] = useState(false);
+  const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
+  const themes = [
+    { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#FFF5E6', border: '#FF6B35', desc: 'Dicas, conteúdo educativo' },
+    { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#FAFAFA', border: '#1A1A1A', desc: 'Depoimentos, elegância' },
+  ];
   const smooth = 'cubic-bezier(0.16, 1, 0.3, 1)';
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const trigger = () => {
-    setActive(true);
-    setTimeout(() => setActive(false), 1400);
+  useEffect(() => () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+  }, []);
+
+  const trigger = (id: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (id === 'apple') {
+      setAppleRun(run => run + 1);
+      setActive(id);
+      return;
+    }
+    setActive(id);
+    timeoutRef.current = setTimeout(() => setActive(null), id === 'scramble' ? 2300 : id === 'tipsy' ? 6600 : 1400);
   };
 
   return (
     <div className="space-y-12">
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-4">🎨 Selecione o Tema</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {themes.map((t) => (
+            <button key={t.id} onClick={() => setTheme(t.id)} className={`relative p-4 rounded-xl border-2 transition-all ${theme === t.id ? 'border-tech scale-105 shadow-lg' : 'border-[var(--surface-border)] hover:border-tech/50'}`} aria-label={`Tema ${t.name}`} aria-pressed={theme === t.id}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 border-4" style={{ backgroundColor: t.bg, borderColor: t.border }} />
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{t.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{t.desc}</p>
+              {theme === t.id && (<div className="absolute top-2 right-2"><Check className="w-4 h-4 text-tech" /></div>)}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
         <p className="text-tech font-semibold mb-2">🎬 Textos que viram cena</p>
-        <p className="text-sm text-[var(--text-on-surface-muted)]">Timeline determinística, resolução fixa (1080×1350) e safe zone obrigatória. Aqui a tipografia é a cena — RGB split e jitter acontecem dentro da área segura, sem hover/scroll.</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Timeline determinística, resolução fixa (1080×1350) e safe zone obrigatória. Aqui a tipografia é a cena — RGB split, jitter e scramble de texto acontecem dentro da área segura, sem hover/scroll.</p>
       </div>
 
       <div>
@@ -850,29 +980,284 @@ function SocialMotionTextosSection() {
             </span>
           </label>
         </div>
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-3 gap-4" data-theme={theme}>
           <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
-            <button onClick={trigger} className="w-full text-left">
-              <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[#0a0a0f] to-[#1a1a2e] border border-[var(--surface-border)]">
-                <div className="absolute inset-0 flex items-center justify-center" style={{ opacity: active ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-                <div className="absolute inset-0 flex items-center justify-center" style={{ opacity: active ? 1 : 0, transform: active ? 'translateX(3px)' : 'translateX(0)', transition: `all 600ms ${smooth}` }}>
-                  <span className="absolute font-display font-bold text-4xl" style={{ color: '#06B6D4', opacity: active ? 0.7 : 0, transform: active ? 'translateX(-4px)' : 'translateX(0)', transition: `all 300ms ${smooth}` }}>CTA →</span>
-                  <span className="absolute font-display font-bold text-4xl" style={{ color: '#fbbf24', opacity: active ? 0.7 : 0, transform: active ? 'translateX(4px)' : 'translateX(0)', transition: `all 300ms ${smooth} 50ms` }}>CTA →</span>
-                  <span className="font-display font-bold text-4xl text-white relative" style={{ textShadow: active ? '2px 0 #06B6D4, -2px 0 #fbbf24' : 'none' }}>CTA →</span>
+            <div className="w-full text-left">
+              <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]" style={{ textShadow: '0 0 8px color-mix(in srgb, var(--slide-text) 50%, transparent)' }}>
+                <div className="absolute inset-0 flex items-center justify-center px-6">
+                  <GlitchText as="span" text="CTA →" className="font-display font-bold text-3xl text-[var(--slide-text)] text-center uppercase tracking-wide">CTA →</GlitchText>
                 </div>
                 {showSafeZone && (
                   <>
-                    <div className="absolute pointer-events-none border-2 border-dashed border-[rgba(6,182,212,0.6)] bg-[rgba(6,182,212,0.03)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
-                    <div className="absolute pointer-events-none bg-[rgba(6,182,212,0.9)] text-white px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                    <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                    <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                  </>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Glitch Cut</p>
+              <span className="text-xs font-mono text-tech">loop · 2s infinite</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Glitch RGB em loop infinito (GlitchText do Hero), sem trigger. Tech/Digital.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <button onClick={() => trigger('scramble')} className="w-full text-left">
+              <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]" style={{ textShadow: '0 0 8px color-mix(in srgb, var(--slide-text) 50%, transparent)' }}>
+                <div className="absolute inset-0 flex items-center justify-center px-6">
+                  {active === 'scramble' ? (
+                    <TextScramble text="Scramble" className="font-display font-bold text-3xl text-[var(--slide-text)] text-center uppercase tracking-wide" />
+                  ) : (
+                    <span className="font-display font-bold text-3xl text-[var(--slide-text)] text-center uppercase tracking-wide">Scramble</span>
+                  )}
+                </div>
+                {showSafeZone && (
+                  <>
+                    <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                    <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
                   </>
                 )}
               </div>
             </button>
             <div className="flex items-center gap-2 mt-3">
-              <p className="font-display font-bold text-[var(--text-on-surface)]">Glitch Cut</p>
-              <span className="text-xs font-mono text-tech">600ms · Smooth</span>
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Text Scramble</p>
+              <span className="text-xs font-mono text-tech">720ms/letra · tick 30ms</span>
             </div>
-            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">RGB split + jitter, corte trocado. Tech/Digital.</p>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Começa vazio, após delay cada letra embaralha 720ms em onda e resolve da esquerda p/ direita. Título tech/futuro.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <button onClick={() => trigger('tipsy')} className="w-full text-left">
+              <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]" style={{ textShadow: '0 0 8px color-mix(in srgb, var(--slide-text) 50%, transparent)' }}>
+                <div className="absolute inset-0 flex items-center justify-center px-6">
+                  {active === 'tipsy' ? (
+                    <TipsyFrame key="playing" text="LANDING" className="font-display font-bold text-3xl text-[var(--slide-text)] text-center uppercase tracking-wide" />
+                  ) : (
+                    <TipsyFrame key="idle" animate={false} text="LANDING" className="font-display font-bold text-3xl text-[var(--slide-text)] text-center uppercase tracking-wide" />
+                  )}
+                </div>
+                {showSafeZone && (
+                  <>
+                    <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                    <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                  </>
+                )}
+              </div>
+            </button>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Tipsy Frame</p>
+              <span className="text-xs font-mono text-tech">6000ms · Smooth</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Retângulo Primary Dark gira 180° uma vez e para — metade na frente, metade atrás do texto.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <button onClick={() => trigger('apple')} className="w-full text-left">
+              <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]" style={{ textShadow: '0 0 8px color-mix(in srgb, var(--slide-text) 50%, transparent)' }}>
+                <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                  {active === 'apple' ? (
+                    <AppleTitle key={`playing-${appleRun}`} top={APPLE_TOP} bottom="Quero saber +" topFontSize={48} bottomFontSize={24} firstLineFontSize={16} secondLineFontSize={16} className="font-display font-bold uppercase tracking-wide" />
+                  ) : (
+                    <AppleTitle key="idle" animate={false} top={APPLE_TOP} bottom="Quero saber +" topFontSize={48} bottomFontSize={24} firstLineFontSize={16} secondLineFontSize={16} className="font-display font-bold uppercase tracking-wide" />
+                  )}
+                </div>
+                {showSafeZone && (
+                  <>
+                    <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                    <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                  </>
+                )}
+              </div>
+            </button>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Apple Title</p>
+              <span className="text-xs font-mono text-tech">3000ms · Smooth</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Divisor entra primeiro, cada linha encosta nele empurrando a anterior para cima; o CTA desce por último.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <StrokeText text="ABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Stroke Text</p>
+              <span className="text-xs font-mono text-tech">6s · loop</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Contorno animado em loop, sem trigger — traços tech/gold correm pelo contorno das letras.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <div className="fx-stamp">CARIMBADO</div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Rubber Stamp</p>
+              <span className="text-xs font-mono text-tech">3.2s · loop</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Carimbo CSS puro, sem JS — a palavra desce como tinta e desvanece. Tokens `--ink`/`--ink-2`/`--ink-3` do DS permitem re-skin.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <div className="fx-voltage" role="img" aria-label="TRÁFEGO PAGO"><b aria-hidden="true" style={{ '--i': 0 } as React.CSSProperties}>T</b><b aria-hidden="true" style={{ '--i': 1 } as React.CSSProperties}>R</b><b aria-hidden="true" style={{ '--i': 2 } as React.CSSProperties}>Á</b><b aria-hidden="true" style={{ '--i': 3 } as React.CSSProperties}>F</b><b aria-hidden="true" style={{ '--i': 4 } as React.CSSProperties}>E</b><b aria-hidden="true" style={{ '--i': 5 } as React.CSSProperties}>G</b><b aria-hidden="true" style={{ '--i': 6 } as React.CSSProperties}>O</b><b aria-hidden="true" style={{ '--i': 7 } as React.CSSProperties}>&nbsp;</b><b aria-hidden="true" style={{ '--i': 8 } as React.CSSProperties}>P</b><b aria-hidden="true" style={{ '--i': 9 } as React.CSSProperties}>A</b><b aria-hidden="true" style={{ '--i': 10 } as React.CSSProperties}>G</b><b aria-hidden="true" style={{ '--i': 11 } as React.CSSProperties}>O</b></div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Kilovolt</p>
+              <span className="text-xs font-mono text-tech">2.6s · loop</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Letras estalam com descarga elétrica em stagger (CSS puro, sem JS). Tokens `--ink`/`--ink-2`/`--ink-3` do DS permitem re-skin.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', containerType: 'inline-size' }}>
+                <div className="fx-equalizer" role="img" aria-label="GRÁFICOS"><b aria-hidden="true" style={{ '--i': 0 } as React.CSSProperties}>G</b><b aria-hidden="true" style={{ '--i': 1 } as React.CSSProperties}>R</b><b aria-hidden="true" style={{ '--i': 2 } as React.CSSProperties}>Á</b><b aria-hidden="true" style={{ '--i': 3 } as React.CSSProperties}>F</b><b aria-hidden="true" style={{ '--i': 4 } as React.CSSProperties}>I</b><b aria-hidden="true" style={{ '--i': 5 } as React.CSSProperties}>C</b><b aria-hidden="true" style={{ '--i': 6 } as React.CSSProperties}>O</b><b aria-hidden="true" style={{ '--i': 7 } as React.CSSProperties}>S</b></div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Equalizer</p>
+              <span className="text-xs font-mono text-tech">1.9s · loop</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Letras sobem nos picos de um medidor de áudio (CSS puro, sem JS). Tokens `--ink`/`--ink-2`/`--ink-3` do DS permitem re-skin.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="fx-pewpew" role="img" aria-label="MARKETING"><b aria-hidden="true" style={{ '--i': 0 } as React.CSSProperties}>M</b><b aria-hidden="true" style={{ '--i': 1 } as React.CSSProperties}>A</b><b aria-hidden="true" style={{ '--i': 2 } as React.CSSProperties}>R</b><b aria-hidden="true" style={{ '--i': 3 } as React.CSSProperties}>K</b><b aria-hidden="true" style={{ '--i': 4 } as React.CSSProperties}>E</b><b aria-hidden="true" style={{ '--i': 5 } as React.CSSProperties}>T</b><b aria-hidden="true" style={{ '--i': 6 } as React.CSSProperties}>I</b><b aria-hidden="true" style={{ '--i': 7 } as React.CSSProperties}>N</b><b aria-hidden="true" style={{ '--i': 8 } as React.CSSProperties}>G</b></div>
+                  <div className="fx-pewpew" role="img" aria-label="DIGITAL"><b aria-hidden="true" style={{ '--i': 9 } as React.CSSProperties}>D</b><b aria-hidden="true" style={{ '--i': 10 } as React.CSSProperties}>I</b><b aria-hidden="true" style={{ '--i': 11 } as React.CSSProperties}>G</b><b aria-hidden="true" style={{ '--i': 12 } as React.CSSProperties}>I</b><b aria-hidden="true" style={{ '--i': 13 } as React.CSSProperties}>T</b><b aria-hidden="true" style={{ '--i': 14 } as React.CSSProperties}>A</b><b aria-hidden="true" style={{ '--i': 15 } as React.CSSProperties}>L</b></div>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Pew-Pew</p>
+              <span className="text-xs font-mono text-tech">3.2s · loop</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Letras disparam como raios laser e recapitam (CSS puro, sem JS). Tokens `--ink`/`--ink-2`/`--ink-3` do DS permitem re-skin.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <div className="fx-loud">MAX</div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Loud</p>
+              <span className="text-xs font-mono text-tech">3s · loop</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">A palavra incha, grita com shake violento e volta ao tamanho (CSS puro, sem JS). Tokens `--ink`/`--ink-2`/`--ink-3` do DS permitem re-skin.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <div className="fx-rotator">ME</div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Rotator</p>
+              <span className="text-xs font-mono text-tech">8s · loop</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Palavra rola para cima e nova entra por baixo, em 3 cores (CSS puro, sem JS). Tokens `--ink`/`--ink-2`/`--ink-3` do DS permitem re-skin.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <div className="fx-annotate" role="img" aria-label="SaaS">SaaS<svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"><path className="fx-annotate-ring" pathLength={100} d="M 104 8 C 58 5 22 18 12 36 C 2 56 30 82 78 90 C 126 98 178 88 190 68 C 202 48 170 20 122 10 C 108 7 92 6 78 8" /><path className="fx-annotate-line" pathLength={100} d="M 30 82 C 52 76 68 86 92 80 S 132 74 152 82 S 168 84 172 78" /></svg></div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Margin-Note</p>
+              <span className="text-xs font-mono text-tech">5.2s · loop</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Círculo e sublinhado de caneta vermelha anotam a palavra (CSS puro, sem JS). Tokens `--ink`/`--ink-2`/`--ink-3` do DS permitem re-skin.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <div className="fx-synthwave">UAU</div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Synth-Sunset</p>
+              <span className="text-xs font-mono text-tech">6s · loop</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Gradiente retrô com scanlines e grade em perspectiva (CSS puro, sem JS). Tokens `--ink`/`--ink-2`/`--ink-3` do DS permitem re-skin.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <div className="flex flex-col items-center gap-6">
+                  <div className="fx-stretch" role="img" aria-label="Automação"><b aria-hidden="true" style={{ '--i': 0 } as React.CSSProperties}>A</b><b aria-hidden="true" style={{ '--i': 1 } as React.CSSProperties}>u</b><b aria-hidden="true" style={{ '--i': 2 } as React.CSSProperties}>t</b><b aria-hidden="true" style={{ '--i': 3 } as React.CSSProperties}>o</b><b aria-hidden="true" style={{ '--i': 4 } as React.CSSProperties}>m</b><b aria-hidden="true" style={{ '--i': 5 } as React.CSSProperties}>a</b><b aria-hidden="true" style={{ '--i': 6 } as React.CSSProperties}>ç</b><b aria-hidden="true" style={{ '--i': 7 } as React.CSSProperties}>ã</b><b aria-hidden="true" style={{ '--i': 8 } as React.CSSProperties}>o</b></div>
+                  <div className="fx-stretch" role="img" aria-label="WhatsApp"><b aria-hidden="true" style={{ '--i': 9 } as React.CSSProperties}>W</b><b aria-hidden="true" style={{ '--i': 10 } as React.CSSProperties}>h</b><b aria-hidden="true" style={{ '--i': 11 } as React.CSSProperties}>a</b><b aria-hidden="true" style={{ '--i': 12 } as React.CSSProperties}>t</b><b aria-hidden="true" style={{ '--i': 13 } as React.CSSProperties}>s</b><b aria-hidden="true" style={{ '--i': 14 } as React.CSSProperties}>A</b><b aria-hidden="true" style={{ '--i': 15 } as React.CSSProperties}>p</b><b aria-hidden="true" style={{ '--i': 16 } as React.CSSProperties}>p</b></div>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Stretch-Club</p>
+              <span className="text-xs font-mono text-tech">3.6s · loop</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Letras condensadas esticam para cima em ritmo escalonado, em 3 cores (CSS puro, sem JS). Tokens `--ink`/`--ink-2`/`--ink-3` do DS permitem re-skin.</p>
           </div>
         </div>
       </div>
@@ -886,7 +1271,20 @@ function SocialMotionTextosSection() {
             { key: 'dur', label: 'Duração' },
           ]}
           data={[
-            { name: 'Glitch Cut', when: 'Troca tech com RGB split + jitter (Capa → CTA)', dur: '600ms Smooth + jitter' },
+            { name: 'Glitch Cut', when: 'Texto fixo com glitch RGB em loop (sem trigger)', dur: 'loop infinito 2s (GlitchText)' },
+            { name: 'Text Scramble', when: 'Revelação de headline tech/futuro com decode (Capa → título)', dur: 'delay 300ms + 720ms/letra · stagger 90ms (~1680ms p/ 8 chars)' },
+            { name: 'Tipsy Frame', when: 'Entrada de título com moldura giratória (Capa → título)', dur: '6000ms Smooth · 1 volta (180deg) e para' },
+            { name: 'Apple Title', when: 'Entrada em duas metades com divisor (Capa → CTA)', dur: 'divisor 500ms → linha 600ms c/ pausa 400ms seq. → CTA 500ms' },
+            { name: 'Stroke Text', when: 'Contorno em loop contínuo, sem trigger (texto fixo no slide)', dur: '6s linear infinite · 4 camadas alternadas Primary/Tech' },
+            { name: 'Rubber Stamp', when: 'Selo/carimbo com slam e fade (CSS puro, sem JS)', dur: '3.2s cubic-bezier(.22,1.4,.36,1) infinite · tokens --ink/--ink-2/--ink-3' },
+            { name: 'Kilovolt', when: 'Descarga elétrica por letra em stagger (CSS puro, sem JS)', dur: '2.6s steps(1) infinite · delay calc(var(--i)*.08s) · tokens --ink/--ink-2/--ink-3' },
+            { name: 'Equalizer', when: 'Letras sobem nos picos de um medidor de áudio (CSS puro, sem JS)', dur: '1.9s ease-in-out infinite · delay calc(var(--i)*-.21s) · tokens --ink/--ink-2/--ink-3' },
+            { name: 'Pew-Pew', when: 'Letras disparam como raios laser (CSS puro, sem JS)', dur: '3.2s infinite · delay calc(var(--i)*.14s) · tokens --ink/--ink-2/--ink-3' },
+            { name: 'Loud', when: 'Palavra incha, grita com shake e volta (CSS puro, sem JS)', dur: '3s infinite · scale 1.75 + shake · tokens --ink/--ink-2/--ink-3' },
+            { name: 'Rotator', when: 'Palavra rola e nova entra por baixo, em 3 cores (CSS puro, sem JS)', dur: '8s infinite · slide 2s cubic-bezier(.7,0,.3,1) · tokens --ink/--ink-2/--ink-3' },
+            { name: 'Margin-Note', when: 'Círculo e sublinhado de caneta anotam a palavra (CSS puro, sem JS)', dur: '5.2s cubic-bezier(.45,0,.2,1) infinite · tokens --ink/--ink-2/--ink-3' },
+            { name: 'Synth-Sunset', when: 'Gradiente retrô com scanlines e grade (CSS puro, sem JS)', dur: '6s linear infinite · tokens --ink/--ink-2/--ink-3' },
+            { name: 'Stretch-Club', when: 'Letras condensadas esticam para cima em stagger (CSS puro, sem JS)', dur: '3.6s cubic-bezier(.65,0,.35,1) infinite · delay calc(var(--i)*.1s) · tokens --ink/--ink-2/--ink-3' },
           ]}
         />
       </div>
@@ -894,42 +1292,835 @@ function SocialMotionTextosSection() {
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
         <PropsTable props={[
-          { name: 'duration', type: '600', default: '600', description: 'Sempre 600ms (Smooth travado)' },
-          { name: 'easing', type: "'Smooth'", default: "'Smooth'", description: 'Curva Smooth para o split RGB' },
-          { name: 'jitter', type: 'number (px)', default: '3', description: 'Deslocamento horizontal do split (translateX)' },
-          { name: 'offset', type: 'number (px)', default: '4', description: 'Separação das camadas cyan/gold' },
+          { name: 'as (GlitchText)', type: "'span'", default: "'span'", description: 'Tag renderizada (loop RGB infinito, sem trigger)' },
+          { name: 'text (GlitchText)', type: 'string', default: "'CTA →'", description: 'Texto duplicado nas camadas RGB (error/tech)' },
+          { name: 'text', type: 'string', default: "'Scramble'", description: 'Texto final do scramble (data-value do original)' },
+          { name: 'charset', type: 'string', default: "'ABCDEFGHIJKLMNOPQRSTUVWXYZ'", description: 'Alfabeto do embaralhamento — igual ao original' },
+          { name: 'tick', type: 'number (ms)', default: '30', description: 'Intervalo do scramble' },
+          { name: 'stagger', type: 'number (ms)', default: '90', description: 'Espera entre o início de cada letra' },
+          { name: 'delay', type: 'number (ms)', default: '300', description: 'Pausa com texto vazio antes de começar' },
+          { name: 'letterDuration', type: '720 (fixo)', default: '720', description: 'Duração do embaralhamento de TODAS as letras — sempre 720ms, qualquer texto/lugar' },
+          { name: 'className', type: 'string', default: "''", description: 'Classes extras (tamanho, cor, font-display…)' },
+          { name: 'onComplete', type: '() => void', default: 'undefined', description: 'Chamado ao fim do scramble' },
+          { name: 'duration (Tipsy)', type: 'number (ms)', default: '6000', description: '1 volta visual (180deg) e para — borda Primary Dark #6b4a1a' },
+          { name: 'easing (Tipsy)', type: 'string', default: "'Smooth'", description: 'Curva da rotação do retângulo' },
+          { name: 'animate (Tipsy)', type: 'boolean', default: 'true', description: 'false = retângulo parado (repouso)' },
+          { name: 'top (Apple)', type: 'string[]', default: "'Tecnologia que gera resultado', 'Transforme Sua Empresa com Tecnologia'", description: 'Linhas do bloco superior (2)' },
+          { name: 'bottom (Apple)', type: 'string', default: "'Quero saber +'", description: 'Linha abaixo do divisor (tech cyan)' },
+          { name: 'dividerDuration (Apple)', type: 'number (ms)', default: '500', description: 'Divisor entra primeiro (scaleX)' },
+          { name: 'lineDuration (Apple)', type: 'number (ms)', default: '600', description: 'Entrada inteira de cada linha' },
+          { name: 'lineHold (Apple)', type: 'number (ms)', default: '400', description: 'Pausa com a linha completa antes da próxima' },
+          { name: 'bottomDuration (Apple)', type: 'number (ms)', default: '500', description: 'Descida da linha de baixo, após as linhas do topo' },
+          { name: 'text (Stroke)', type: 'string', default: "'ABCDEFGHIJKLMNOPQRSTUVWXYZ'", description: 'Texto do contorno — quebra automática em linhas dentro da Safe Zone (trunca com ... só se passar da altura)' },
+          { name: 'fontSize (Stroke)', type: 'number', default: '45', description: 'Tamanho do texto (50% maior que o text-3xl dos outros cards)' },
+          { name: 'duration (Stroke)', type: 'number (ms)', default: '6000', description: 'Loop do contorno (infinite linear, sem trigger)' },
+          { name: '--ink (Stamp)', type: 'color token', default: 'currentColor', description: 'Cor principal do carimbo (CSS puro, sem JS)' },
+          { name: '--ink-2 (Stamp)', type: 'color token', default: 'var(--color-tech)', description: 'Acento primário — borda/cor do carimbo' },
+          { name: '--ink-3 (Stamp)', type: 'color token', default: 'var(--color-primary-light)', description: 'Acento secundário do carimbo' },
+          { name: '--ink (Voltage)', type: 'color token', default: 'currentColor', description: 'Cor principal das letras (CSS puro, sem JS)' },
+          { name: '--ink-2 (Voltage)', type: 'color token', default: 'var(--color-tech)', description: 'Acento primário da descarga' },
+          { name: '--ink-3 (Voltage)', type: 'color token', default: 'var(--color-primary-light)', description: 'Acento secundário da descarga' },
+          { name: '--i (Voltage)', type: 'number', default: 'índice da letra', description: 'Delay em stagger: calc(var(--i)*.08s) por letra' },
+          { name: '--ink (Equalizer)', type: 'color token', default: 'currentColor', description: 'Cor principal das letras (CSS puro, sem JS)' },
+          { name: '--ink-2 (Equalizer)', type: 'color token', default: 'var(--color-tech)', description: 'Acento primário da barra' },
+          { name: '--ink-3 (Equalizer)', type: 'color token', default: 'var(--color-primary-light)', description: 'Acento secundário da barra' },
+          { name: '--i (Equalizer)', type: 'number', default: 'índice da letra', description: 'Delay em stagger: calc(var(--i)*-.21s) por letra' },
+          { name: '--ink (PewPew)', type: 'color token', default: 'currentColor', description: 'Cor principal das letras (CSS puro, sem JS)' },
+          { name: '--ink-2 (PewPew)', type: 'color token', default: 'var(--color-tech)', description: 'Acento primário da faísca' },
+          { name: '--ink-3 (PewPew)', type: 'color token', default: 'var(--color-primary-light)', description: 'Acento secundário da faísca' },
+          { name: '--i (PewPew)', type: 'number', default: 'índice da letra', description: 'Delay em stagger: calc(var(--i)*.14s) por letra' },
+          { name: '--ink (Loud)', type: 'color token', default: 'currentColor', description: 'Cor principal da palavra (CSS puro, sem JS)' },
+          { name: '--ink-2 (Loud)', type: 'color token', default: 'var(--color-tech)', description: 'Acento do grito' },
+          { name: '--ink-3 (Loud)', type: 'color token', default: 'var(--color-primary-light)', description: 'Acento secundário do grito' },
+          { name: '--ink (Rotator)', type: 'color token', default: 'currentColor', description: 'Cor da 1ª palavra (CSS puro, sem JS)' },
+          { name: '--ink-2 (Rotator)', type: 'color token', default: 'var(--color-tech)', description: 'Acento das palavras 2 e 4' },
+          { name: '--ink-3 (Rotator)', type: 'color token', default: 'var(--color-primary-light)', description: 'Acento da palavra 3' },
+          { name: '--ink (Annotate)', type: 'color token', default: 'var(--slide-text)', description: 'Cor da palavra (CSS puro, sem JS)' },
+          { name: '--ink-2 (Annotate)', type: 'color token', default: 'var(--color-tech)', description: 'Acento do círculo' },
+          { name: '--ink-3 (Annotate)', type: 'color token', default: 'var(--color-primary-light)', description: 'Acento do sublinhado' },
+          { name: '--ink (Synthwave)', type: 'color token', default: 'currentColor', description: 'Cor principal do pôr-do-sol (CSS puro, sem JS)' },
+          { name: '--ink-2 (Synthwave)', type: 'color token', default: 'var(--color-tech)', description: 'Acento primário do gradiente' },
+          { name: '--ink-3 (Synthwave)', type: 'color token', default: 'var(--color-primary-light)', description: 'Acento secundário do gradiente' },
+          { name: '--ink (Stretch)', type: 'color token', default: 'var(--slide-text)', description: 'Cor das letras 3n (CSS puro, sem JS)' },
+          { name: '--ink-2 (Stretch)', type: 'color token', default: 'var(--color-tech)', description: 'Acento das letras 3n+1' },
+          { name: '--ink-3 (Stretch)', type: 'color token', default: 'var(--color-primary-light)', description: 'Acento das letras 3n+2' },
+          { name: '--i (Stretch)', type: 'number', default: 'índice da letra', description: 'Delay em stagger: calc(var(--i)*.1s) por letra' },
         ]} />
       </div>
 
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
-        <CodeBlock code={'<GlitchCut jitter={3} offset={4} duration={600} easing="Smooth">\n  CTA →\n</GlitchCut>'} />
+        <CodeBlock code={'<GlitchText as="span" text="CTA →">CTA →</GlitchText>\n\n<TextScramble text="Scramble" charset="ABCDEFGHIJKLMNOPQRSTUVWXYZ" tick={30} stagger={90} delay={300} />\n\n<TipsyFrame text="LANDING" duration={6000} easing="Smooth" />\n\n<AppleTitle top={["Tecnologia que gera resultado", "Transforme Sua Empresa com Tecnologia"]} bottom="Quero saber +" topFontSize={48} bottomFontSize={24} firstLineFontSize={16} secondLineFontSize={16} />\n\n<StrokeText text="ABCDEFGHIJKLMNOPQRSTUVWXYZ" fontSize={45} duration={6000} />\n\n<div class="fx-stamp">CARIMBADO</div>\n\n<div class="fx-voltage" role="img" aria-label="TRTRÁFEGO PAGO"><b aria-hidden="true" style="--i:0">T</b>...</div>\n\n<div class="fx-equalizer" role="img" aria-label="GRÁFICOS"><b aria-hidden="true" style="--i:0">G</b>...</div>\n\n<div class="fx-pewpew" role="img" aria-label="MARKETING">...</div>\n<div class="fx-pewpew" role="img" aria-label="DIGITAL">...</div>\n\n<div class="fx-loud">MAX</div>\n\n<div class="fx-rotator">ME</div>\n\n<div class="fx-annotate" role="img" aria-label="SaaS">SaaS<svg>...</svg></div>\n\n<div class="fx-synthwave">UAU</div>\n\n<div class="fx-stretch" role="img" aria-label="Automação WhatsApp">...</div>'} />
       </div>
     </div>
   );
 }
 
+function FxCountdown({ slot }: { slot: number }) {
+  const [value, setValue] = useState('4.00');
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setValue('4.00');
+      return;
+    }
+    const start = Date.now();
+    const id = setInterval(() => {
+      const raw = (Date.now() - start - slot * 6000 + 1000) % 18000;
+      const phase = raw < 0 ? raw + 18000 : raw;
+      const remaining = phase <= 5000 ? 5 - phase / 1000 : 0;
+      setValue(remaining.toFixed(2));
+    }, 10);
+    return () => clearInterval(id);
+  }, [slot]);
+  return <>{value}</>;
+}
+
+function TiltCarousel() {
+  const cards = [
+    { title: 'Design Engineering', sub: 'Inclina sozinho em loop p/ vídeo' },
+    { title: 'Design Systems', sub: 'Componentes que escalam junto' },
+    { title: 'AI Workflows', sub: 'Automação que gera resultado' },
+  ];
+  const [active, setActive] = useState(0);
+  const [count, setCount] = useState(5);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setCount(5);
+      return;
+    }
+    setCount(5);
+    const start = Date.now();
+    const id = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const remaining = Math.max(0, 5 - elapsed / 1000);
+      setCount(remaining);
+      if (remaining <= 0) {
+        clearInterval(id);
+        setIsTransitioning(true);
+        const timer = setTimeout(() => {
+          setActive((prev) => (prev + 1) % 3);
+          setIsTransitioning(false);
+        }, 600);
+        return () => clearTimeout(timer);
+      }
+    }, 10);
+    return () => clearInterval(id);
+  }, [active]);
+  return (
+    <div className="relative w-full max-w-[200px] h-[140px] [perspective:800px]">
+      {cards.map((card, i) => {
+        const next = (active + 1) % 3;
+        let outerCls = 'absolute inset-0 flex items-center justify-center';
+        let innerCls = 'w-full h-full rounded-xl border border-[var(--slide-accent)] bg-[var(--slide-bg)] p-4 text-center shadow-lg relative flex flex-col items-center justify-center';
+        if (i === active && !isTransitioning) innerCls += ' fx-tilt';
+        if (i === active && isTransitioning) outerCls += ' fx-tilt-exit';
+        else if (i === next && isTransitioning) outerCls += ' fx-tilt-enter';
+        else if (i !== active) outerCls += ' fx-tilt-hidden';
+        return (
+          <div key={i} className={outerCls} style={{ zIndex: i === active ? 3 : i === next ? 2 : 1 }}>
+            <div className={innerCls}>
+              <span className="fx-tilt-count absolute top-2 right-3 font-mono text-xs text-[var(--slide-accent)]">{i === active ? count.toFixed(2) : '5.00'}</span>
+              <p className="text-[10px] uppercase tracking-widest text-[var(--slide-accent)]">Serviço</p>
+              <p className="font-display font-bold text-lg text-[var(--slide-text)]">{card.title}</p>
+              <p className="text-xs text-[var(--slide-text-muted)] mt-1">{card.sub}</p>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function StatCarousel() {
+  const targets = [97, 89, 99];
+  const labels = ['Resultado', 'Conversão', 'Retenção'];
+  const [active, setActive] = useState(0);
+  const [count, setCount] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setCount(targets[active]);
+      return;
+    }
+    setCount(0);
+    const target = targets[active];
+    const start = Date.now();
+    const id = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const progress = Math.min(1, elapsed / 3000);
+      const current = Math.floor(progress * target);
+      setCount(current);
+      if (progress >= 1) {
+        clearInterval(id);
+        setCount(target);
+        const delayTimer = setTimeout(() => {
+          setIsTransitioning(true);
+          const timer = setTimeout(() => {
+            setActive((prev) => (prev + 1) % 3);
+            setIsTransitioning(false);
+          }, 600);
+          return () => clearTimeout(timer);
+        }, 2000);
+        return () => clearTimeout(delayTimer);
+      }
+    }, 10);
+    return () => clearInterval(id);
+  }, [active]);
+  return (
+    <div className="relative w-full max-w-[200px] h-[140px]">
+      {targets.map((target, i) => {
+        const next = (active + 1) % 3;
+        let cls = 'fx-stat-hidden absolute inset-0 rounded-xl border border-[var(--slide-accent)] bg-[var(--slide-bg)] p-4 text-center flex flex-col items-center justify-center';
+        if (i === active) cls = 'absolute inset-0 rounded-xl border border-[var(--slide-accent)] bg-[var(--slide-bg)] p-4 text-center flex flex-col items-center justify-center';
+        if (i === active && isTransitioning) cls += ' fx-stat-exit';
+        if (i === next && isTransitioning) cls += ' fx-stat-enter';
+        return (
+          <div key={i} className={cls} style={{ zIndex: i === active ? 3 : i === next ? 2 : 1 }}>
+            <p className="text-[10px] uppercase tracking-widest text-[var(--slide-accent)]">{labels[i]}</p>
+            <p className="font-display font-bold text-4xl text-[var(--slide-text)]">{i === active ? count : 0}%</p>
+            <p className="text-xs text-[var(--slide-text-muted)] mt-1">meta {target}%</p>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
+ * EXEMPLO DE CONSUMIDOR DO `DecoBox`.
+ *
+ * O primitivo do DS desenha a caixa; quem mede o texto e decide o tamanho é o
+ * consumidor — aqui, um `ResizeObserver` igual ao do app social. A cor vem do
+ * tema (`var(--slide-accent)`) e o `settled` é o frame final (tela estática).
+ */
+function BoxedDemo({ text, variant, settled, fontSize = 20, delayMs = 0, durationMs = 700, loop = true }: {
+  text: string;
+  variant: DecoBoxVariant;
+  settled: boolean;
+  fontSize?: number;
+  delayMs?: number;
+  durationMs?: number;
+  loop?: boolean;
+}) {
+  const innerRef = useRef<HTMLSpanElement>(null);
+  const [size, setSize] = useState<{ w: number; h: number } | null>(null);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      setSize(r.width > 0 && r.height > 0 ? { w: r.width, h: r.height } : null);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [text, fontSize]);
+  const PAD_X = 16;
+  const PAD_Y = 10;
+  return (
+    <span style={{ position: 'relative', display: 'inline-block', padding: `${PAD_Y}px ${PAD_X}px` }}>
+      <span ref={innerRef} style={{ display: 'inline-block', position: 'relative', zIndex: 1, fontSize, lineHeight: 1.2, color: 'var(--slide-text)' }}>
+        {text}
+      </span>
+      {size ? (
+        <DecoBox
+          width={Math.round(size.w + PAD_X * 2)}
+          height={Math.round(size.h + PAD_Y * 2)}
+          variant={variant}
+          delayMs={delayMs}
+          durationMs={durationMs}
+          loop={loop}
+          settled={settled}
+          style={{ inset: 0 }}
+        />
+      ) : null}
+    </span>
+  );
+}
+
 function SocialMotionCardsSection() {
-  return null;
+  const [showSafeZone, setShowSafeZone] = useState(false);
+  const [boxSettled, setBoxSettled] = useState(false);
+  const [boxReplay, setBoxReplay] = useState(0);
+  const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
+  const themes = [
+    { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#FFF5E6', border: '#FF6B35', desc: 'Dicas, conteúdo educativo' },
+    { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#FAFAFA', border: '#1A1A1A', desc: 'Depoimentos, elegância' },
+  ];
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-4">🎨 Selecione o Tema</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {themes.map((t) => (
+            <button key={t.id} onClick={() => setTheme(t.id)} className={`relative p-4 rounded-xl border-2 transition-all ${theme === t.id ? 'border-tech scale-105 shadow-lg' : 'border-[var(--surface-border)] hover:border-tech/50'}`} aria-label={`Tema ${t.name}`} aria-pressed={theme === t.id}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 border-4" style={{ backgroundColor: t.bg, borderColor: t.border }} />
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{t.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{t.desc}</p>
+              {theme === t.id && (<div className="absolute top-2 right-2"><Check className="w-4 h-4 text-tech" /></div>)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">▣ Cards &amp; Boxes — caixas com comportamento</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Cards e boxes são os recipientes do conteúdo: entrada em stagger, tilt, pilha, contador e revelação — sempre dentro da Safe Zone, sem depender de scroll ou hover para a mensagem principal.</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Formato IG 4:5 + Safe Zone</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)] mb-4">
+          <div className="grid md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Canvas</p>
+              <p className="text-[var(--text-on-surface)] font-mono">1080x1350px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Base no DS</p>
+              <p className="text-[var(--text-on-surface)] font-mono">340x425px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Safe Zone</p>
+              <p className="text-[var(--text-on-surface)] font-mono">800x970px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Margens</p>
+              <p className="text-[var(--text-on-surface)] font-mono">140px / 180px / 200px</p>
+            </div>
+          </div>
+        </div>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Conteúdo crítico (`title`, `metric`) vive **dentro** da linha tracejada (`13.3%` topo, `13%` laterais, `74%` × `71.9%`).</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Overview por tipo de card — IG 4:5 · 340×425</h3>
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] mb-6">
+          <label className="flex items-center gap-3 cursor-pointer flex-1">
+            <input type="checkbox" checked={showSafeZone} onChange={(e) => setShowSafeZone(e.target.checked)} className="sr-only peer" />
+            <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tech relative"></div>
+            <span className="text-sm font-medium text-[var(--text-on-surface)] flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              Mostrar área de segurança
+            </span>
+          </label>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4" data-theme={theme}>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <TiltCarousel />
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Tilt Card</p>
+              <span className="text-xs font-mono text-tech">5s/card · carrossel</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">3 cards com countdown no topo à direita; ao zerar sai p/ esquerda fora da Safe Zone e próximo entra da direita (tilt só parado no centro).</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <div className="relative w-full max-w-[200px] h-[140px]">
+                  <div className="fx-stack-card absolute inset-0 rounded-xl border border-[var(--slide-accent)] bg-[var(--slide-bg)] p-4" style={{ '--s': 1 } as React.CSSProperties}><p className="text-xs font-bold text-[var(--slide-text)]">Card 3 · <FxCountdown slot={2} /></p></div>
+                  <div className="fx-stack-card absolute inset-0 rounded-xl border border-[var(--slide-accent)] bg-[var(--slide-bg)] p-4" style={{ '--s': 2 } as React.CSSProperties}><p className="text-xs font-bold text-[var(--slide-text)]">Card 2 · <FxCountdown slot={1} /></p></div>
+                  <div className="fx-stack-card absolute inset-0 rounded-xl border border-[var(--slide-accent)] bg-[var(--slide-bg)] p-4 shadow-xl" style={{ '--s': 0 } as React.CSSProperties}><p className="text-xs font-bold text-[var(--slide-text)]">Card 1 · <FxCountdown slot={0} /></p></div>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Stack</p>
+              <span className="text-xs font-mono text-tech">18s · 5s/card</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Countdown de 5s (com centésimos) dispara o próximo; após 0,5s na subida o card vai p/ baixo do 3º sem fade e o ciclo se repete.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex items-center justify-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <StatCarousel />
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Stat</p>
+              <span className="text-xs font-mono text-tech">3s + 2s · por meta</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Carrossel por meta: 97% → 89% → 99%; ao chegar, espera 2s e sai em escala 200% girando 90° com blur, próximo entra reverso.</p>
+          </div>
+        </div>
+      </div>
+
+      <div data-theme={theme}>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-2">DecoBox — a caixa que se desenha</h3>
+        <p className="text-sm text-[var(--text-on-surface-muted)] mb-4">
+          Primitivo do DS que desenha uma caixa em volta de um texto. O <strong>tamanho é do consumidor</strong> (aqui medido com <code>ResizeObserver</code>), a <strong>cor é do tema</strong> (muda com o seletor acima), e o <strong>estado assentado</strong> é o frame final — o mesmo que a tela estática do app social mostra antes de aprovar.
+        </p>
+
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)] mb-4">
+          <div className="flex flex-wrap items-center gap-6 mb-6">
+            <label className="flex items-center gap-2 cursor-pointer text-sm text-[var(--text-on-surface)]">
+              <input type="checkbox" checked={boxSettled} onChange={(e) => setBoxSettled(e.target.checked)} />
+              Estado assentado (tela estática)
+            </label>
+            <button
+              onClick={() => setBoxReplay((n) => n + 1)}
+              className="px-3 py-1.5 rounded-lg border border-tech/40 text-tech text-sm font-medium hover:bg-tech/10 transition-colors"
+            >
+              ↻ Repetir animação
+            </button>
+            <span className="text-xs font-mono text-[var(--text-on-surface-subtle)]">
+              tamanho: medido pelo consumidor · cor: var(--slide-accent)
+            </span>
+          </div>
+
+          <p className="text-xs font-mono text-[var(--text-on-surface-subtle)] mb-2">VARIANTES</p>
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            {(['highlight', 'frame', 'chip'] as DecoBoxVariant[]).map((v) => (
+              <div key={v} className="flex flex-col items-start gap-2">
+                <p className="text-xs font-mono text-tech">{v}</p>
+                <BoxedDemo key={`${v}-${boxReplay}`} text="Qual dos 3 é o seu?" variant={v} settled={boxSettled} />
+              </div>
+            ))}
+          </div>
+
+          <p className="text-xs font-mono text-[var(--text-on-surface-subtle)] mb-2">VARIAÇÃO DE TAMANHO (o box acompanha o texto)</p>
+          <div className="flex flex-wrap items-start gap-6">
+            <BoxedDemo key={`s-${boxReplay}`} text="Erro 01" variant="highlight" settled={boxSettled} fontSize={16} />
+            <BoxedDemo key={`m-${boxReplay}`} text="Otimizar para clique, não para conversão" variant="highlight" settled={boxSettled} fontSize={20} />
+            <BoxedDemo key={`l-${boxReplay}`} text="Comenta 1, 2 ou 3 que eu te mostro como corrigir." variant="highlight" settled={boxSettled} fontSize={26} />
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <h4 className="text-lg font-display font-bold text-[var(--text-on-surface)] mb-3">Props do DecoBox</h4>
+          <PropsTable props={[
+            { name: 'width / height', type: 'number (px)', default: '—', description: 'Tamanho da caixa: quem mede é o consumidor, o DS não mede nada' },
+            { name: 'variant', type: "'highlight' | 'frame' | 'chip'", default: "'highlight'", description: 'highlight = preenchido + traço · frame = só traço · chip = pílula' },
+            { name: 'radius / strokeWidth', type: 'number (px)', default: '10 / 2.5', description: 'Sobrescrevem o preset da variante' },
+            { name: 'delayMs / durationMs', type: 'number (ms)', default: '0 / 700', description: 'Atraso e duração do traçado' },
+            { name: 'settled', type: 'boolean', default: 'false', description: 'Estado final sem animação — é o que a tela estática mostra' },
+            { name: 'loop', type: 'boolean', default: 'false', description: 'Repete o ciclo (só para ilustração no demo)' },
+          ]} />
+        </div>
+
+        <CodeBlock code={'<DecoBox width={320} height={64} variant="highlight" delayMs={700} durationMs={800} settled={false} style={{ inset: 0 }} />'} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Quando usar</h3>
+        <Table
+          columns={[
+            { key: 'name', label: 'Card' },
+            { key: 'when', label: 'Quando usar' },
+            { key: 'dur', label: 'Duração' },
+          ]}
+          data={[
+            { name: 'Tilt Card', when: 'Carrossel de 3 serviços: countdown 5s no topo à direita, sai p/ esquerda e próximo entra da direita (Capa → serviço)', dur: '5s/card + 0.6s slide · vídeo' },
+            { name: 'Stack', when: 'Countdown 5s por card; ao zerar sobe e volta para trás (Capa → prova/antes-depois)', dur: '18s infinite · 6s/card · vídeo' },
+            { name: 'Stat', when: 'Métrica por meta: 97% → 89% → 99%; ao chegar, espera 2s e troca em escala 200% com giro 90° (Capa → resultado)', dur: '3s + 2s + 0.6s transição · vídeo' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'countdown (Tilt)', type: 'number (s)', default: '5', description: 'Countdown no topo à direita por card; ao zerar sai p/ esquerda' },
+          { name: 'rotate (Stack)', type: 'deg', default: '-6 / 3', description: 'Angulos do leque no hover' },
+          { name: 'target (Stat)', type: 'number', default: '97 / 89 / 99', description: 'Meta que dispara a troca (97% → 89% → 99%)' },
+          { name: 'duration (Stat)', type: 'number (ms)', default: '3000', description: 'Tempo da contagem até a meta por card' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
+        <CodeBlock code={'<div class="group [perspective:800px]"><div class="transition group-hover:[transform:perspective(800px)_rotateX(6deg)_rotateY(-6deg)]">Design Engineering</div></div>\n\n<div class="group"><div>Card 3</div><div>Card 2</div><div>Card 1</div></div>\n\n<div class="fx-stat">128%</div>'} />
+      </div>
+    </div>
+  );
 }
 
 function SocialMotionPathSection() {
-  return null;
+  const [showSafeZone, setShowSafeZone] = useState(false);
+  const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
+  const themes = [
+    { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#FFF5E6', border: '#FF6B35', desc: 'Dicas, conteúdo educativo' },
+    { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#FAFAFA', border: '#1A1A1A', desc: 'Depoimentos, elegância' },
+  ];
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-4">🎨 Selecione o Tema</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {themes.map((t) => (
+            <button key={t.id} onClick={() => setTheme(t.id)} className={`relative p-4 rounded-xl border-2 transition-all ${theme === t.id ? 'border-tech scale-105 shadow-lg' : 'border-[var(--surface-border)] hover:border-tech/50'}`} aria-label={`Tema ${t.name}`} aria-pressed={theme === t.id}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 border-4" style={{ backgroundColor: t.bg, borderColor: t.border }} />
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{t.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{t.desc}</p>
+              {theme === t.id && (<div className="absolute top-2 right-2"><Check className="w-4 h-4 text-tech" /></div>)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">🎬 Movimento que segue um caminho</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Setas e elementos que percorrem uma curva determinística — sempre dentro da Safe Zone, sem depender de scroll ou hover. A curva é o roteiro: A → B pela mesma trilha, em loop.</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Formato IG 4:5 + Safe Zone</h3>
+        <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)] mb-4">
+          <div className="grid md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Canvas</p>
+              <p className="text-[var(--text-on-surface)] font-mono">1080x1350px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Base no DS</p>
+              <p className="text-[var(--text-on-surface)] font-mono">340x425px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Safe Zone</p>
+              <p className="text-[var(--text-on-surface)] font-mono">800x970px</p>
+            </div>
+            <div>
+              <p className="text-[var(--text-on-surface-subtle)]">Margens</p>
+              <p className="text-[var(--text-on-surface)] font-mono">140px / 180px / 200px</p>
+            </div>
+          </div>
+        </div>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Seta/ponto crítico (`path`, `A → B`) vive **dentro** da linha tracejada (`13.3%` topo, `13%` laterais, `74%` × `71.9%`).</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview — IG 4:5 · 340×425</h3>
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] mb-6">
+          <label className="flex items-center gap-3 cursor-pointer flex-1">
+            <input type="checkbox" checked={showSafeZone} onChange={(e) => setShowSafeZone(e.target.checked)} className="sr-only peer" />
+            <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tech relative"></div>
+            <span className="text-sm font-medium text-[var(--text-on-surface)] flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              Mostrar área de segurança
+            </span>
+          </label>
+        </div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Movimento ao longo do caminho</h3>
+        <div className="grid md:grid-cols-3 gap-4" data-theme={theme}>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <p className="font-display font-bold text-lg text-[var(--slide-text)] text-center">Do início ao destino</p>
+                <PathRun variant="run" />
+                <span className="absolute flex items-center justify-center w-8 h-8 rounded-full border-2 border-[var(--slide-primary)] bg-[var(--slide-bg)] text-xs font-bold text-[var(--slide-text)]" style={{ left: '4%', top: '88%', transform: 'translate(-50%, -50%)' }}>A</span>
+                <span className="absolute flex items-center justify-center w-8 h-8 rounded-full border-2 border-[var(--slide-accent)] bg-[var(--slide-bg)] text-xs font-bold text-[var(--slide-text)]" style={{ left: '90%', top: '12%', transform: 'translate(-50%, -50%)' }}>B</span>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Path Run</p>
+              <span className="text-xs font-mono text-tech">3s linear infinite</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Ponto percorre a curva A → B em loop determinístico.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <p className="font-display font-bold text-lg text-[var(--slide-text)] text-center">A curva se desenha</p>
+                <PathRun variant="draw" d="M 20 268 Q 126 60 232 44" duration="4s" />
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Path Draw</p>
+              <span className="text-xs font-mono text-tech">loop · 4s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Trajeto se desenha e vira seta — a curva anuncia o destino.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <p className="font-display font-bold text-lg text-[var(--slide-text)] text-center">Siga os pontos</p>
+                <PathRun variant="march" duration="1.2s" />
+                <span className="absolute flex items-center justify-center w-8 h-8 rounded-full border-2 border-[var(--slide-primary)] bg-[var(--slide-bg)] text-xs font-bold text-[var(--slide-text)]" style={{ left: '4%', top: '88%', transform: 'translate(-50%, -50%)' }}>A</span>
+                <span className="absolute flex items-center justify-center w-8 h-8 rounded-full border-2 border-[var(--slide-accent)] bg-[var(--slide-bg)] text-xs font-bold text-[var(--slide-text)]" style={{ left: '90%', top: '12%', transform: 'translate(-50%, -50%)' }}>B</span>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Marching Dots</p>
+              <span className="text-xs font-mono text-tech">loop · 1.2s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Pontos marcham ao longo do trajeto indicando a direção.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <p className="font-display font-bold text-lg text-[var(--slide-text)] text-center">Voo até o destino</p>
+                <PathRun variant="fly" duration="3.4s" />
+                <span className="absolute flex items-center justify-center w-8 h-8 rounded-full border-2 border-[var(--slide-primary)] bg-[var(--slide-bg)] text-xs font-bold text-[var(--slide-text)]" style={{ left: '4%', top: '88%', transform: 'translate(-50%, -50%)' }}>A</span>
+                <span className="absolute flex items-center justify-center w-8 h-8 rounded-full border-2 border-[var(--slide-accent)] bg-[var(--slide-bg)] text-xs font-bold text-[var(--slide-text)]" style={{ left: '90%', top: '12%', transform: 'translate(-50%, -50%)' }}>B</span>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Fly To</p>
+              <span className="text-xs font-mono text-tech">3.4s · ease-out</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Elemento voa até o ponto final e pulsa na chegada.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <p className="font-display font-bold text-lg text-[var(--slide-text)] text-center">Aponte para o alvo</p>
+                <PathPointer />
+                <span className="absolute w-3 h-3 rounded-full bg-[var(--slide-accent)]" style={{ left: '90%', top: '12%', transform: 'translate(-50%, -50%)' }} />
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Path Pointer</p>
+              <span className="text-xs font-mono text-tech">3s linear infinite</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Flechinha percorre a curva e aponta para o alvo.</p>
+          </div>
+        </div>
+
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6 mt-12">Path aplicado ao elemento</h3>
+        <div className="grid md:grid-cols-3 gap-4" data-theme={theme}>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <p className="font-display font-bold text-lg text-[var(--slide-text)] text-center">A flecha se desenha</p>
+                <PathRun variant="arrow" duration="4s" />
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Path Arrow</p>
+              <span className="text-xs font-mono text-tech">4s · draw loop</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Haste e ponta desenhadas num único traço.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <PathRun variant="card" duration="4s" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <p className="font-display font-bold text-lg text-[var(--slide-text)] text-center">O card se desenha</p>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Path Card</p>
+              <span className="text-xs font-mono text-tech">4s · draw loop</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Contorno de card com cantos arredondados, desenhado do zero.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <p className="font-display font-bold text-lg text-[var(--slide-text)] text-center">A marca, letra por letra</p>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative w-[88%]" style={{ aspectRatio: '182 / 87' }}>
+                    <PathRun variant="logo" duration="6s" />
+                  </div>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Path Logo</p>
+              <span className="text-xs font-mono text-tech">loop · 6s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">O path desenha o contorno do M e depois do E do logo ME, sem preenchimento.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <p className="font-display font-bold text-lg text-[var(--slide-text)] text-center">O texto se desenha</p>
+                <PathRun variant="text" text="Transforme Sua Empresa" fontSize={36} duration="6s" />
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Path Text</p>
+              <span className="text-xs font-mono text-tech">loop · 6s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">O path desenha o contorno do texto letra a letra, como no logo.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <div className="absolute inset-x-0 top-[15%] flex justify-center">
+                  <PathPulse width={208} height={40} delayMs={150} loop />
+                </div>
+                <p className="font-display font-bold text-lg text-[var(--slide-text)] text-center absolute inset-0 flex items-center justify-center px-2">O título emoldurado</p>
+                <div className="absolute inset-x-0 top-[62%] flex justify-center">
+                  <PathPulse width={208} height={40} delayMs={900} loop />
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Path Pulse</p>
+              <span className="text-xs font-mono text-tech whitespace-nowrap">loop · 6s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Linha de batimento (ECG) que se desenha e emolda o título: uma em cima (150ms) e outra embaixo (900ms). No demo ela fica em loop, como as outras animações.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Quando usar</h3>
+        <Table
+          columns={[
+            { key: 'name', label: 'Path Motion' },
+            { key: 'when', label: 'Quando usar' },
+            { key: 'dur', label: 'Duração' },
+          ]}
+          data={[
+            { name: 'Path Run', when: 'Ligar dois pontos com curva/seta (A → B)', dur: '3s linear infinite' },
+            { name: 'Path Draw', when: 'Revelar o trajeto como ação (“olha o caminho”)', dur: 'loop · 4s' },
+            { name: 'Marching Dots', when: 'Indicar direção/percurso sem texto', dur: 'loop · 1.2s' },
+            { name: 'Fly To', when: 'Levar elemento a um destino e marcar chegada', dur: '3.4s · ease-out' },
+            { name: 'Path Pointer', when: 'Apontar para algo (seta segue a curva até o alvo)', dur: '3s linear infinite' },
+            { name: 'Path Arrow', when: 'Flecha completa (haste + ponta) num único traço', dur: '4s · draw loop' },
+            { name: 'Path Card', when: 'Desenhar o contorno de um card (reveal do recipiente)', dur: '4s · draw loop' },
+            { name: 'Path Logo', when: 'Contornar o logo letra por letra (M → E) como reveal da marca', dur: 'loop · 6s' },
+            { name: 'Path Text', when: 'Desenhar o contorno do texto letra a letra, como no logo (reveal da headline)', dur: 'loop · 6s' },
+            { name: 'Path Pulse', when: 'Separador que emolda o título com um bico de batimento (linha ECG acima e abaixo)', dur: 'loop · 6s · 150ms / 900ms' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'variant', type: "'run' | 'draw' | 'march' | 'fly' | 'arrow' | 'card' | 'logo' | 'text'", default: "'run'", description: 'Comportamento do path' },
+          { name: 'text', type: 'string', default: "'Transforme Sua Empresa'", description: 'Texto desenhado (variant="text"), 2 linhas, Space Grotesk' },
+          { name: 'fontSize', type: 'number', default: '36', description: 'Tamanho do texto (variant="text") — encolhe se estourar a largura' },
+          { name: 'd', type: 'string', default: "'M 24 282 Q 70 90 228 40'", description: 'Curva (path SVG) ligando A → B' },
+          { name: 'duration', type: '3s', default: '3s', description: 'Tempo de percorrimento do ponto' },
+          { name: 'loop', type: 'infinite', default: 'infinite', description: 'Loop determinístico, sem trigger' },
+          { name: 'rotate', type: 'auto', default: 'auto', description: 'Seta/ponto segue o ângulo da curva (offset-rotate)' },
+          { name: 'pulse', type: 'boolean', default: 'true', description: 'Pulso na chegada (variant="fly")' },
+          { name: 'durationMs (Pulse)', type: 'number', default: '1500', description: 'Duração do desenho da linha ECG (PathPulse)' },
+          { name: 'delayMs (Pulse)', type: 'number', default: '0', description: 'Atraso da linha ECG — 150ms na de cima, 900ms na de baixo' },
+          { name: 'settled (Pulse)', type: 'boolean', default: 'false', description: 'Estado final sem animação (tela estática)' },
+          { name: 'loop (Pulse)', type: 'boolean', default: 'false', description: 'Repete o ciclo (só para ilustração no demo)' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
+        <CodeBlock code={'<PathRun variant="run" d="M 24 282 Q 70 90 228 40" duration="3s" loop />\n  A → B pela curva\n</PathRun>\n\n<PathRun variant="draw" d="M 20 268 Q 126 60 232 44" loop />\n<PathRun variant="march" d="M 24 282 Q 70 90 228 40" loop />\n<PathRun variant="fly" d="M 24 282 Q 70 90 228 40" pulse />\n\n<PathPointer d="M 24 282 Q 70 90 228 40" />\n\n<PathRun variant="arrow" loop />\n  haste + ponta num único traço\n</PathRun>\n\n<PathRun variant="card" loop />\n  contorno do card\n</PathRun>\n\n<PathRun variant="logo" loop />\n  contorna M e depois E do logo\n</PathRun>\n\n<PathRun variant="text" text="Transforme Sua Empresa" fontSize={36} />\n  contorno do texto, linha a linha\n</PathRun>\n\n<PathPulse width={208} height={40} delayMs={150} />\n  separador ECG que emolda o título\n</PathPulse>'} />
+      </div>
+    </div>
+  );
 }
 
 function SocialMotionNumbersSection() {
-  const [active, setActive] = useState(false);
   const [showSafeZone, setShowSafeZone] = useState(false);
-  const smooth = 'cubic-bezier(0.16, 1, 0.3, 1)';
+  const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
+  const themes = [
+    { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#FFF5E6', border: '#FF6B35', desc: 'Dicas, conteúdo educativo' },
+    { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#FAFAFA', border: '#1A1A1A', desc: 'Depoimentos, elegância' },
+  ];
   const bars = [35, 60, 45, 80, 55, 95];
-
-  const trigger = () => {
-    setActive(true);
-    setTimeout(() => setActive(false), 1400);
-  };
 
   return (
     <div className="space-y-12">
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-4">🎨 Selecione o Tema</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {themes.map((t) => (
+            <button key={t.id} onClick={() => setTheme(t.id)} className={`relative p-4 rounded-xl border-2 transition-all ${theme === t.id ? 'border-tech scale-105 shadow-lg' : 'border-[var(--surface-border)] hover:border-tech/50'}`} aria-label={`Tema ${t.name}`} aria-pressed={theme === t.id}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 border-4" style={{ backgroundColor: t.bg, borderColor: t.border }} />
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{t.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{t.desc}</p>
+              {theme === t.id && (<div className="absolute top-2 right-2"><Check className="w-4 h-4 text-tech" /></div>)}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
         <p className="text-tech font-semibold mb-2">🎬 Dados que viram cena</p>
         <p className="text-sm text-[var(--text-on-surface-muted)]">Timeline determinística, resolução fixa (1080×1350) e safe zone obrigatória. Barras e contadores animam dentro da área segura — prova social como cena, não como rodapé.</p>
@@ -961,7 +2152,7 @@ function SocialMotionNumbersSection() {
       </div>
 
       <div>
-        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview (clique para testar) — IG 4:5 · 340×425</h3>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview — IG 4:5 · 340×425</h3>
         <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] mb-6">
           <label className="flex items-center gap-3 cursor-pointer flex-1">
             <input type="checkbox" checked={showSafeZone} onChange={(e) => setShowSafeZone(e.target.checked)} className="sr-only peer" />
@@ -972,32 +2163,236 @@ function SocialMotionNumbersSection() {
             </span>
           </label>
         </div>
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-3 gap-4 numbers-scope" data-theme={theme}>
           <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
-            <button onClick={trigger} className="w-full text-left">
-              <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[#0a0a0f] to-[#1a1a2e] border border-[var(--surface-border)]">
-                <div className="absolute inset-0 flex items-center justify-center" style={{ opacity: active ? 0 : 1, transition: `opacity 300ms ${smooth}` }}><span className="font-display font-bold text-white/70">Dica #1</span></div>
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #8f6424 100%)', opacity: active ? 1 : 0, transition: `opacity 600ms ${smooth}` }}>
-                  <div className="flex items-end gap-2 h-24">
-                    {bars.map((h, i) => (
-                      <div key={i} style={{ width: 12, height: active ? `${h}%` : '8%', background: 'rgba(255,255,255,0.9)', borderRadius: 2, transition: `height 600ms ${smooth} ${i * 60}ms`, opacity: active ? 1 : 0.2 }} />
-                    ))}
-                  </div>
-                  <span className="font-display font-bold text-2xl text-white" style={{ transform: active ? 'scale(1)' : 'scale(0.8)', opacity: active ? 1 : 0, transition: `all 600ms ${smooth} 300ms` }}>+150 projetos</span>
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden border border-[var(--surface-border)]" style={{ background: 'var(--slide-gradient)' }}>
+              <div className="absolute flex flex-col items-center justify-center gap-4" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <div className="flex items-end gap-2 h-24">
+                  {bars.map((h, i) => (
+                    <div key={i} className="fx-bars-grow-y" style={{ width: 12, height: `${h}%`, background: 'var(--slide-gradient)', borderRadius: 2, animationDelay: `${i * 120}ms` }} />
+                  ))}
                 </div>
-                {showSafeZone && (
-                  <>
-                    <div className="absolute pointer-events-none border-2 border-dashed border-[rgba(6,182,212,0.6)] bg-[rgba(6,182,212,0.03)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
-                    <div className="absolute pointer-events-none bg-[rgba(6,182,212,0.9)] text-white px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
-                  </>
-                )}
+                <span className="font-display font-bold text-2xl text-white">+150 projetos</span>
               </div>
-            </button>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
             <div className="flex items-center gap-2 mt-3">
               <p className="font-display font-bold text-[var(--text-on-surface)]">Data Grid</p>
-              <span className="text-xs font-mono text-tech">600ms · Smooth</span>
+              <span className="text-xs font-mono text-tech">loop · 5s</span>
             </div>
-            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">6 barras + counter +150. Prova-social com dados.</p>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">6 barras + counter +150 em loop automático, sem clique.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute inset-0" style={{ background: 'var(--slide-gradient)' }}>
+                <div className="absolute flex flex-col items-center justify-center gap-6" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                  <span className="font-display font-bold text-lg text-white">Antes × Depois</span>
+                  <div className="w-full space-y-4">
+                  {[
+                    { label: 'Antes', value: 25, tone: 'var(--slide-primary)' },
+                    { label: 'Depois', value: 92, tone: 'var(--slide-primary)' },
+                  ].map((row, i) => (
+                    <div key={row.label} className="w-full">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-semibold text-white/80">{row.label}</span>
+                        <span className="text-xs font-mono text-white">{row.value}%</span>
+                      </div>
+                      <div className="h-5 rounded-full overflow-hidden" style={{ background: 'var(--slide-border)' }}>
+                        <div className="fx-compare-bar h-full rounded-full" style={{ width: `${row.value}%`, background: row.tone, animationDelay: `${i * 300}ms` }} />
+                      </div>
+                    </div>
+                  ))}
+                  </div>
+                  <span className="font-display font-bold text-2xl text-white">+268%</span>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Comparação</p>
+              <span className="text-xs font-mono text-tech">loop · 5s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Barras horizontais Antes × Depois em loop automático, sem clique.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute inset-0" style={{ background: 'var(--slide-gradient)' }}>
+                <div className="absolute flex flex-col items-center justify-center gap-4" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                  <span className="font-display font-bold text-lg text-white">Crescimento</span>
+                  <svg className="w-full" viewBox="0 0 216 90" fill="none" aria-hidden>
+                  <path className="fx-path-draw-line" d="M 0 80 L 36 62 L 72 68 L 108 44 L 144 50 L 180 24 L 216 10" pathLength={100} stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ animationDuration: '4s' }} />
+                  <circle cx="216" cy="10" r="4" fill="var(--slide-primary)" />
+                  </svg>
+                  <span className="font-display font-bold text-2xl text-white">+150% em 12 meses</span>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Linha de Crescimento</p>
+              <span className="text-xs font-mono text-tech">loop · 4s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Trajetória que se desenha em loop automático, estilo Path Draw.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute inset-0" style={{ background: 'var(--slide-gradient)' }}>
+                <div className="absolute flex flex-col items-center justify-center gap-2" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                  <span className="font-display font-bold text-lg text-white">Projetos entregues</span>
+                  <span className="font-display font-bold text-6xl text-white" aria-label="150 projetos"><span aria-hidden="true">+</span><span className="fx-count" aria-hidden="true" /></span>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Contador Grande</p>
+              <span className="text-xs font-mono text-tech">loop · 3s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Big number contando de 0 até +150 em loop automático.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute inset-0" style={{ background: 'var(--slide-gradient)' }}>
+                <div className="absolute flex flex-col items-center justify-center gap-4" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                  <span className="font-display font-bold text-lg text-white">Clientes que indicam</span>
+                  <div className="relative w-36 h-36">
+                    <svg className="w-full h-full" viewBox="0 0 120 120" fill="none" aria-hidden>
+                      <circle cx="60" cy="60" r="52" stroke="var(--slide-border)" strokeWidth="10" />
+                      <circle className="fx-donut-ring" cx="60" cy="60" r="52" pathLength={100} stroke="var(--slide-primary)" strokeWidth="10" strokeLinecap="round" transform="rotate(-90 60 60)" />
+                    </svg>
+                    <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-3xl text-white">87%</span>
+                  </div>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Anel %</p>
+              <span className="text-xs font-mono text-tech">loop · 4s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Anel que fecha até 87% em loop automático, com o % no centro.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute inset-0" style={{ background: 'var(--slide-gradient)' }}>
+                <div className="absolute flex flex-col items-center justify-center gap-6" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                  <span className="font-display font-bold text-lg text-white">Meta do mês</span>
+                  <div className="w-full">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-semibold text-white/80">Progresso</span>
+                      <span className="text-xs font-mono text-white">78%</span>
+                    </div>
+                    <div className="h-6 rounded-full overflow-hidden" style={{ background: 'var(--slide-border)' }}>
+                      <div className="fx-compare-bar h-full rounded-full" style={{ width: '78%', background: 'var(--slide-primary)' }} />
+                    </div>
+                  </div>
+                  <span className="font-display font-bold text-2xl text-white">78%</span>
+                  <span className="text-xs text-white/70">Faltam 22% para a meta</span>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Progresso / Meta</p>
+              <span className="text-xs font-mono text-tech">loop · 5s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Barra única que enche até 78% em loop automático.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute inset-0" style={{ background: 'var(--slide-gradient)' }}>
+                <div className="absolute flex flex-col items-center justify-center gap-4" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                  <span className="font-display font-bold text-lg text-white">Origem do tráfego</span>
+                  <svg className="w-36 h-36" viewBox="0 0 100 100" fill="none" aria-hidden>
+                    <path className="fx-path-draw-line" d="M 50 50 L 50 5 A 45 45 0 0 1 63.9 92.8 Z" pathLength={100} stroke="#ffffff" strokeWidth="2.5" strokeLinejoin="round" fill="var(--slide-primary)" fillOpacity="0.85" style={{ animationDuration: '4s' }} />
+                    <path className="fx-path-draw-line" d="M 50 50 L 63.9 92.8 A 45 45 0 0 1 7.2 36.1 Z" pathLength={100} stroke="#ffffff" strokeWidth="2.5" strokeLinejoin="round" fill="var(--slide-accent)" fillOpacity="0.55" style={{ animationDuration: '4s', animationDelay: '800ms' }} />
+                    <path className="fx-path-draw-line" d="M 50 50 L 7.2 36.1 A 45 45 0 0 1 50 5 Z" pathLength={100} stroke="#ffffff" strokeWidth="2.5" strokeLinejoin="round" fill="#ffffff" fillOpacity="0.35" style={{ animationDuration: '4s', animationDelay: '1600ms' }} />
+                  </svg>
+                  <div className="flex items-center gap-3 text-xs text-white">
+                    <span>Orgânico 45%</span>
+                    <span>Pago 35%</span>
+                    <span>Indicação 20%</span>
+                  </div>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Pizza</p>
+              <span className="text-xs font-mono text-tech">loop · 4s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Fatias se revelando em sequência em loop automático.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute inset-0" style={{ background: 'var(--slide-gradient)' }}>
+                <div className="absolute flex flex-col items-center justify-center gap-4" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                  <span className="font-display font-bold text-lg text-white">Funil de conversão</span>
+                  <div className="w-full space-y-2">
+                    {[
+                      { label: 'Visitantes', value: '10.000', width: 100, tone: 'bg-[var(--slide-primary)]' },
+                      { label: 'Leads', value: '2.500', width: 55, tone: 'bg-[var(--slide-accent)]' },
+                      { label: 'Clientes', value: '800', width: 25, tone: 'bg-white/40' },
+                    ].map((stage, i) => (
+                      <div key={stage.label} className="flex justify-center">
+                        <div className={`fx-funnel-stage rounded-lg ${stage.tone}`} style={{ width: `${stage.width}%`, animationDelay: `${i * 300}ms` }}>
+                          <div className="flex items-center justify-between px-3 py-1.5">
+                            <span className="funil-label text-xs font-semibold text-white">{stage.label}</span>
+                            <span className="funil-label text-xs font-mono text-white">{stage.value}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Funil</p>
+              <span className="text-xs font-mono text-tech">loop · 5s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Estágios encolhendo em sequência em loop automático.</p>
           </div>
         </div>
       </div>
@@ -1011,7 +2406,14 @@ function SocialMotionNumbersSection() {
             { key: 'dur', label: 'Duração' },
           ]}
           data={[
-            { name: 'Data Grid', when: 'Reveal de prova-social/big number com barras (Dica → Prova)', dur: '600ms Smooth + stagger 60ms' },
+            { name: 'Data Grid', when: 'Prova-social com barras verticais + big number em loop', dur: 'loop · 5s + stagger 120ms' },
+            { name: 'Comparação', when: 'Antes × Depois com barras horizontais em loop', dur: 'loop · 5s' },
+            { name: 'Linha de Crescimento', when: 'Trajetória de crescimento que se desenha', dur: 'loop · 4s' },
+            { name: 'Contador Grande', when: 'Big number contando até o valor final', dur: 'loop · 3s' },
+            { name: 'Anel %', when: 'Percentual de satisfação/indicação no centro do anel', dur: 'loop · 4s' },
+            { name: 'Progresso / Meta', when: 'Uma barra que enche até o % da meta', dur: 'loop · 5s' },
+            { name: 'Pizza', when: 'Distribuição em fatias se revelando', dur: 'loop · 4s' },
+            { name: 'Funil', when: 'Estágios de conversão encolhendo', dur: 'loop · 5s' },
           ]}
         />
       </div>
@@ -1024,12 +2426,513 @@ function SocialMotionNumbersSection() {
           { name: 'stagger', type: 'number (ms)', default: '60', description: 'Delay entre barras (i * stagger)' },
           { name: 'bars', type: 'number[]', default: '[35,60,45,80,55,95]', description: 'Alturas (%) das 6 barras' },
           { name: 'counter', type: 'number', default: '150', description: 'Valor final do big number (+150 projetos)' },
+          { name: 'value', type: 'number', default: '150', description: 'Valor final do Contador Grande' },
+          { name: 'points', type: 'number[]', default: '[0,20,35,30,55,80,100]', description: 'Pontos da Linha de Crescimento' },
+          { name: 'percent', type: 'number', default: '87', description: 'Valor do Anel % (centro) e da barra de Meta' },
+          { name: 'slices', type: 'number[]', default: '[45,35,20]', description: 'Fatias (%) da Pizza' },
+          { name: 'stages', type: '[{label, value, width}]', default: 'Visitantes/Leads/Clientes', description: 'Estágios do Funil' },
+          { name: 'rows', type: '[{label, value}]', default: 'Antes 25 / Depois 92', description: 'Barras da Comparação' },
         ]} />
       </div>
 
       <div>
         <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
-        <CodeBlock code={'<DataGrid bars={[35,60,45,80,55,95]} counter={150} suffix="+" stagger={60} duration={600} easing="Smooth">\n  +150 projetos\n</DataGrid>'} />
+        <CodeBlock code={'<DataGrid bars={[35,60,45,80,55,95]} counter={150} suffix="+" stagger={60} duration={600} easing="Smooth">\n  +150 projetos\n</DataGrid>\n\n<Comparison rows={[{ label: "Antes", value: 25 }, { label: "Depois", value: 92 }]} loop />\n\n<GrowthLine points={[0,20,35,30,55,80,100]} loop />\n\n<BigCounter value={150} prefix="+" loop />\n\n<Donut percent={87} loop />\n\n<ProgressBar percent={78} loop />\n\n<Pizza slices={[45,35,20]} loop />\n\n<Funnel stages={[{ label: "Visitantes", value: "10.000" }, { label: "Leads", value: "2.500" }, { label: "Clientes", value: "800" }]} loop />'} />
+      </div>
+    </div>
+  );
+}
+
+function SocialMotionCtaSection() {
+  const [showSafeZone, setShowSafeZone] = useState(false);
+  const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
+  const scrambleText = 'SALVAR';
+  const scrambleTotal = getScrambleTotalTicks(scrambleText);
+  const [scrambleTick, setScrambleTick] = useState(0);
+  const [scramblePhase, setScramblePhase] = useState<'run' | 'hold' | 'out'>('run');
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }, []);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setScrambleTick(scrambleTotal);
+      return;
+    }
+    if (scramblePhase === 'run') {
+      const iv = setInterval(() => {
+        setScrambleTick(t => {
+          if (t + 1 >= scrambleTotal) {
+            setScramblePhase('hold');
+            return scrambleTotal;
+          }
+          return t + 1;
+        });
+      }, 30);
+      return () => clearInterval(iv);
+    }
+    if (scramblePhase === 'hold') {
+      const to = setTimeout(() => setScramblePhase('out'), 1400);
+      return () => clearTimeout(to);
+    }
+    const to = setTimeout(() => {
+      setScrambleTick(0);
+      setScramblePhase('run');
+    }, 350);
+    return () => clearTimeout(to);
+  }, [scramblePhase, reducedMotion, scrambleTotal]);
+
+  const scrambleProgress = Math.min(1, scrambleTick / scrambleTotal);
+  const scrambleLabel = reducedMotion ? scrambleText : getScrambleFrame(scrambleText, scrambleTick);
+  const themes = [
+    { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#FFF5E6', border: '#FF6B35', desc: 'Dicas, conteúdo educativo' },
+    { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#FAFAFA', border: '#1A1A1A', desc: 'Depoimentos, elegância' },
+  ];
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-4">🎨 Selecione o Tema</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {themes.map((t) => (
+            <button key={t.id} onClick={() => setTheme(t.id)} className={`relative p-4 rounded-xl border-2 transition-all ${theme === t.id ? 'border-tech scale-105 shadow-lg' : 'border-[var(--surface-border)] hover:border-tech/50'}`} aria-label={`Tema ${t.name}`} aria-pressed={theme === t.id}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 border-4" style={{ backgroundColor: t.bg, borderColor: t.border }} />
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{t.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{t.desc}</p>
+              {theme === t.id && (<div className="absolute top-2 right-2"><Check className="w-4 h-4 text-tech" /></div>)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">🎬 O vídeo termina com um pedido</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">CTA pulsante em loop automático — sem clique, sem hover. O anel marca onde olhar e a flutuação mantém a tensão até o fim.</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview — IG 4:5 · 340×425</h3>
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] mb-6">
+          <label className="flex items-center gap-3 cursor-pointer flex-1">
+            <input type="checkbox" checked={showSafeZone} onChange={(e) => setShowSafeZone(e.target.checked)} className="sr-only peer" />
+            <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tech relative"></div>
+            <span className="text-sm font-medium text-[var(--text-on-surface)] flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              Mostrar área de segurança
+            </span>
+          </label>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4" data-theme={theme}>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex flex-col items-center justify-center gap-6" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <span className="font-display font-bold text-lg text-[var(--slide-text)]">Gostou? Salva o post</span>
+                <div className="relative animate-float">
+                  <span className="animate-pulse-ring absolute inset-0 rounded-full border-2 border-[var(--slide-accent)]" aria-hidden="true" />
+                  <span className="relative flex items-center gap-2 rounded-full bg-[var(--slide-accent)] px-6 py-3 font-display font-bold text-[var(--slide-on-accent)]">Salva o post</span>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">CTA Primário</p>
+              <span className="text-xs font-mono text-tech">loop · 1.5s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Botão preenchido com anel pulsante e flutuação, sem clique.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex flex-col items-center justify-center gap-6" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <span className="font-display font-bold text-lg text-[var(--slide-text)]">Envia pra quem precisa</span>
+                <div className="relative animate-float">
+                  <span className="animate-pulse-ring absolute inset-0 rounded-full border-2 border-[var(--slide-primary)]" aria-hidden="true" />
+                  <span className="relative flex items-center gap-2 rounded-full border-2 border-[var(--slide-accent)] px-6 py-3 font-display font-bold text-[var(--slide-accent)]">Link na bio</span>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">CTA Ghost</p>
+              <span className="text-xs font-mono text-tech">loop · 1.5s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Contorno com anel em primary — alternativa elegante ao preenchido.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex flex-col items-center justify-center gap-6" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <span className="font-display font-bold text-lg text-[var(--slide-text)]">Atenção!</span>
+                <div className="fx-cta-loud rounded-full">
+                  <span className="flex items-center gap-2 rounded-full bg-[var(--slide-accent)] px-6 py-3 font-display font-bold text-[var(--slide-on-accent)]">Salva o post</span>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">CTA Loud</p>
+              <span className="text-xs font-mono text-tech">loop · 3s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Botão que escala e treme com brilho, estilo Loud dos Textos.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex flex-col items-center justify-center gap-6" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <span className="font-display font-bold text-lg text-[var(--slide-text)]">Cada letra, um traço</span>
+                <div className="relative inline-flex min-w-[190px] items-center justify-center" style={{ opacity: scramblePhase === 'out' ? 0 : 1, transition: 'opacity 300ms' }}>
+                  <svg className="absolute" style={{ inset: -6 }} viewBox="0 0 120 36" preserveAspectRatio="none" fill="none" aria-hidden>
+                    <path d="M 18 2 H 102 Q 118 2 118 18 Q 118 34 102 34 H 18 Q 2 34 2 18 Q 2 2 18 2 Z" pathLength={100} stroke="var(--slide-accent)" strokeWidth="2.5" strokeLinejoin="round" style={{ strokeDasharray: 100, strokeDashoffset: (1 - scrambleProgress) * 100 }} />
+                  </svg>
+                  <span className="relative block whitespace-nowrap px-7 py-3 text-center font-display font-bold text-[var(--slide-accent)]">{scrambleLabel}</span>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">CTA Scramble</p>
+              <span className="text-xs font-mono text-tech">loop · 3.2s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Letras embaralham e resolvem enquanto o contorno abre junto.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Quando usar</h3>
+        <Table
+          columns={[
+            { key: 'name', label: 'CTA' },
+            { key: 'when', label: 'Quando usar' },
+            { key: 'dur', label: 'Duração' },
+          ]}
+          data={[
+            { name: 'CTA Primário', when: 'Pedido principal do vídeo (salvar, comentar, seguir)', dur: 'loop · 1.5s' },
+            { name: 'CTA Ghost', when: 'Alternativa discreta (link na bio, enviar)', dur: 'loop · 1.5s' },
+            { name: 'CTA Loud', when: 'Urgência máxima: escala + shake com brilho', dur: 'loop · 3s' },
+            { name: 'CTA Scramble', when: 'Letras embaralhando com contorno abrindo (scramble + draw)', dur: 'loop · 3.2s' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'label', type: 'string', default: "'Salva o post'", description: 'Rótulo do botão' },
+          { name: 'variant', type: "'primary' | 'ghost' | 'loud' | 'scramble'", default: "'primary'", description: 'Preenchido, contorno, escala+shake ou scramble com contorno' },
+          { name: 'loop', type: 'infinite', default: 'infinite', description: 'Anel pulsante + flutuação, sem trigger' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
+        <CodeBlock code={'<SocialCta label="Salva o post" variant="primary" loop />\n\n<SocialCta label="Link na bio" variant="ghost" loop />\n\n<SocialCta label="Salva o post" variant="loud" loop />\n\n<SocialCta label="SALVAR" variant="scramble" loop />'} />
+      </div>
+    </div>
+  );
+}
+
+function SocialMotionPassosSection() {
+  const [showSafeZone, setShowSafeZone] = useState(false);
+  const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
+  const themes = [
+    { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#FFF5E6', border: '#FF6B35', desc: 'Dicas, conteúdo educativo' },
+    { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#FAFAFA', border: '#1A1A1A', desc: 'Depoimentos, elegância' },
+  ];
+  const steps = [
+    { n: 1, title: 'Diagnóstico', desc: 'Entendemos onde você está' },
+    { n: 2, title: 'Estratégia', desc: 'Plano sob medida' },
+    { n: 3, title: 'Escala', desc: 'Resultado que cresce' },
+  ];
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-4">🎨 Selecione o Tema</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {themes.map((t) => (
+            <button key={t.id} onClick={() => setTheme(t.id)} className={`relative p-4 rounded-xl border-2 transition-all ${theme === t.id ? 'border-tech scale-105 shadow-lg' : 'border-[var(--surface-border)] hover:border-tech/50'}`} aria-label={`Tema ${t.name}`} aria-pressed={theme === t.id}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 border-4" style={{ backgroundColor: t.bg, borderColor: t.border }} />
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{t.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{t.desc}</p>
+              {theme === t.id && (<div className="absolute top-2 right-2"><Check className="w-4 h-4 text-tech" /></div>)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">🎬 O caminho em 3 passos</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Passos numerados entram em stagger dentro da Safe Zone, em loop — o "como funciona" vira cena.</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview — IG 4:5 · 340×425</h3>
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] mb-6">
+          <label className="flex items-center gap-3 cursor-pointer flex-1">
+            <input type="checkbox" checked={showSafeZone} onChange={(e) => setShowSafeZone(e.target.checked)} className="sr-only peer" />
+            <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tech relative"></div>
+            <span className="text-sm font-medium text-[var(--text-on-surface)] flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              Mostrar área de segurança
+            </span>
+          </label>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4" data-theme={theme}>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex flex-col justify-center gap-4" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <span className="font-display font-bold text-lg text-[var(--slide-text)] text-center">Como funciona</span>
+                {steps.map((step, i) => (
+                  <div key={step.n} className="fx-step-in flex items-center gap-3" style={{ animationDelay: `${i * 500}ms` }}>
+                    <span className="flex items-center justify-center w-10 h-10 rounded-full font-display font-bold text-[var(--slide-on-accent)] shrink-0" style={{ background: 'var(--slide-gradient)' }}>{step.n}</span>
+                    <span className="flex flex-col">
+                      <span className="font-display font-bold text-[var(--slide-text)]">{step.title}</span>
+                      <span className="text-xs text-[var(--slide-text-muted)]">{step.desc}</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Passos</p>
+              <span className="text-xs font-mono text-tech">loop · 6s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Passos numerados com stagger em loop automático.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex flex-col justify-center gap-3" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <span className="font-display font-bold text-lg text-[var(--slide-text)] text-center">Como funciona</span>
+                {steps.map((step, i) => (
+                  <div key={step.n} className="relative flex items-center gap-3 px-3 py-2.5">
+                    <svg className="absolute inset-0 w-full h-full" viewBox="0 0 252 60" preserveAspectRatio="none" fill="none" aria-hidden>
+                      <path className={`fx-step-border-${['a', 'b', 'c'][i]}`} d="M 16 2 H 236 Q 250 2 250 16 V 44 Q 250 58 236 58 H 16 Q 2 58 2 44 V 16 Q 2 2 16 2 Z" pathLength={100} stroke="var(--slide-accent)" strokeWidth="2.5" strokeLinejoin="round" />
+                    </svg>
+                    <span className={`fx-step-fade-${['a', 'b', 'c'][i]} flex items-center gap-3`}>
+                      <span className="flex items-center justify-center w-7 h-7 rounded-full border-2 border-[var(--slide-accent)] shrink-0">
+                        <Check className="w-4 h-4 text-[var(--slide-accent)]" />
+                      </span>
+                      <span className="flex flex-col">
+                        <GlitchText as="span" text={step.title} className="font-display font-bold text-[var(--slide-text)]">{step.title}</GlitchText>
+                        <span className="text-xs text-[var(--slide-text-muted)]">{step.desc}</span>
+                      </span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">Passos Check</p>
+              <span className="text-xs font-mono text-tech">loop · 6s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Check redondo, título Glitch e contorno desenhando por passo, todos em conjunto.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Quando usar</h3>
+        <Table
+          columns={[
+            { key: 'name', label: 'Passos' },
+            { key: 'when', label: 'Quando usar' },
+            { key: 'dur', label: 'Duração' },
+          ]}
+          data={[
+            { name: 'Passos', when: '“Como funciona”, processo e roteiros em 3 etapas', dur: 'loop · 6s + stagger 500ms' },
+            { name: 'Passos Check', when: 'Passos com check, título Glitch e contorno por passo', dur: 'loop · 4s + stagger 600ms' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'steps', type: '[{n, title, desc}]', default: 'Diagnóstico / Estratégia / Escala', description: 'Passos numerados' },
+          { name: 'stagger', type: 'number (ms)', default: '500', description: 'Delay entre passos (i * stagger)' },
+          { name: 'loop', type: 'infinite', default: 'infinite', description: 'Stagger em loop determinístico' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
+        <CodeBlock code={'<Steps steps={[{ n: 1, title: "Diagnóstico", desc: "Entendemos onde você está" }, { n: 2, title: "Estratégia", desc: "Plano sob medida" }, { n: 3, title: "Escala", desc: "Resultado que cresce" }]} stagger={500} loop />\n\n<StepsCheck check glitch border />'} />
+      </div>
+    </div>
+  );
+}
+
+function SocialMotionEndCardSection() {
+  const [showSafeZone, setShowSafeZone] = useState(false);
+  const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
+  const themes = [
+    { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#FFF5E6', border: '#FF6B35', desc: 'Dicas, conteúdo educativo' },
+    { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#FAFAFA', border: '#1A1A1A', desc: 'Depoimentos, elegância' },
+  ];
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-4">🎨 Selecione o Tema</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {themes.map((t) => (
+            <button key={t.id} onClick={() => setTheme(t.id)} className={`relative p-4 rounded-xl border-2 transition-all ${theme === t.id ? 'border-tech scale-105 shadow-lg' : 'border-[var(--surface-border)] hover:border-tech/50'}`} aria-label={`Tema ${t.name}`} aria-pressed={theme === t.id}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 border-4" style={{ backgroundColor: t.bg, borderColor: t.border }} />
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{t.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{t.desc}</p>
+              {theme === t.id && (<div className="absolute top-2 right-2"><Check className="w-4 h-4 text-tech" /></div>)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">🎬 O frame final do vídeo</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Logo desenhado + nome + handle + CTA por 2s na Safe Zone — o encerramento padrão de qualquer vídeo social.</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Preview — IG 4:5 · 340×425</h3>
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)] mb-6">
+          <label className="flex items-center gap-3 cursor-pointer flex-1">
+            <input type="checkbox" checked={showSafeZone} onChange={(e) => setShowSafeZone(e.target.checked)} className="sr-only peer" />
+            <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tech relative"></div>
+            <span className="text-sm font-medium text-[var(--text-on-surface)] flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              Mostrar área de segurança
+            </span>
+          </label>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4" data-theme={theme}>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto rounded-lg overflow-hidden bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)] border border-[var(--surface-border)]">
+              <div className="absolute flex flex-col items-center justify-center gap-3" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <div className="relative w-[64%]" style={{ aspectRatio: '182 / 87' }}>
+                  <PathRun variant="logo" duration="6s" />
+                  <svg className="fx-logo-fill absolute inset-0 w-full h-full" viewBox="0 0 182 87" preserveAspectRatio="none" fill="none" aria-hidden>
+                    <path d={PATH_LOGO_E_D} fill="var(--slide-accent)" />
+                    <path d={PATH_LOGO_M_D} fill="var(--slide-accent)" />
+                  </svg>
+                </div>
+                <GlitchText as="span" text="Max Ebina" className="font-display font-bold text-xl text-[var(--slide-text)] text-center">Max Ebina</GlitchText>
+                <span className="text-sm text-[var(--slide-text-muted)]">Marketing Digital</span>
+                <GlitchText as="span" text="@maxebina" className="px-4 py-1.5 rounded-full border border-[var(--slide-border)] text-sm font-semibold text-[var(--slide-accent)] text-center">@maxebina</GlitchText>
+                <span className="mt-1 rounded-full bg-[var(--slide-accent)] px-5 py-2 font-display font-bold text-sm text-[var(--slide-on-accent)]">Segue pra mais</span>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">End Card</p>
+              <span className="text-xs font-mono text-tech">loop · 6s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Logo + marca/handle em GlitchText + CTA no frame final.</p>
+          </div>
+          <div className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+            <div className="relative aspect-[4/5] w-full max-w-[340px] mx-auto overflow-hidden rounded-lg bg-gradient-to-b from-[var(--slide-bg)] to-[var(--slide-bg-secondary)]" data-theme={theme}>
+              <div className="absolute flex flex-col items-center justify-center text-center" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%' }}>
+                <Sparkles className="w-8 h-8 mb-5" style={{ color: 'var(--slide-accent)' }} />
+                <GlitchText as="h4" text="Agende seu diagnóstico gratuito" className="font-display font-bold text-2xl leading-tight text-[var(--slide-text)] text-center">Agende seu diagnóstico gratuito</GlitchText>
+                <GlitchText as="span" text="Vagas limitadas" className="block text-sm mt-2 mb-6 text-[var(--slide-text-muted)] text-center">Vagas limitadas</GlitchText>
+                <div className="fx-cta-loud rounded-full">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-[var(--slide-accent)] px-6 py-3 font-display font-semibold text-sm text-[var(--slide-on-accent)]">
+                    Link na bio <ArrowRight className="w-4 h-4" style={{ color: 'var(--slide-on-accent)' }} />
+                  </span>
+                </div>
+              </div>
+              <div className="absolute" style={{ bottom: '3%', right: '4%', zIndex: 5 }}>
+                <div className="relative" style={{ width: 60, height: 29 }}>
+                  <PathRun variant="logo" duration="6s" />
+                  <svg className="fx-logo-fill absolute inset-0 w-full h-full" viewBox="0 0 182 87" preserveAspectRatio="none" fill="none" aria-hidden>
+                    <path d={PATH_LOGO_E_D} fill="var(--slide-accent)" />
+                    <path d={PATH_LOGO_M_D} fill="var(--slide-accent)" />
+                  </svg>
+                </div>
+              </div>
+              {showSafeZone && (
+                <>
+                  <div className="absolute pointer-events-none border-2 border-dashed border-[var(--slide-border)] bg-[color-mix(in_srgb,var(--slide-accent)_3%,transparent)] rounded-lg" style={{ top: '13.3%', left: '13%', width: '74%', height: '71.9%', zIndex: 50 }} />
+                  <div className="absolute pointer-events-none bg-[var(--slide-accent)] text-[var(--slide-on-accent)] px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide" style={{ top: '14.3%', left: '50%', transform: 'translateX(-50%)', zIndex: 51 }}>Safe Zone</div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-3">
+              <p className="font-display font-bold text-[var(--text-on-surface)]">End Card CTA</p>
+              <span className="text-xs font-mono text-tech">loop · 6s</span>
+            </div>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">Variação do slide CTA com headline/urgência em GlitchText e logo ME animado no canto.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-6">Quando usar</h3>
+        <Table
+          columns={[
+            { key: 'name', label: 'End Card' },
+            { key: 'when', label: 'Quando usar' },
+            { key: 'dur', label: 'Duração' },
+          ]}
+          data={[
+            { name: 'End Card', when: 'Últimos 2s do vídeo: marca + CTA + handle', dur: 'loop · 6s' },
+            { name: 'End Card CTA', when: 'Encerramento no layout do slide CTA (ícone, título, vagas, Link na bio, logo ME)', dur: 'loop · 6s' },
+          ]}
+        />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Props</h3>
+        <PropsTable props={[
+          { name: 'brand', type: 'string', default: "'Max Ebina'", description: 'Nome da marca' },
+          { name: 'sub', type: 'string', default: "'Marketing Digital'", description: 'Assinatura' },
+          { name: 'handle', type: 'string', default: "'@maxebina'", description: 'Handle do perfil' },
+          { name: 'cta', type: 'string', default: "'Segue pra mais'", description: 'Rótulo do botão final' },
+          { name: 'ctaVariant', type: "'ghost' | 'loud'", default: "'loud'", description: 'Animação do CTA no End Card CTA' },
+        ]} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Exemplo</h3>
+        <CodeBlock code={'<EndCard brand="Max Ebina" sub="Marketing Digital" handle="@maxebina" cta="Segue pra mais" loop />\n\n<EndCardCta title="Agende seu diagnóstico gratuito" subtitle="Vagas limitadas" cta="Link na bio" ctaVariant="loud" logo loop />'} />
       </div>
     </div>
   );
@@ -1163,10 +3066,10 @@ function LogoSection() {
               <div>
                 <p className="font-semibold text-[var(--text-on-surface)] mb-2">✅ Use assim</p>
                 <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-1">
-                  <li>• Mantenha a proporção original (2.09:1)</li>
-                  <li>• Use em fundos claros ou escuros</li>
-                  <li>• Respeite a área de proteção</li>
-                  <li>• Tamanho mínimo: 91px de largura</li>
+                  <li>? Mantenha a proporção original (2.09:1)</li>
+                  <li>? Use em fundos claros ou escuros</li>
+                  <li>? Respeite a área de proteção</li>
+                  <li>? Tamanho mínimo: 91px de largura</li>
                 </ul>
               </div>
             </div>
@@ -1178,10 +3081,10 @@ function LogoSection() {
               <div>
                 <p className="font-semibold text-[var(--text-on-surface)] mb-2">❌ Evite isso</p>
                 <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-1">
-                  <li>• Alterar as cores do logo</li>
-                  <li>• Distorcer a proporção</li>
-                  <li>• Adicionar efeitos (sombra, brilho)</li>
-                  <li>• Usar em fundos com pouco contraste</li>
+                  <li>? Alterar as cores do logo</li>
+                  <li>? Distorcer a proporção</li>
+                  <li>? Adicionar efeitos (sombra, brilho)</li>
+                  <li>? Usar em fundos com pouco contraste</li>
                 </ul>
               </div>
             </div>
@@ -1458,19 +3361,19 @@ function TypographySection() {
           <div className="rounded-xl border border-success/20 bg-success/5 p-6">
             <p className="font-semibold text-[var(--text-on-surface)] mb-3">✅ Use Space Grotesk para:</p>
             <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
-              <li>• Headlines e títulos principais</li>
-              <li>• Nomes de seções</li>
-              <li>• CTAs de botões</li>
-              <li>• Números de métricas</li>
+              <li>? Headlines e títulos principais</li>
+              <li>? Nomes de seções</li>
+              <li>? CTAs de botões</li>
+              <li>? Números de métricas</li>
             </ul>
           </div>
           <div className="rounded-xl border border-success/20 bg-success/5 p-6">
             <p className="font-semibold text-[var(--text-on-surface)] mb-3">✅ Use Inter para:</p>
             <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
-              <li>• Corpo de texto</li>
-              <li>• Labels de formulários</li>
-              <li>• Descrições e parágrafos</li>
-              <li>• UI elements (botões, links)</li>
+              <li>? Corpo de texto</li>
+              <li>? Labels de formulários</li>
+              <li>? Descrições e parágrafos</li>
+              <li>? UI elements (botões, links)</li>
             </ul>
           </div>
         </div>
@@ -1706,17 +3609,17 @@ function ButtonsSection() {
           <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
             <p className="text-tech text-sm font-semibold mb-3">Primário (Tech)</p>
             <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
-              <li>• "Quero Escalar Meu Negócio"</li>
-              <li>• "Agendar Diagnóstico Gratuito"</li>
-              <li>• "Começar Agora"</li>
+              <li>? "Quero Escalar Meu Negócio"</li>
+              <li>? "Agendar Diagnóstico Gratuito"</li>
+              <li>? "Começar Agora"</li>
             </ul>
           </div>
           <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
             <p className="text-tech text-sm font-semibold mb-3">Secundário (Ghost)</p>
             <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-2">
-              <li>• "Ver Cases"</li>
-              <li>• "Conhecer Soluções"</li>
-              <li>• "Saiba Mais"</li>
+              <li>? "Ver Cases"</li>
+              <li>? "Conhecer Soluções"</li>
+              <li>? "Saiba Mais"</li>
             </ul>
           </div>
         </div>
@@ -2374,17 +4277,17 @@ function NavbarSection() {
           <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
             <p className="text-tech font-semibold mb-2">📍 Topo da página</p>
             <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-1">
-              <li>• Background transparente</li>
-              <li>• Padding maior (py-4)</li>
-              <li>• Sem sombra</li>
+              <li>? Background transparente</li>
+              <li>? Padding maior (py-4)</li>
+              <li>? Sem sombra</li>
             </ul>
           </div>
           <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
             <p className="text-tech font-semibold mb-2">📍 Após scroll (50px+)</p>
             <ul className="text-sm text-[var(--text-on-surface-muted)] space-y-1">
-              <li>• Glassmorphism (backdrop-blur)</li>
-              <li>• Padding menor (py-2)</li>
-              <li>• Sombra e borda</li>
+              <li>? Glassmorphism (backdrop-blur)</li>
+              <li>? Padding menor (py-2)</li>
+              <li>? Sombra e borda</li>
             </ul>
           </div>
         </div>
@@ -2640,25 +4543,25 @@ function FooterSection() {
             <div>
               <p className="font-semibold text-[var(--text-on-surface)] mb-2">📍 Coluna 1 (Logo + Descrição)</p>
               <ul className="text-[var(--text-on-surface-muted)] space-y-1 ml-4">
-                <li>• Logo com gradiente</li>
-                <li>• Descrição da empresa (max 2 linhas)</li>
-                <li>• Ícones de redes sociais</li>
+                <li>? Logo com gradiente</li>
+                <li>? Descrição da empresa (max 2 linhas)</li>
+                <li>? Ícones de redes sociais</li>
               </ul>
             </div>
             <div>
               <p className="font-semibold text-[var(--text-on-surface)] mb-2">📍 Colunas 2-4 (Links)</p>
               <ul className="text-[var(--text-on-surface-muted)] space-y-1 ml-4">
-                <li>• Título da seção</li>
-                <li>• Lista de links (4-6 itens)</li>
-                <li>• Hover com cor tech</li>
+                <li>? Título da seção</li>
+                <li>? Lista de links (4-6 itens)</li>
+                <li>? Hover com cor tech</li>
               </ul>
             </div>
             <div>
               <p className="font-semibold text-[var(--text-on-surface)] mb-2">📍 Barra Inferior</p>
               <ul className="text-[var(--text-on-surface-muted)] space-y-1 ml-4">
-                <li>• Copyright à esquerda</li>
-                <li>• Links legais à direita</li>
-                <li>• Borda superior sutil</li>
+                <li>? Copyright à esquerda</li>
+                <li>? Links legais à direita</li>
+                <li>? Borda superior sutil</li>
               </ul>
             </div>
           </div>
@@ -2814,8 +4717,8 @@ function ModalSection() {
           </div>
         </div>
         <div className="mt-4 text-xs text-[var(--text-on-surface-muted)]">
-          <p>• <strong>Sem slot:</strong> omitir prop <code>image</code>.</p>
-          <p>• <strong>Tamanhos:</strong> <code>size={"sm"}</code> (400px), <code>size={"md"}</code> (640px), <code>size={"lg"}</code> (960px).</p>
+          <p>? <strong>Sem slot:</strong> omitir prop <code>image</code>.</p>
+          <p>? <strong>Tamanhos:</strong> <code>size={"sm"}</code> (400px), <code>size={"md"}</code> (640px), <code>size={"lg"}</code> (960px).</p>
         </div>
       </div>
     </div>
@@ -3061,17 +4964,17 @@ function InstagramSection() {
             <div className="rounded-lg border border-success/20 bg-success/5 p-4">
               <p className="font-semibold text-success mb-2">✅ Inclui Logo</p>
               <ul className="text-xs space-y-1">
-                <li>• <strong>Capa</strong> - Identifica a marca no primeiro contato</li>
-                <li>• <strong>Serviço</strong> - Reforça quem oferece o serviço</li>
-                <li>• <strong>Prova Social</strong> - Aumenta credibilidade</li>
-                <li>• <strong>CTA</strong> - Autoridade no call to action</li>
+                <li>? <strong>Capa</strong> - Identifica a marca no primeiro contato</li>
+                <li>? <strong>Serviço</strong> - Reforça quem oferece o serviço</li>
+                <li>? <strong>Prova Social</strong> - Aumenta credibilidade</li>
+                <li>? <strong>CTA</strong> - Autoridade no call to action</li>
               </ul>
             </div>
             
             <div className="rounded-lg border border-warning/20 bg-warning/5 p-4">
               <p className="font-semibold text-warning mb-2">⚠️ Não Inclui Logo</p>
               <ul className="text-xs space-y-1">
-                <li>• <strong>Dica</strong> - Evita poluição visual em conteúdo rápido</li>
+                <li>? <strong>Dica</strong> - Evita poluição visual em conteúdo rápido</li>
               </ul>
             </div>
           </div>
@@ -3090,11 +4993,11 @@ function InstagramSection() {
           <div className="mt-4 p-4 rounded-lg bg-primary/5 border border-primary/20">
             <p className="font-semibold text-primary mb-2">💡 Por que o logo é importante?</p>
             <ul className="text-xs space-y-1">
-              <li>• <strong>Branding consistente</strong> - Reforça a marca em todos os posts</li>
-              <li>• <strong>Reconhecimento imediato</strong> - Seguidores identificam conteúdo oficial</li>
-              <li>• <strong>Profissionalismo</strong> - Posts parecem mais confiáveis</li>
-              <li>• <strong>Compartilhamento</strong> - Logo vai junto quando compartilham</li>
-              <li>• <strong>Diferenciação</strong> - Destaca em um feed cheio de conteúdo</li>
+              <li>? <strong>Branding consistente</strong> - Reforça a marca em todos os posts</li>
+              <li>? <strong>Reconhecimento imediato</strong> - Seguidores identificam conteúdo oficial</li>
+              <li>? <strong>Profissionalismo</strong> - Posts parecem mais confiáveis</li>
+              <li>? <strong>Compartilhamento</strong> - Logo vai junto quando compartilham</li>
+              <li>? <strong>Diferenciação</strong> - Destaca em um feed cheio de conteúdo</li>
             </ul>
           </div>
         </div>
@@ -3219,10 +5122,10 @@ function BrandVoiceSection() {
           <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
             <p className="text-tech text-sm font-semibold mb-3">Headlines de Exemplo</p>
             <ul className="space-y-2 text-sm text-[var(--text-on-surface)]">
-              <li>• "Transforme Sua Empresa com Tecnologia e Automação"</li>
-              <li>• "Sites, LPs e CRM que geram resultados reais"</li>
-              <li>• "5 Automações que Toda Empresa Precisa em 2026"</li>
-              <li>• "Escale seu negócio com inteligência digital"</li>
+              <li>? "Transforme Sua Empresa com Tecnologia e Automação"</li>
+              <li>? "Sites, LPs e CRM que geram resultados reais"</li>
+              <li>? "5 Automações que Toda Empresa Precisa em 2026"</li>
+              <li>? "Escale seu negócio com inteligência digital"</li>
             </ul>
           </div>
         </div>
@@ -3309,7 +5212,7 @@ function IconsSection() {
           {icons.map(icon => (
             <div key={icon} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)] text-center hover:border-tech/30 transition-colors">
               <div className="w-8 h-8 mx-auto mb-2 text-tech flex items-center justify-center">
-                <span className="text-2xl">•</span>
+                <span className="text-2xl">?</span>
               </div>
               <p className="text-xs font-mono text-[var(--text-on-surface-muted)] truncate">{icon}</p>
             </div>
@@ -3675,7 +5578,7 @@ function GlitchTextSection() {
             <GlitchText as="h1" className="text-4xl md:text-6xl font-display font-extrabold text-bg-light tracking-wide">
               Glitch Distortion
             </GlitchText>
-            <p className="text-xs text-white/40 mt-8">Passe o mouse para intensificar · clique/tap para o burst</p>
+            <p className="text-xs text-white/40 mt-8">Loop em glitch RGB, sem hover — só animação</p>
           </div>
           <div className="rounded-xl border border-[var(--surface-border)] p-8 bg-[var(--surface-card)]">
             <p className="text-xs font-semibold uppercase tracking-widest text-tech text-center mb-6">Com glitch (default)</p>
@@ -3715,8 +5618,7 @@ function GlitchTextSection() {
         <div className="grid md:grid-cols-2 gap-4">
           {[
             'RGB split automático (error + tech) em todo heading',
-            'Hover intensifica o glitch (0.6s infinite)',
-            'Clique/tap dispara burst de shake (0.28s)',
+            'Loop infinito 2s, sem hover/clique — só a animação (p/ vídeo)',
             'Camadas decorativas com aria-hidden="true"',
             'prefers-reduced-motion: animações desativadas',
             'Cores via tokens do DS (--color-error / --color-tech)',
@@ -4192,6 +6094,238 @@ function PreviewSection() {
       </div>
 
       <WhatsAppFloat />
+    </div>
+  );
+}
+
+function SocialMotionServicosSection() {
+  const [showSafeZone, setShowSafeZone] = useState(false);
+  const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
+  const [aspect, setAspect] = useState<ServiceCardAspect>('4:5');
+  const themes = [
+    { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#FFF5E6', border: '#FF6B35', desc: 'Dicas, conteúdo educativo' },
+    { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#FAFAFA', border: '#1A1A1A', desc: 'Depoimentos, elegância' },
+  ];
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-4">🎨 Selecione o Tema</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {themes.map((t) => (
+            <button key={t.id} onClick={() => setTheme(t.id)} className={`relative p-4 rounded-xl border-2 transition-all ${theme === t.id ? 'border-tech scale-105 shadow-lg' : 'border-[var(--surface-border)] hover:border-tech/50'}`} aria-label={`Tema ${t.name}`} aria-pressed={theme === t.id}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 border-4" style={{ backgroundColor: t.bg, borderColor: t.border }} />
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{t.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{t.desc}</p>
+              {theme === t.id && (<div className="absolute top-2 right-2"><Check className="w-4 h-4 text-tech" /></div>)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">🃏 Card de serviço — 3 camadas (Direção D)</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">
+          Cada serviço é um card com <strong>selo de ícone</strong> (topo direito), <strong>ilustração plana atrás com bleed</strong> (fundo) e o <strong>mock do dispositivo na frente</strong> (foco — é nesse lugar que a foto real entra depois, no app social). Embaixo, título + frase sobre o fundo do tema. Cor vem do tema, tamanho é fixo por aspect e a safe zone acompanha o formato.
+        </p>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-4 p-4 rounded-xl bg-[var(--surface-card-secondary)] border border-[var(--surface-border)]">
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input type="checkbox" checked={showSafeZone} onChange={(e) => setShowSafeZone(e.target.checked)} className="sr-only peer" />
+          <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tech relative"></div>
+          <span className="text-sm font-medium text-[var(--text-on-surface)] flex items-center gap-2"><Eye className="w-4 h-4" />Mostrar área de segurança</span>
+        </label>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-[var(--text-on-surface)]">Formato</span>
+          {(['4:5', '9:16'] as ServiceCardAspect[]).map((a) => (
+            <button key={a} onClick={() => setAspect(a)} aria-pressed={aspect === a} className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-all ${aspect === a ? 'bg-tech text-white border-tech' : 'border-[var(--surface-border)] text-[var(--text-on-surface-muted)] hover:border-tech/50'}`}>
+              {a} {a === '9:16' ? '(reels)' : '(feed)'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div data-theme={theme} className="space-y-12">
+        {SERVICE_FAMILIES.map((fam) => (
+          <div key={fam.id}>
+            <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-1">{fam.title}</h3>
+            <p className="text-sm text-[var(--text-on-surface-muted)] mb-6">{fam.cards.length} serviços</p>
+            <div className="grid md:grid-cols-3 gap-4">
+              {fam.cards.map((card) => (
+                <div key={card.id} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+                  <div className="flex justify-center">
+                    <SocialServiceCard
+                      title={card.title}
+                      phrase={card.phrase}
+                      icon={card.icon}
+                      device={card.device}
+                      aspect={aspect}
+                      showSafeZone={showSafeZone}
+                      settled
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 mt-3">
+                    <p className="font-display font-bold text-[var(--text-on-surface)]">{card.title}</p>
+                    <span className="text-xs font-mono text-tech">{aspect === '9:16' ? '340×604' : '340×425'}</span>
+                  </div>
+                  <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">{card.phrase}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Uso (o app social consome o DS)</h3>
+        <CodeBlock code={"import { SocialServiceCard, SERVICE_FAMILIES } from 'me-agencia-ds';\\n\\n{SERVICE_FAMILIES.map(fam => (\\n  <section key={fam.id}>\\n    <h2>{fam.title}</h2>\\n    {fam.cards.map(c => (\\n      <SocialServiceCard key={c.id} title={c.title} phrase={c.phrase} icon={c.icon} device={c.device} aspect=\"9:16\" settled />\\n    ))}\\n  </section>\\n))}"} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Contrato</h3>
+        <PropsTable props={[
+          { name: 'title', type: 'string', default: '-', description: 'Título do serviço (ex.: "Sites Institucionais").' },
+          { name: 'phrase', type: 'string', default: '-', description: 'Frase curta de venda, embaixo do título.' },
+          { name: 'icon', type: 'ServiceIconName', default: '-', description: 'Ícone do selo e das duas artes (set de 15 em ServiceIcon).' },
+          { name: 'device', type: "'browser' | 'phone' | 'dash'", default: "'browser'", description: 'Envelope do mock (foco do card). A foto real entra nesse lugar no app social.' },
+          { name: 'aspect', type: "'4:5' | '9:16'", default: "'4:5'", description: '4:5 = 340×425 (feed) · 9:16 = 340×604 (reels). A safe zone acompanha o aspect.' },
+          { name: 'showSafeZone', type: 'boolean', default: 'false', description: 'Overlay da área de segurança (demo no DS; variante 9:16 incluída).' },
+          { name: 'settled', type: 'boolean', default: 'false', description: 'Frame final sem animação de entrada — o mesmo das telas estáticas.' },
+        ]} />
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Social Studio → Extras (lote 2026-11-17)
+   CtaButton · StickerPop · ConfettiBurst · DecoProgressRing ·
+   DecoCounter odometer · LottieDeco (Deco/) e
+   StepsList · ReelProgress · MarqueeTape · SceneOverlay (Scene/)
+   ═══════════════════════════════════════════════════════════ */
+
+const EXTRAS_LOTTIE_DATA = {
+  v: '5.7.4', fr: 30, ip: 0, op: 60, w: 200, h: 200, nm: 'pulse', ddd: 0, assets: [],
+  layers: [{
+    ddd: 0, ind: 1, ty: 4, nm: 'circle', sr: 1,
+    ks: {
+      o: { a: 0, k: 100 }, r: { a: 0, k: 0 },
+      p: { a: 0, k: [100, 100, 0] }, a: { a: 0, k: [0, 0, 0] },
+      s: { a: 1, k: [
+        { i: { x: [0.4], y: [1] }, o: { x: [0.6], y: [0] }, t: 0, s: [30, 30, 100] },
+        { i: { x: [0.4], y: [1] }, o: { x: [0.6], y: [0] }, t: 30, s: [130, 130, 100] },
+        { t: 60, s: [30, 30, 100] },
+      ] },
+    },
+    ao: 0,
+    shapes: [{
+      ty: 'gr',
+      it: [
+        { ty: 'el', d: 1, s: { a: 0, k: [120, 120] }, p: { a: 0, k: [0, 0] } },
+        { ty: 'fl', c: { a: 0, k: [1, 0.42, 0.2, 1] }, o: { a: 0, k: 100 } },
+        { ty: 'tr', p: { a: 0, k: [0, 0] }, a: { a: 0, k: [0, 0] }, s: { a: 0, k: [100, 100] }, r: { a: 0, k: 0 }, o: { a: 0, k: 100 } },
+      ],
+      nm: 'g',
+    }],
+    ip: 0, op: 60, st: 0, bm: 0,
+  }],
+};
+
+function SocialMotionExtrasSection() {
+  const [theme, setTheme] = useState<'midnight' | 'sunrise' | 'neon' | 'minimal'>('midnight');
+  const [settled, setSettled] = useState(true);
+  const [run, setRun] = useState(0);
+  const [prog, setProg] = useState(1); // 0..1 dirigido pelo botão Animar (progress-driven)
+  const themes = [
+    { id: 'midnight' as const, name: 'Midnight', bg: '#0a0a0f', border: '#06B6D4', desc: 'Posts técnicos, autoridade' },
+    { id: 'sunrise' as const, name: 'Sunrise', bg: '#FFF5E6', border: '#FF6B35', desc: 'Dicas, conteúdo educativo' },
+    { id: 'neon' as const, name: 'Neon', bg: '#000000', border: '#FF006E', desc: 'Lançamentos, urgência' },
+    { id: 'minimal' as const, name: 'Minimal', bg: '#FAFAFA', border: '#1A1A1A', desc: 'Depoimentos, elegância' },
+  ];
+  const animar = () => {
+    setRun(r => r + 1); // remonta os primitivos de entrada (key) → anima do zero
+    setSettled(false);
+    setProg(0);
+    const t0 = performance.now();
+    const dur = 1600;
+    const step = (now: number) => {
+      const p = Math.min(1, (now - t0) / dur);
+      setProg(p);
+      if (p < 1) requestAnimationFrame(step);
+      else setSettled(true);
+    };
+    requestAnimationFrame(step);
+  };
+  const steps = [
+    { title: 'Diagnóstico', desc: 'Entendemos onde você está hoje' },
+    { title: 'Estratégia', desc: 'Plano sob medida pro seu negócio' },
+    { title: 'Escala', desc: 'Resultado que cresce todo mês' },
+  ];
+  const tape = ['Marketing Digital', 'Sites & LPs', 'Automação', 'Tráfego Pago', 'Branding'];
+  const card = (title: string, desc: string, children: React.ReactNode) => (
+    <div key={title} className="rounded-xl border border-[var(--surface-border)] p-4 bg-[var(--surface-card-secondary)]">
+      <div className="relative aspect-[4/5] w-full max-w-[300px] mx-auto rounded-lg overflow-hidden border border-[var(--slide-border)] flex items-center justify-center" style={{ background: 'var(--slide-gradient)' }}>
+        {children}
+      </div>
+      <div className="flex items-center gap-2 mt-3"><p className="font-display font-bold text-[var(--text-on-surface)]">{title}</p></div>
+      <p className="text-sm text-[var(--text-on-surface-muted)] mt-1">{desc}</p>
+    </div>
+  );
+  return (
+    <div className="space-y-12">
+      <div className="rounded-xl bg-tech/5 border border-tech/20 p-6">
+        <p className="text-tech font-semibold mb-2">Lote "Extras" — primitivos novos do DS (2026-11-17)</p>
+        <p className="text-sm text-[var(--text-on-surface-muted)]">Todos nascem em <code className="text-tech">social-motion/</code> e seguem o contrato ADR-005: cor só do tema (<code className="text-tech">--slide-*</code>), entrada por <code className="text-tech">delayMs</code>/<code className="text-tech">durationMs</code>, <code className="text-tech">settled</code> = frame final (igual à tela estática). Parado = <strong>settled</strong>; clique em <strong>Animar</strong> para ver a entrada do zero. Progress-driven (ReelProgress, DecoCounter, DecoProgressRing aqui) segue o progresso da cena — determinístico no export.</p>
+      </div>
+
+      <div className="rounded-xl border border-[var(--surface-border)] p-6 bg-[var(--surface-card-secondary)]">
+        <p className="text-tech font-semibold mb-4">Selecione o tema</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+          {themes.map((t) => (
+            <button key={t.id} onClick={() => setTheme(t.id)} className={'relative p-4 rounded-xl border-2 transition-all ' + (theme === t.id ? 'border-tech scale-105 shadow-lg' : 'border-[var(--surface-border)] hover:border-tech/50')} aria-label={'Tema ' + t.name} aria-pressed={theme === t.id}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 border-4" style={{ backgroundColor: t.bg, borderColor: t.border }} />
+              <p className="font-semibold text-sm text-[var(--text-on-surface)] mb-1">{t.name}</p>
+              <p className="text-xs text-[var(--text-on-surface-subtle)]">{t.desc}</p>
+              {theme === t.id && (<div className="absolute top-2 right-2"><Check className="w-4 h-4 text-tech" /></div>)}
+            </button>
+          ))}
+        </div>
+        <button onClick={animar} className="px-5 py-2.5 rounded-lg bg-tech text-[var(--text-on-accent,#fff)] font-semibold text-sm hover:opacity-90 transition-opacity">▶ Animar (entra do zero)</button>
+        <span className="ml-3 text-sm text-[var(--text-on-surface-muted)]">{settled ? 'Estado: settled (frame final / tela estática)' : 'Estado: animando…'}</span>
+      </div>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4" data-theme={theme}>
+        {card('CtaButton', 'Pílula de CTA com pop + anel pulsante + flutuação. settled = parado.', <CtaButton key={run} label="Segue pra mais" settled={settled} />)}
+        {card('StepsList', 'Passos em cascata (stagger). settled = todos no lugar.', <div className="p-4 w-full"><StepsList key={run} steps={steps} settled={settled} /></div>)}
+        {card('StickerPop', 'Sticker/emoji com spring + wiggle. settled = parado.', <StickerPop key={run} text="🔥" settled={settled} />)}
+        {card('ReelProgress', 'Barra de progresso do reel (progress-driven, liga no onProgress).', <ReelProgress progress={prog} />)}
+        {card('MarqueeTape', 'Fita marquee em loop (2 cópias, translateX -50%). settled = parada.', <MarqueeTape key={run} items={tape} settled={settled} />)}
+        {card('SceneOverlay', 'Vinheta + grão de filme (SVG feTurbulence). Estático — seguro p/ export.', <SceneOverlay preset="grain-vignette" />)}
+        {card('ConfettiBurst', 'Confete com seed fixa (determinístico). settled = frame final vazio.', <ConfettiBurst key={run} settled={settled} />)}
+        {card('DecoProgressRing', 'Anel que se desenha até value/max (pathLength 100).', <DecoProgressRing key={run} value={Math.round(72 * prog)} label={Math.round(72 * prog) + '%'} settled={settled} />)}
+        {card('DecoCounter odometer', "variant='odometer': dígitos em colunas (progress-driven).", <DecoCounter variant="odometer" value={Math.round(150 * prog)} suffix=" projetos" progress={prog} durationMs={1600} fontSize={40} />)}
+        {card('LottieDeco', 'Lottie via import dinâmico (peer opcional lottie-web). settled = último frame.', <LottieDeco key={run} data={EXTRAS_LOTTIE_DATA} settled={settled} loop style={{ width: 120, height: 120 }} />)}
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Uso (o app social consome o DS)</h3>
+        <CodeBlock code={"import { CtaButton, StepsList, StickerPop, ConfettiBurst, DecoProgressRing, DecoCounter, LottieDeco, ReelProgress, MarqueeTape, SceneOverlay } from 'me-agencia-ds';\\n\\n<div className=\"instagram-slide\" data-theme=\"neon\">\\n  <SceneOverlay preset=\"grain-vignette\" />\\n  <ReelProgress progress={p} />\\n  <StepsList steps={passos} settled={modoEstatico} />\\n  <StickerPop text=\"🔥\" settled={modoEstatico} />\\n  <ConfettiBurst settled={modoEstatico} />\\n  <DecoProgressRing value={72} settled={modoEstatico} />\\n  <DecoCounter variant=\"odometer\" value={150} progress={p} durationMs={2000} />\\n  <LottieDeco src=\"https://.../anim.json\" settled={modoEstatico} />\\n  <MarqueeTape items={['Marketing', 'Sites', 'Automação']} settled={modoEstatico} />\\n  <CtaButton label=\"Segue pra mais\" settled={modoEstatico} />\\n</div>"} />
+      </div>
+
+      <div>
+        <h3 className="text-xl font-display font-bold text-[var(--text-on-surface)] mb-4">Contrato</h3>
+        <PropsTable props={[
+          { name: 'delayMs / durationMs', type: 'number', default: '0 / por primitivo', description: 'Entrada por keyframes via CSS vars; determinístico no export.' },
+          { name: 'settled', type: 'boolean', default: 'false', description: 'Frame final sem animação de entrada — o mesmo das telas estáticas (ADR-005).' },
+          { name: 'progress (ReelProgress/DecoCounter)', type: '0..1', default: '-', description: 'Progress-driven: vem do onProgress da ReelTimeline; não precisa de settled.' },
+          { name: 'variant (DecoCounter)', type: "'count' | 'odometer'", default: "'count'", description: "'count' = comportamento atual preservado; 'odometer' = colunas de dígitos." },
+          { name: 'seed (ConfettiBurst)', type: 'number', default: '7', description: 'RNG com seed fixa (mulberry32) → partículas determinísticas; count limitado a 8..80.' },
+          { name: 'src/data (LottieDeco)', type: 'string | object', default: '-', description: 'Lottie via import dinâmico: lottie-web é peer opcional e vira chunk separado.' },
+          { name: 'cores', type: 'tema', default: '--slide-*', description: 'Nenhum primitivo aceita cor fixa por prop; SceneOverlay/LottieDeco são excessões documentadas (grão monocromático / cor do .json).' },
+        ]} />
+      </div>
     </div>
   );
 }
