@@ -7,7 +7,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
-> Trabalho ainda **não commitado** no git (working tree sobre o commit `1.0.17`). O `dist/` local já contém tudo isto e o `me-agencia-social` consome via `file:`, mas o pacote publicado como 1.0.17 não. Ao commitar/publicar, mover este bloco para a próxima versão.
+> Commitado na `main`, mas **ainda não publicado**: o pacote publicado como 1.0.17 não contém este bloco (o `me-agencia-social` consome via `file:`). Ao publicar, mover este bloco para a próxima versão.
 
 ### Adicionado
 - **Social Motion — primitivos exportados** (contrato em `docs/ADR-005-primitivos-social-motion.md`, catálogo em `docs/PRIMITIVOS-SOCIAL-MOTION.md`):
@@ -17,14 +17,30 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - `Scene/`: `ReelTimeline`, `SceneBackdrop` + `BG_PRESETS`, `StepsList`, `ReelProgress`, `MarqueeTape`, `SceneOverlay`; `SceneTransitionType` ganhou `'glitch'` e `'rgb-split'`
   - Lote "Extras" (`Deco/`): `CtaButton`, `StickerPop`, `ConfettiBurst` (RNG com seed fixa, DOM puro), `DecoProgressRing`, `LottieDeco`
   - `Services/`: `SocialServiceCard`, `ServiceIcon`, `ServiceArt`, `SERVICE_FAMILIES` (nome `SocialServiceCard` para não colidir com o `ServiceCard` da LP)
+- **`PathRun` — variantes `logo` e `text`**:
+  - `variant="logo"`: desenha o contorno do logo ME (M, depois E), segura, apaga e repete em loop de 6s. Usa os glifos originais do logo (`viewBox 0 0 182 87`) com `fill="none"` e `pathLength={100}`, então o traço percorre o perímetro exato de cada letra. Novas constantes exportadas: `PATH_LOGO_M_D`, `PATH_LOGO_E_D`, `PATH_LOGO_VIEWBOX`.
+  - `variant="text"` (props `text`, `fontSize`; constantes `PATH_TEXT_DEFAULT`, `PATH_TEXT_FONT_SIZE`): desenha o contorno do texto linha por linha, com o mesmo timing do logo. Cada linha é um `<text>` SVG com comprimento medido por `getComputedTextLength()`; se a linha mais longa estourar o container, o `fontSize` encolhe. Espessura do traço = `fontSize / 24` (mínimo 0.75px).
+  - Classes CSS `fx-path-logo-m`/`fx-path-logo-e` e `fx-path-text-line-a`/`-b`, com fallback `prefers-reduced-motion` (contorno completo).
 - Safe zone 9:16 (`.safe-zone-overlay--916`)
-- Demos na seção 🎬 Social Studio (incluindo **Extras**)
+- Demos na seção 🎬 Social Studio:
+  - **Path Motion**: cards Path Logo e Path Text
+  - **Numbers & Data**: gráficos Anel %, Progresso / Meta, Pizza e Funil (loop, dentro da Safe Zone; CSS `fx-donut-ring`, `fx-funnel-stage`) e seletor de tema
+  - Novas seções **CTA Animado** (Primário e Ghost com anel pulsante), **Passos** (3 passos em stagger, classe `fx-step-in`) e **End Card** (logo em path + marca + handle + CTA)
+  - **Extras**
 - `docs/ADR-005-primitivos-social-motion.md` e `docs/PRIMITIVOS-SOCIAL-MOTION.md`
 
 ### Alterado
 - **InstagramSlide** (visual): formas decorativas desfocadas mais presentes (3 blobs com `color-mix` do tema, no lugar dos 2 círculos a 10%) e textos de apoio em `font-medium` com `var(--font-body)`. API sem mudança.
 - **OceanBackground**: props opcionais `horizonTiltY`, `sunElevationDeg`, `sunAzimuthDeg`, `exposure`, `lookAtX` (padrões iguais aos valores fixos anteriores — retrocompatível) e `preserveDrawingBuffer: true` no renderer (permite capturar o canvas); `public/ocean-static.png` como imagem estática
 - `lottie-web` passa a ser **peer dependency opcional** (`>=5.7.0`), carregada por import dinâmico no `LottieDeco` — fica fora do bundle de quem não usa
+- **Social Studio (demos)**:
+  - **Path Motion**: previews em 2 grupos ("Movimento ao longo do caminho" e "Path aplicado ao elemento") e títulos nos cards Path Card e Path Text
+  - **Numbers & Data**: Data Grid no padrão dos demais (sem clique, barras em loop `fx-bars-grow-y`); gráficos com cores `--slide-primary`/`--slide-accent` e tracks em `--slide-border`; no tema Minimal, escopo `.numbers-scope` clareia primary/accent/border para manter contraste sobre o gradiente escuro (só nesse grid)
+  - **Transições**: "Dica #1" usa `var(--slide-text-muted)` (contraste no Minimal/Sunrise)
+  - **Extras** redistribuído: `CtaButton` → CTA Animado, `StepsList` → Passos, `DecoCounter` odometer e `DecoProgressRing` → Numbers & Data, `ReelProgress` e `SceneOverlay` → Cena & Timeline, `MarqueeTape` → Textos Animados; Extras fica com `StickerPop`, `ConfettiBurst` e `LottieDeco`. Demo compartilhada em `ExtrasPrimitivesBlock`
+
+### Corrigido
+- **AppleTitle**: o auto-fit da 1ª/2ª linha (`firstLineFontSize`/`secondLineFontSize`) alternava entre encolher e voltar ao tamanho alvo, gerando loop infinito de `setState` ("Maximum update depth exceeded") e deixando Textos Animados em branco. Agora, para o mesmo tamanho de container, só encolhe; volta ao alvo apenas quando o container ou o alvo mudam
 
 ## [1.0.17] - 2026-11-07
 
