@@ -7,6 +7,34 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+> Trabalho ainda **não commitado** no git (working tree sobre o commit `1.0.17`). O `dist/` local já contém tudo isto e o `me-agencia-social` consome via `file:`, mas o pacote publicado como 1.0.17 não. Ao commitar/publicar, mover este bloco para a próxima versão.
+
+### Adicionado
+- **Social Motion — primitivos exportados** (contrato em `docs/ADR-005-primitivos-social-motion.md`, catálogo em `docs/PRIMITIVOS-SOCIAL-MOTION.md`):
+  - `Text/`: `TextScramble`, `TipsyFrame`, `AppleTitle`, `StrokeText`, `PewPewText`, `RubberStamp`
+  - `Path/`: `PathRun`, `PathPointer`, `PathPulse`
+  - `Deco/`: `DecoStamp`, `DecoPointer`, `DecoCounter` (com `variant?: 'count' | 'odometer'`), `DecoBox`
+  - `Scene/`: `ReelTimeline`, `SceneBackdrop` + `BG_PRESETS`, `StepsList`, `ReelProgress`, `MarqueeTape`, `SceneOverlay`; `SceneTransitionType` ganhou `'glitch'` e `'rgb-split'`
+  - Lote "Extras" (`Deco/`): `CtaButton`, `StickerPop`, `ConfettiBurst` (RNG com seed fixa, DOM puro), `DecoProgressRing`, `LottieDeco`
+  - `Services/`: `SocialServiceCard`, `ServiceIcon`, `ServiceArt`, `SERVICE_FAMILIES` (nome `SocialServiceCard` para não colidir com o `ServiceCard` da LP)
+- Safe zone 9:16 (`.safe-zone-overlay--916`)
+- Demos na seção 🎬 Social Studio (incluindo **Extras**)
+- `docs/ADR-005-primitivos-social-motion.md` e `docs/PRIMITIVOS-SOCIAL-MOTION.md`
+
+### Alterado
+- **InstagramSlide** (visual): formas decorativas desfocadas mais presentes (3 blobs com `color-mix` do tema, no lugar dos 2 círculos a 10%) e textos de apoio em `font-medium` com `var(--font-body)`. API sem mudança.
+- **OceanBackground**: props opcionais `horizonTiltY`, `sunElevationDeg`, `sunAzimuthDeg`, `exposure`, `lookAtX` (padrões iguais aos valores fixos anteriores — retrocompatível) e `preserveDrawingBuffer: true` no renderer (permite capturar o canvas); `public/ocean-static.png` como imagem estática
+- `lottie-web` passa a ser **peer dependency opcional** (`>=5.7.0`), carregada por import dinâmico no `LottieDeco` — fica fora do bundle de quem não usa
+
+## [1.0.17] - 2026-11-07
+
+### Alterado
+- **Footer**: layout mobile compacto, com logo oculto e Serviços na horizontal
+- **Social Motion (preview/docs)**: previews em 4:5 real (340x425) com safe zone; ajustes nas transições Fade/Slide/Zoom/Wipe/Blur/Push (cortina + texto), Diagonal, Diamond e Checkerboard; Glitch Cut em Textos e Data Grid em Numbers
+
+### Documentação
+- ADR-004 e PUBLISH: fluxo manual de atualização, sem Dependabot
+
 ## [1.0.16] - 2026-11-06
 
 ### Adicionado

@@ -144,6 +144,15 @@ Atualize `index.html`:
 }
 ```
 
+## 🎬 Primitivos de Movimento Social
+
+Elementos animados de social (carimbo, seta, contador, texto embaralhando, caixa que se desenha) **nascem no DS** e são consumidos pelo app `me-agencia-social` (e por qualquer outro consumidor).
+
+- **Contrato e decisões:** [`docs/ADR-005-primitivos-social-motion.md`](docs/ADR-005-primitivos-social-motion.md) — quem decide o *como se move* (DS), o *onde e quão grande* (consumidor) e a *cor* (tema).
+- **Catálogo e props:** [`docs/PRIMITIVOS-SOCIAL-MOTION.md`](docs/PRIMITIVOS-SOCIAL-MOTION.md) — o que existe hoje e como usar.
+
+Regra prática: o primitivo nunca mede o conteúdo nem fixa cor. O consumidor mede e passa `width`/`height`; a cor vem de `var(--slide-accent)` (e demais variáveis do tema). Todo primitivo animado expõe `settled` para que a tela estática aprovada seja igual ao último frame do vídeo.
+
 ## 🎨 Bordas e Radius
 
 ### Alterando Border Radius
